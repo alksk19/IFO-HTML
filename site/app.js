@@ -18,6 +18,26 @@
 
   if (!DATA) { console.error("site/data.js fehlt — Rscript R/build_data.R ausfuehren."); return; }
 
+  // Schriftstack fuer alles, was auf Canvas gezeichnet wird (Sparklines und
+  // PNG-Export). Muss zur Angabe in styles.css passen, sonst stehen die
+  // exportierten Bilder in einer anderen Schrift als die Seite.
+  const SCHRIFT = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", ' +
+                  'Roboto, "Helvetica Neue", Arial, sans-serif';
+  if (window.Chart) Chart.defaults.font.family = SCHRIFT;
+
+  // Canvas zeichnet mit der Schrift, die im Moment des Zeichnens geladen ist.
+  // Bei font-display: swap kann das beim ersten Aufbau noch der Fallback sein;
+  // die Diagramme werden deshalb nachgezeichnet, sobald Inter steht. Die
+  // Sparklines beschriften nichts und bleiben davon unberuehrt.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      if (!window.Chart || !Chart.instances) return;
+      Object.keys(Chart.instances).forEach(function (k) {
+        try { Chart.instances[k].update("none"); } catch (e) { /* egal */ }
+      });
+    });
+  }
+
   /* --- Zahlen und Monate ------------------------------------------------- */
 
   const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni",
@@ -227,14 +247,14 @@
     g.fillRect(0, 0, out.width, out.height);
 
     g.fillStyle = css("--text-primary") || "#000000";
-    g.font = "600 " + (14 * skala) + "px system-ui, -apple-system, sans-serif";
+    g.font = "600 " + (14 * skala) + "px " + SCHRIFT;
     g.textBaseline = "middle";
     g.fillText(titel, rand, kopfH / 2 + 2 * skala);
 
     g.drawImage(src, rand, kopfH);
 
     g.fillStyle = css("--text-muted") || "#777777";
-    g.font = (11 * skala) + "px system-ui, -apple-system, sans-serif";
+    g.font = (11 * skala) + "px " + SCHRIFT;
     g.fillText("Quelle: " + quelle, rand, out.height - fussH / 2 - 6 * skala);
     g.fillText(CFG.disclaimer, rand, out.height - fussH / 2 + 8 * skala);
 
