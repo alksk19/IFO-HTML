@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodik</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-titel="Methodik">
+
+<main class="wrap">
+<div class="prosa">
+
+  <h1>Methodik und Quellen</h1>
+  <p class="intro">
+    Diese Seite erklärt, wie die hier gezeigten Zahlen zustande kommen,
+    woher sie stammen und was bei ihrer Verwendung zu beachten ist. Die
+    inhaltlichen Erläuterungen folgen den Methodenkästen der
+    Pressemitteilung des ifo Instituts vom 26. Oktober 2026; sie sind unten
+    als Zitat ausgewiesen.
+  </p>
+
+  <h2>Was ist ein Saldo?</h2>
+  <p>
+    Die ifo Konjunkturumfragen stellen keine Fragen nach Zahlen, sondern
+    nach Einschätzungen. Die Unternehmen beurteilen ihre aktuelle
+    Geschäftslage als <em>gut</em>, <em>befriedigend</em> oder
+    <em>schlecht</em> und ihre Erwartungen für die nächsten sechs Monate als
+    <em>günstiger</em>, <em>gleichbleibend</em> oder <em>ungünstiger</em>.
+  </p>
+  <p>
+    Der Saldo ist die Differenz der Prozentanteile der beiden äußeren
+    Antwortmöglichkeiten. Für die Geschäftslage ist das der Anteil
+    „gut“ minus dem Anteil „schlecht“, für die Erwartungen der Anteil
+    „günstiger“ minus dem Anteil „ungünstiger“. Die mittlere Antwort geht
+    nicht in den Saldo ein, zählt aber in die Prozentbasis.
+  </p>
+  <p>
+    Daraus folgt, wie Salden zu lesen sind: Ein Saldo von +10 heißt, dass
+    zehn Prozentpunkte mehr Unternehmen zufrieden als unzufrieden sind —
+    nicht, dass zehn Prozent der Unternehmen zufrieden wären. Der
+    rechnerisch mögliche Bereich reicht von −100 bis +100. Die Nulllinie
+    trennt die überwiegend positiven von den überwiegend negativen
+    Einschätzungen und ist in den Diagrammen dieser Seite deshalb
+    hervorgehoben.
+  </p>
+
+  <h2>Wie der Index gebildet wird</h2>
+  <p>
+    Das Geschäftsklima ist kein eigenständig erhobener Wert, sondern wird
+    aus den beiden Salden Lage und Erwartungen berechnet: als
+    transformierter Mittelwert der beiden. Für die Indexdarstellung werden
+    die transformierten Salden auf den Durchschnitt des Jahres 2015
+    normiert; der Jahresdurchschnitt 2015 entspricht also dem Wert 100.
+  </p>
+  <p>
+    Deshalb gibt es dieselbe Größe in zwei Einheiten, und beide sind auf
+    dieser Seite abrufbar: als <strong>Index (2015 = 100)</strong> und als
+    <strong>Saldo</strong>. Für Deutschland insgesamt wird üblicherweise der
+    Index berichtet, für die einzelnen Wirtschaftsbereiche der Saldo.
+    Index- und Saldenreihe beschreiben denselben Sachverhalt, sind aber
+    nicht ineinander umrechenbar, ohne die Transformation zu kennen; sie
+    sollten daher nicht gemischt werden.
+  </p>
+  <p>
+    Alle Reihen dieser Seite sind saisonbereinigt — mit einer Ausnahme: die
+    ifo Geschäftsunsicherheit wird als Ursprungswert ausgewiesen. Welche
+    Einheit eine Reihe hat, steht in den Diagrammen jeweils unter dem Titel
+    und in jeder heruntergeladenen CSV-Datei in der Spalte
+    <code>unit</code>.
+  </p>
+
+  <h2>Die Methodenkästen der Pressemitteilung</h2>
+  <p>
+    Die folgenden Abschnitte geben die Erläuterungen des ifo Instituts
+    wieder, auf denen die Texte dieser Seite beruhen.
+  </p>
+
+  <div class="quelle-kasten">
+    <p><strong>ifo Geschäftsklima.</strong> Die Erhebung beruht auf rund
+    9.000 monatlichen Meldungen von Unternehmen des Verarbeitenden
+    Gewerbes, des Dienstleistungssektors, des Handels und des
+    Bauhauptgewerbes. Die Unternehmen beurteilen ihre gegenwärtige
+    Geschäftslage und teilen ihre Erwartungen für die nächsten sechs Monate
+    mit. Der Saldowert der Geschäftslage ist die Differenz der
+    Prozentanteile der Antworten „gut“ und „schlecht“, der Saldowert der
+    Erwartungen die Differenz der Anteile „günstiger“ und „ungünstiger“.
+    Das Geschäftsklima ist ein transformierter Mittelwert aus beiden
+    Salden; zur Berechnung der Indexwerte werden die transformierten Salden
+    auf den Durchschnitt des Jahres 2015 normiert.</p>
+    <p style="margin-bottom:0"><em>Quelle: ifo Institut, Pressemitteilung
+    „ifo Geschäftsklima Deutschland — Ergebnisse der ifo Konjunkturumfragen
+    im Oktober 2026“, München, 26. Oktober 2026, Methodenkasten S. 2.</em></p>
+  </div>
+
+  <div class="quelle-kasten">
+    <p><strong>ifo Geschäftsunsicherheit.</strong> Sie misst, wie schwer es
+    Managerinnen und Managern fällt, die Entwicklung der Geschäftslage ihres
+    Unternehmens in den nächsten sechs Monaten vorherzusagen. Berechnet wird
+    sie aus den gewichteten Anteilen der Unternehmen, die auf die
+    Antwortoptionen „leicht“, „eher leicht“, „eher schwer“ und „schwer“
+    entfallen; die Antwortkategorien werden dazu in eine numerische Skala
+    mit gleichen Abständen übersetzt. Der Wert kann rein rechnerisch
+    zwischen 0 und 100 liegen. Höhere Werte zeigen höhere Unsicherheit an.</p>
+    <p style="margin-bottom:0"><em>Quelle: ebenda, Methodenkasten S. 4.</em></p>
+  </div>
+
+  <h2>Die vier Indikatoren im Überblick</h2>
+  <dl id="reihen"></dl>
+
+  <h2>Woher die Daten stammen</h2>
+  <p>
+    Grundlage sind die vom ifo Institut veröffentlichten Excel-Dateien mit
+    den langen Zeitreihen, abrufbar unter
+    <a href="https://www.ifo.de/umfragen/zeitreihen">ifo.de/umfragen/zeitreihen</a>,
+    sowie die oben zitierte Pressemitteilung. Die Rohdateien liegen
+    unverändert im Projektordner unter <code>data/raw/</code>.
+  </p>
+  <p>
+    An den Zahlen selbst wurde nichts gerechnet. Verändert wurde allein die
+    Form: Die Quelldateien verwenden zwei verschiedene Datumsformate — teils
+    Text in der Schreibweise <code>MM/JJJJ</code>, teils echte
+    Excel-Datumswerte, beim Beschäftigungsbarometer zudem
+    Veröffentlichungstage statt Monatsenden. Alle Datumsangaben wurden auf
+    die einheitliche Form <code>JJJJ-MM</code> gebracht. Je Reihe liegt
+    danach genau ein Wert pro Monat vor, ohne Lücken in der Monatsfolge.
+  </p>
+  <p>
+    Erzeugt werden die Daten dieser Seite von einem einzigen R-Skript
+    (<code>R/build_data.R</code>). Es liest die Rohdateien, schreibt die
+    aufbereiteten Reihen als CSV nach <code>data/clean/</code> und erneuert
+    die Datendatei der Website. Einheiten und Bezeichnungen werden dabei
+    exakt so übernommen, wie sie in den Quelldateien stehen.
+  </p>
+
+  <h2>Offene Fragen</h2>
+  <p>
+    Zwei Angaben ließen sich aus den Quellen nicht eindeutig klären und
+    werden deshalb unverändert, aber gekennzeichnet wiedergegeben:
+  </p>
+  <ul>
+    <li>
+      Beim <strong>ifo Importklima</strong> bezeichnet die Quelldatei die
+      Reihe als „Indexwerte, saisonbereinigt“. Die Werte schwanken jedoch um
+      null und liegen zwischen etwa −3,1 und 1,4; es handelt sich also nicht
+      um einen auf 2015 = 100 normierten Index wie beim Geschäftsklima.
+    </li>
+    <li>
+      Beim <strong>ifo Beschäftigungsbarometer</strong> weist die Quelldatei
+      eine Einheit nur für die Gesamtreihe aus („Indexwerte, 2015 = 100“).
+      Für die vier Bereichsspalten ist keine Einheit angegeben; ihre Werte
+      legen Salden nahe, werden hier aber nicht als solche deklariert.
+    </li>
+  </ul>
+  <p>
+    Ebenfalls offen ist die genaue Definition der <strong>ifo
+    Konjunkturampel</strong>: Die herangezogene Pressemitteilung enthält
+    dazu keinen Methodenkasten. Übernommen wurde die Bezeichnung aus der
+    Quelldatei — „Wahrscheinlichkeit für eine expansive Entwicklung in %“.
+    Alle offenen Punkte sind in der Datei <code>DATA.md</code> des Projekts
+    festgehalten.
+  </p>
+
+  <h2>Verwendung</h2>
+  <p>
+    Unter jedem Diagramm steht die Tabelle mit den dargestellten Werten, und
+    über jedem Diagramm liegen vier Schaltflächen: <em>Bild kopieren</em>
+    legt das Diagramm als Bild in die Zwischenablage, <em>PNG</em> lädt es
+    als Datei, <em>Daten (CSV)</em> lädt genau die gezeigten Werte, und
+    <em>Link</em> kopiert die Adresse dieses Diagramms. Exportierte Bilder
+    tragen Quellenangabe und Prototyp-Hinweis mit sich.
+  </p>
+  <p>
+    Die CSV-Dateien verwenden Semikolon als Trennzeichen und Komma als
+    Dezimaltrennzeichen und lassen sich in einem deutschsprachigen Excel
+    ohne Importdialog öffnen. Die Spalten entsprechen den Dateien in
+    <code>data/clean/</code>: <code>date</code>, <code>series</code>,
+    <code>sector</code>, <code>value</code>, <code>unit</code>,
+    <code>source</code>.
+  </p>
+  <p class="hinweis-klein">
+    Bei Zitaten in Veröffentlichungen ist das ifo Institut als Quelle zu
+    nennen, nicht diese Seite. Sie ist ein Prototyp und keine offizielle
+    Veröffentlichung des Instituts.
+  </p>
+
+</div>
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  APP.rahmenAufbauen();
+
+  // Die Übersicht der Reihen wird aus den Metadaten erzeugt, damit sie nach
+  // einem neuen Datenstand nicht von Hand nachgepflegt werden muss.
+  const BESCHREIBUNG = {
+    geschaeftsklima: "Stimmung der Unternehmen in Deutschland, erhoben im " +
+      "Verarbeitenden Gewerbe, im Dienstleistungssektor, im Handel und im " +
+      "Bauhauptgewerbe.",
+    exporterwartungen: "Einschätzung des Auslandsgeschäfts der kommenden drei " +
+      "Monate durch die Unternehmen des Verarbeitenden Gewerbes.",
+    importklima: "Frühindikator für die deutschen Importe, gebildet aus " +
+      "Informationen der wichtigsten Herkunftsländer.",
+    beschaeftigungsbarometer: "Einstellungs- und Abbaupläne der Unternehmen " +
+      "für die kommenden drei Monate."
+  };
+
+  const dl = document.getElementById("reihen");
+
+  SITE.themen.forEach(function (t) {
+    const s = APP.serie(t.dataset, t.series, t.sector);
+    if (!s) return;
+
+    const dt = document.createElement("dt");
+    dt.innerHTML = '<a href="' + t.seite + '">' + APP.escape(t.titel) + "</a>";
+    dl.appendChild(dt);
+
+    const dd = document.createElement("dd");
+    dd.innerHTML = APP.escape(BESCHREIBUNG[t.id] || t.beschreibung) +
+      "<br><span class=\"hinweis-klein\">Verfügbar ab " +
+      APP.escape(APP.monatLang(s.start)) + ", zuletzt " +
+      APP.escape(APP.monatLang(s.end)) + " · " + s.values.length +
+      " Monatswerte · Einheit laut Quelldatei: " + APP.escape(s.unit) +
+      "</span>";
+    dl.appendChild(dd);
+  });
+
+  APP.ankerAnspringen();
+})();
+</script>
+</body>
+</html>
