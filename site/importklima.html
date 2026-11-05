@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Importklima</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body data-titel="Importklima">
+
+<main class="wrap">
+
+  <h1>ifo Importklima</h1>
+  <p class="intro">
+    Das ifo Importklima ist ein Frühindikator für die Entwicklung der
+    deutschen Importe. Es verdichtet Informationen aus den wichtigsten
+    Herkunftsländern deutscher Einfuhren. Die Werte schwanken um null;
+    höhere Werte deuten auf eine kräftigere Importentwicklung hin.
+  </p>
+  <p class="hinweis-klein">
+    Die Quelldatei bezeichnet die Reihe als „Indexwerte, saisonbereinigt“.
+    Die Werte liegen jedoch zwischen etwa −3,1 und 1,4 und schwanken um null,
+    sind also kein auf 2015 = 100 normierter Index wie beim Geschäftsklima.
+    Die Bezeichnung wird hier unverändert aus der Datei übernommen; die
+    genaue Einheit ist eine offene Frage und in <code>DATA.md</code>
+    festgehalten.
+  </p>
+
+  <div class="tiles" id="kennzahlen"></div>
+
+  <h2>Verlauf</h2>
+  <div id="verlauf"></div>
+
+  <h2>Mehr Details</h2>
+  <div id="details"></div>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="seite.js"></script>
+<script>
+SEITE.aufbauen({
+  dataset: "imklima",
+  series: "Importklima",
+  sector: "Deutschland",
+  kennzahlTitel: "ifo Importklima",
+  kennzahlZusatz: "Bezeichnung laut Quelldatei: Indexwerte, saisonbereinigt",
+  chartId: "chart-importklima",
+  chartTitel: "ifo Importklima",
+  nullLinie: true,
+  stellen: 2,
+  langTitel: "ifo Importklima seit 1995",
+  langHinweis: "Die Reihe beginnt im Januar 1995 und reicht bis September 2026; " +
+               "sie endet damit einen Monat früher als die übrigen Reihen dieser Seite.",
+  quellenZusatz: [
+    "Grimme, C., Lehmann, R. und M. Nöller (2018): Das ifo Importklima — ein erster " +
+      "Frühindikator für die Prognose der deutschen Importe, ifo Schnelldienst 71(12), S. 27–32.",
+    "Grimme, C., Lehmann, R. und M. Nöller (2021): Forecasting Imports with Information " +
+      "from Abroad, Economic Modelling 98, S. 109–117."
+  ]
+});
+</script>
+</body>
+</html>

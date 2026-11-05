@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beschäftigungsbarometer</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body data-titel="Beschäftigungsbarometer">
+
+<main class="wrap">
+
+  <h1>ifo Beschäftigungsbarometer</h1>
+  <p class="intro">
+    Das ifo Beschäftigungsbarometer zeigt, ob die Unternehmen in den
+    kommenden drei Monaten eher einstellen oder eher Personal abbauen
+    wollen. Für Deutschland insgesamt wird ein Index ausgewiesen, der auf
+    den Durchschnitt des Jahres 2015 normiert ist; daneben stehen die vier
+    Wirtschaftsbereiche.
+  </p>
+
+  <div class="tiles" id="kennzahlen"></div>
+
+  <h2>Verlauf</h2>
+  <div id="verlauf"></div>
+
+  <h2>Wirtschaftsbereiche</h2>
+  <p class="intro">
+    Die vier Bereiche werden getrennt ausgewiesen. Werte über null stehen
+    für überwiegende Einstellungsabsichten, Werte darunter für überwiegende
+    Abbauabsichten.
+  </p>
+  <p class="hinweis-klein">
+    Die Quelldatei weist in der Kopfzeile nur für die Gesamtreihe eine
+    Einheit aus („Indexwerte, 2015 = 100, saisonbereinigt“). Für die vier
+    Bereichsspalten ist keine Einheit angegeben; ihre Werte legen Salden
+    nahe, werden hier aber nicht als solche deklariert. Siehe
+    <code>DATA.md</code>.
+  </p>
+  <div id="bereiche"></div>
+
+  <h2>Mehr Details</h2>
+  <div id="details"></div>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="seite.js"></script>
+<script>
+SEITE.aufbauen({
+  dataset: "empl",
+  series: "Beschaeftigungsbarometer",
+  sector: "Deutschland",
+  kennzahlTitel: "ifo Beschäftigungsbarometer",
+  kennzahlZusatz: "Index, 2015 = 100",
+  chartId: "chart-empl",
+  chartTitel: "ifo Beschäftigungsbarometer Deutschland",
+  stellen: 1,
+  langTitel: "ifo Beschäftigungsbarometer seit 2002",
+  langHinweis: "Die Reihe beginnt im Januar 2002. Die Datumsangaben der Quelldatei " +
+               "sind Veröffentlichungstage und wurden auf den jeweiligen Monat " +
+               "zurückgeführt; je Monat liegt genau ein Wert vor.",
+  bereiche: {
+    ziel: "bereiche",
+    namen: ["Verarbeitendes Gewerbe", "Bauhauptgewerbe", "Handel", "Dienstleistungssektor"],
+    nullLinie: true
+  }
+});
+</script>
+</body>
+</html>

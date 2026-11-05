@@ -157,9 +157,12 @@ h3 { font-size: 16px; margin: 0 0 4px; font-weight: 620; }
   margin: 22px 0 0;
 }
 
+/* Die Breite ist nach oben begrenzt, damit eine einzelne Kachel auf den
+   Themenseiten nicht ueber die ganze Spalte laeuft. */
 .tile {
   display: flex;
   flex-direction: column;
+  max-width: 340px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);

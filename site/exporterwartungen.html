@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exporterwartungen</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body data-titel="Exporterwartungen">
+
+<main class="wrap">
+
+  <h1>ifo Exporterwartungen</h1>
+  <p class="intro">
+    Die ifo Exporterwartungen geben wieder, wie die Unternehmen des
+    Verarbeitenden Gewerbes ihr Auslandsgeschäft in den kommenden drei
+    Monaten einschätzen. Ausgewiesen wird ein Saldo: die Differenz der
+    Prozentanteile der Unternehmen, die mit steigenden, und jener, die mit
+    sinkenden Exporten rechnen. Ein Wert über null bedeutet, dass die
+    optimistischen Stimmen überwiegen.
+  </p>
+
+  <div class="tiles" id="kennzahlen"></div>
+
+  <h2>Verlauf</h2>
+  <div id="verlauf"></div>
+
+  <h2>Mehr Details</h2>
+  <div id="details"></div>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="seite.js"></script>
+<script>
+SEITE.aufbauen({
+  dataset: "export",
+  series: "Exporterwartungen",
+  sector: "Verarbeitendes Gewerbe",
+  kennzahlTitel: "ifo Exporterwartungen",
+  kennzahlZusatz: "Saldo, saisonbereinigt",
+  chartId: "chart-export",
+  chartTitel: "ifo Exporterwartungen im Verarbeitenden Gewerbe",
+  nullLinie: true,
+  stellen: 1,
+  langTitel: "ifo Exporterwartungen seit 1991",
+  langHinweis: "Die Reihe beginnt im Januar 1991. Die Quelldatei enthält am Ende " +
+               "zwei Monatszeilen ohne Werte; sie sind nicht dargestellt."
+});
+</script>
+</body>
+</html>
