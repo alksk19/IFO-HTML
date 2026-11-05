@@ -394,6 +394,9 @@
       nullLinie: true bei Salden
       zeitraum:  Vorgabe-Zeitraum ("2j" | "10j" | "alle")
       tabelle:   false, wenn keine Tabelle gewuenscht ist
+      tabelleMonate: begrenzt die Tabelle auf die letzten n Monate; das
+                 Diagramm und die CSV umfassen weiterhin den gewaehlten
+                 Zeitraum
       hinweis:   optionaler Hinweis unter dem Diagramm
       klein:     true fuer die flachere Variante in Bereichsabschnitten
     })
@@ -567,11 +570,27 @@
       }
 
       if (tabelleEl) {
+        // Optional wird die Tabelle auf die letzten n Monate gekuerzt, damit
+        // sie lesbar bleibt. Diagramm und CSV umfassen weiterhin den
+        // gewaehlten Zeitraum; der Hinweistext sagt genau das.
+        let tab = a, erlaeuterung;
+        if (o.tabelleMonate && a.monate.length > o.tabelleMonate) {
+          const k = o.tabelleMonate;
+          tab = {
+            monate: a.monate.slice(-k),
+            spalten: a.spalten.map(function (sp) { return sp.slice(-k); })
+          };
+          erlaeuterung = "Die Tabelle zeigt die letzten " + k + " Monate. " +
+            "Mit „Daten (CSV)“ lässt sich der vollständige im Diagramm " +
+            "dargestellte Zeitraum herunterladen.";
+        } else {
+          erlaeuterung = "Die Tabelle zeigt genau den im Diagramm dargestellten " +
+            "Zeitraum. Mit „Daten (CSV)“ lässt sich derselbe Ausschnitt herunterladen.";
+        }
         tabelleEl.innerHTML =
           '<h3 style="margin-top:18px">Daten: ' + escape(o.titel) + "</h3>" +
-          '<p class="hinweis-klein">Die Tabelle zeigt genau den im Diagramm dargestellten ' +
-          "Zeitraum. Mit „Daten (CSV)“ lässt sich derselbe Ausschnitt herunterladen.</p>" +
-          tabelleHtml(a, serien, { legende: o.legende, stellen: stellen });
+          '<p class="hinweis-klein">' + erlaeuterung + "</p>" +
+          tabelleHtml(tab, serien, { legende: o.legende, stellen: stellen });
       }
     }
 
@@ -669,12 +688,161 @@
     if (el) setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 60);
   }
 
+  /* --- Heatmap ---------------------------------------------------------- */
+
+  /*
+    Bereiche in den Zeilen, Monate in den Spalten. Die Werte sind Salden und
+    schwanken um null; die Farbskala ist deshalb divergierend (Blau fuer
+    positive, Rot fuer negative Salden, neutrales Grau in der Mitte). Die
+    Skala ist symmetrisch um null, damit gleich grosse Abweichungen nach oben
+    und unten gleich stark eingefaerbt sind.
+
+    heatmap(ziel, {
+      id, titel, serien: [...], zeilen: [Beschriftungen], monate: Anzahl
+    })
+  */
+  function heatmap(ziel, o) {
+    const serien = o.serien.filter(Boolean);
+    if (!serien.length) return;
+
+    const a = zuschneiden(serien, o.monate || 24);
+    const alleWerte = [];
+    a.spalten.forEach(function (sp) {
+      sp.forEach(function (v) { if (v !== null && v !== undefined) alleWerte.push(v); });
+    });
+    if (!alleWerte.length) return;
+
+    const grenze = Math.max.apply(null, alleWerte.map(Math.abs)) || 1;
+
+    const block = document.createElement("div");
+    block.className = "chart-block sprungziel";
+    block.id = o.id;
+
+    const quelle = serien[0].source;
+    const werkzeuge = document.createElement("div");
+    werkzeuge.className = "werkzeuge";
+
+    const kopf = document.createElement("div");
+    kopf.className = "chart-kopf";
+    kopf.innerHTML = '<div class="titelblock"><h3>' + escape(o.titel) + "</h3>" +
+      '<div class="einheit">' + escape(serien[0].unit) + "</div></div>";
+    kopf.appendChild(werkzeuge);
+    block.appendChild(kopf);
+
+    let meldeTimer = null;
+    const statusEl = document.createElement("span");
+    statusEl.className = "kopier-status";
+    statusEl.setAttribute("role", "status");
+    function melden(t) {
+      statusEl.textContent = t;
+      clearTimeout(meldeTimer);
+      meldeTimer = setTimeout(function () { statusEl.textContent = ""; }, 6000);
+    }
+
+    [["Daten (CSV)", function () {
+       csvHerunterladen(serien, a, o.titel,
+         [o.titel, "Quelle: " + quelle, CFG.disclaimer,
+          "Erzeugt am " + new Date().toLocaleDateString("de-DE")]);
+     }],
+     ["Link", function () { linkKopieren(o.id, melden); }]
+    ].forEach(function (k) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "btn"; b.textContent = k[0];
+      b.addEventListener("click", k[1]);
+      werkzeuge.appendChild(b);
+    });
+
+    // --- Tabelle
+    let h = '<div class="heatmap-huelle"><table class="heatmap"><thead><tr><th></th>';
+    a.monate.forEach(function (m, i) {
+      // Nur jeden zweiten Monat beschriften, sonst wird die Kopfzeile unleserlich.
+      h += "<th>" + (i % 2 === 0 ? MONATE_KURZ[+m.slice(5, 7) - 1] +
+           (m.slice(5, 7) === "01" ? " " + m.slice(2, 4) : "") : "") + "</th>";
+    });
+    h += "</tr></thead><tbody>";
+
+    serien.forEach(function (s, k) {
+      h += "<tr><th>" + escape(o.zeilen ? o.zeilen[k] : label(s.sector)) + "</th>";
+      a.spalten[k].forEach(function (v, i) {
+        if (v === null || v === undefined) {
+          h += '<td class="leer" title="keine Daten">·</td>';
+        } else {
+          h += '<td style="background:' + zellfarbe(v, grenze) +
+               ";color:" + zellschrift(v, grenze) + '" title="' +
+               escape((o.zeilen ? o.zeilen[k] : label(s.sector)) + ", " +
+                      monatLang(a.monate[i]) + ": " + zahl(v, 1)) +
+               '">' + zahl(v, 0) + "</td>";
+        }
+      });
+      h += "</tr>";
+    });
+    h += "</tbody></table></div>";
+
+    const huelle = document.createElement("div");
+    huelle.innerHTML = h;
+    block.appendChild(huelle.firstChild);
+
+    // --- Farbskala als Legende
+    const skala = document.createElement("div");
+    skala.className = "skala";
+    let balken = '<span>' + zahl(-grenze, 0) + "</span><span class=\"balken\">";
+    for (let i = -3; i <= 3; i++) balken += '<i style="background:' +
+      zellfarbe(i / 3 * grenze, grenze) + '"></i>';
+    balken += "</span><span>+" + zahl(grenze, 0) + "</span>";
+    skala.innerHTML = balken +
+      '<span style="margin-left:10px">negative Salden rot, positive blau</span>';
+    block.appendChild(skala);
+
+    const fuss = document.createElement("div");
+    fuss.className = "chart-fuss";
+    fuss.innerHTML = "<span>" + escape(monatLang(a.monate[0])) + " bis " +
+      escape(monatLang(a.monate[a.monate.length - 1])) + " · Quelle: " + escape(quelle) + "</span>";
+    fuss.appendChild(statusEl);
+    block.appendChild(fuss);
+
+    ziel.appendChild(block);
+  }
+
+  // Divergierende Skala: Blau fuer positive, Rot fuer negative Salden, in der
+  // Mitte ein neutrales Grau. Die Deckkraft waechst mit dem Betrag.
+  function zellfarbe(v, grenze) {
+    const t = Math.max(-1, Math.min(1, v / grenze));
+    const betrag = Math.abs(t);
+    if (betrag < 0.04) return css("--div-mid");
+    const farbe = t > 0 ? css("--div-pos") : css("--div-neg");
+    return mischen(css("--div-mid"), farbe, 0.15 + 0.85 * betrag);
+  }
+
+  // Helle Zellen nahe der Mitte bekommen dunkle Schrift, kraeftige Zellen
+  // weisse. Sonst steht in den blassen Feldern Weiss auf fast Weiss.
+  function zellschrift(v, grenze) {
+    const betrag = Math.abs(Math.max(-1, Math.min(1, v / grenze)));
+    return betrag < 0.45 ? css("--text-primary") : "#ffffff";
+  }
+
+  function mischen(a, b, anteil) {
+    const x = hex(a), y = hex(b);
+    if (!x || !y) return b;
+    const m = [0, 1, 2].map(function (i) {
+      return Math.round(x[i] + (y[i] - x[i]) * anteil);
+    });
+    return "rgb(" + m.join(",") + ")";
+  }
+
+  function hex(s) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(String(s).trim());
+    if (!m) return null;
+    const n = parseInt(m[1], 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
   /* --- Export ----------------------------------------------------------- */
 
   window.APP = {
     serie: serie,
     aktuell: aktuell,
     chartBlock: chartBlock,
+    heatmap: heatmap,
     sparkline: sparkline,
     zuschneiden: zuschneiden,
     tabelleHtml: tabelleHtml,
