@@ -199,3 +199,20 @@ sondern je Rolle ein für den dunklen Hintergrund geprüfter Wert.
   kommt als zusätzliche Datei dazu — der alte bleibt nachvollziehbar. Die
   Pressemitteilung bleibt bewusst außen vor: ihre Methodenkästen sind die
   Grundlage der Erklärtexte und werden von Hand geprüft.
+
+## Pages über einen Arbeitsablauf statt über den Branch (05.11.2026)
+
+Die Seite liegt in `site/`, nicht im Projektstamm und nicht in `docs/`. Die
+Einstellung *Settings → Pages → Deploy from a branch* lässt aber nur diese
+beiden Orte zu; ein eigener Ordner steht dort nicht zur Auswahl. Zur Wahl
+standen: `site/` nach `docs/` umbenennen (dann müssten das R-Skript, alle
+Dokumentation und die lokalen Lesezeichen nachziehen) oder die Quelle auf
+*GitHub Actions* umstellen. Entschieden für den Arbeitsablauf
+`seite-veroeffentlichen.yml`: er lädt genau `site/` hoch, lässt die
+Projektstruktur unangetastet und schaltet Pages beim ersten Lauf selbst ein.
+Er läuft nur bei Änderungen an `site/`, damit ein reiner Datenlauf nicht
+unnötig eine Veröffentlichung auslöst — ändert der Datenlauf `site/data.js`,
+greift er dagegen.
+
+Damit ist die frühere Festlegung „Pages vorbereitet, nicht aktiviert"
+überholt: die Seite ist auf ausdrücklichen Wunsch öffentlich erreichbar.

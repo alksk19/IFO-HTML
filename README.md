@@ -199,16 +199,27 @@ geprüft werden.
 
 ## GitHub Pages
 
-Vorbereitet, **nicht aktiviert**. Im Projekt liegt bereits eine leere Datei
-`.nojekyll`, damit GitHub die Dateien unverändert ausliefert und nichts durch
-Jekyll verarbeitet wird. Alle Pfade in den Seiten sind relativ und in der
-Schreibweise geprüft — GitHub Pages unterscheidet, anders als macOS, Groß- und
-Kleinschreibung.
+Die Seite wird vom Arbeitsablauf `.github/workflows/seite-veroeffentlichen.yml`
+aus dem Ordner `site/` bereitgestellt, nach jedem Push auf `main`, der die
+Seite betrifft, und auf Knopfdruck im Reiter *Actions*.
 
-Zum Einschalten im Repository unter *Settings → Pages* als Quelle den Branch
-`main` und den Ordner `/site` wählen. Danach ist die Seite unter
-`https://alksk19.github.io/IFO-HTML/` erreichbar. Solange das nicht geschieht,
-ändert sich nichts; der Code ist im öffentlichen Repository trotzdem lesbar.
+Adresse: `https://alksk19.github.io/IFO-HTML/`
+
+**Warum ein Arbeitsablauf und nicht die Einstellung?** Unter
+*Settings → Pages* lässt die Quelle „Deploy from a branch“ nur den
+Projektstamm oder `/docs` zu — einen eigenen Ordner wie `site/` gibt es dort
+nicht zur Auswahl. Der Arbeitsablauf nimmt dagegen genau diesen Ordner, ohne
+dass das Projekt umgebaut werden muss. Er schaltet Pages beim ersten Lauf
+selbst ein (`enablement: true`); in den Einstellungen ist nichts von Hand zu
+wählen.
+
+Alle Pfade in den Seiten sind relativ und in der Schreibweise geprüft —
+GitHub Pages unterscheidet, anders als macOS, Groß- und Kleinschreibung. Die
+leere Datei `.nojekyll` im Projektstamm stammt noch aus dem Weg über den
+Branch; bei der Bereitstellung über den Arbeitsablauf läuft Jekyll ohnehin
+nicht.
+
+Abschalten lässt sich das unter *Settings → Pages* über *Unpublish site*.
 
 ## Grenzen dieses Prototyps
 

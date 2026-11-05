@@ -1,0 +1,57 @@
+name: Seite veroeffentlichen
+
+# Stellt den Inhalt von site/ als GitHub Pages bereit.
+#
+# Warum ein Arbeitsablauf und nicht die Einstellung "Deploy from a branch":
+# dort laesst GitHub nur den Projektstamm oder /docs als Quelle zu, einen
+# eigenen Ordner wie site/ gibt es in der Auswahl nicht. Der Arbeitsablauf
+# nimmt dagegen genau diesen Ordner.
+#
+# "enablement: true" weiter unten schaltet Pages beim ersten Lauf selbst
+# ein; in den Einstellungen ist nichts von Hand zu waehlen.
+
+on:
+  push:
+    branches: [main]
+    # Nur wenn sich an der Seite oder an diesem Ablauf etwas aendert.
+    paths:
+      - "site/**"
+      - ".nojekyll"
+      - ".github/workflows/seite-veroeffentlichen.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Laufende Veroeffentlichungen nicht abbrechen, aber auch nicht doppeln.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  veroeffentlichen:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.bereitstellen.outputs.page_url }}
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Pages einrichten
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Ordner site/ hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Bereitstellen
+        id: bereitstellen
+        uses: actions/deploy-pages@v4
