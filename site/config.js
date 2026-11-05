@@ -15,6 +15,20 @@ window.SITE = {
   // Monat des aktuellen Datenstands, wie er in den Quelldateien steht.
   stand: "Oktober 2026",
 
+  // Die Seite beim ifo Institut, auf der die jeweilige Reihe veroeffentlicht
+  // wird. Die Quellenangabe unter jedem Diagramm verlinkt hierhin, damit die
+  // Zuordnung zur Originalquelle eindeutig ist. Alle URLs am 05.11.2026 auf
+  // ifo.de geprueft (Status 200).
+  quellenLinks: {
+    gsk_deutschland: "https://www.ifo.de/umfrage/ifo-geschaeftsklima-deutschland",
+    gsk_bereiche:    "https://www.ifo.de/umfrage/ifo-geschaeftsklima-deutschland",
+    empl:            "https://www.ifo.de/umfrage/ifo-beschaeftigungsbarometer",
+    export:          "https://www.ifo.de/umfrage/ifo-exporterwartungen",
+    // Fuer das Importklima gibt es auf ifo.de keine eigene Themenseite; die
+    // Reihe wird nur ueber die Zeitreihen-Seite veroeffentlicht.
+    imklima:         "https://www.ifo.de/ifo-zeitreihen"
+  },
+
   // Lesbare Bezeichnungen fuer die Serien- und Bereichsnamen aus data.js.
   // Die Daten tragen aus Kompatibilitaetsgruenden ASCII-Namen; die Anzeige
   // verwendet durchgaengig diese Beschriftungen.
@@ -53,6 +67,15 @@ window.SITE = {
       sector: "Deutschland"
     },
     {
+      id: "beschaeftigungsbarometer",
+      titel: "ifo Beschäftigungsbarometer",
+      seite: "beschaeftigungsbarometer.html",
+      beschreibung: "Beschäftigungspläne der Unternehmen, Index und Bereiche.",
+      dataset: "empl",
+      series: "Beschaeftigungsbarometer",
+      sector: "Deutschland"
+    },
+    {
       id: "exporterwartungen",
       titel: "ifo Exporterwartungen",
       seite: "exporterwartungen.html",
@@ -71,15 +94,6 @@ window.SITE = {
       einheitKurz: "Indexwerte, saisonbereinigt",
       dataset: "imklima",
       series: "Importklima",
-      sector: "Deutschland"
-    },
-    {
-      id: "beschaeftigungsbarometer",
-      titel: "ifo Beschäftigungsbarometer",
-      seite: "beschaeftigungsbarometer.html",
-      beschreibung: "Beschäftigungspläne der Unternehmen, Index und Bereiche.",
-      dataset: "empl",
-      series: "Beschaeftigungsbarometer",
       sector: "Deutschland"
     }
   ]

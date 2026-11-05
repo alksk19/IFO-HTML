@@ -67,6 +67,28 @@
     return s || null;
   }
 
+  /* --- Quellenangabe mit Link auf die ifo-Seite ------------------------- */
+
+  // Die Serienobjekte aus data.js tragen keinen Datensatznamen. Fuer den Link
+  // wird deshalb nachgeschlagen, in welchem Datensatz das Objekt liegt.
+  function datensatzVon(s) {
+    if (!s) return null;
+    const namen = Object.keys(DATA.datasets || {});
+    for (let i = 0; i < namen.length; i++) {
+      if ((DATA.datasets[namen[i]] || []).indexOf(s) > -1) return namen[i];
+    }
+    return null;
+  }
+
+  // Liefert die Quellenangabe als HTML; ist eine ifo-Seite hinterlegt, wird
+  // die Angabe zum Link dorthin. Ohne Hinterlegung bleibt sie reiner Text.
+  function quelleHtml(s) {
+    const text = escape((s && s.source) || "");
+    const url = (CFG.quellenLinks || {})[datensatzVon(s)];
+    if (!url) return text;
+    return '<a href="' + escape(url) + '" target="_blank" rel="noopener">' + text + "</a>";
+  }
+
   // Letzter Wert, Vormonatswert und Veraenderung einer Serie.
   function aktuell(s) {
     if (!s || !s.values.length) return null;
@@ -565,8 +587,9 @@
       }
 
       if (a.monate.length) {
-        spanne.textContent = monatLang(a.monate[0]) + " bis " + monatLang(a.monate[a.monate.length - 1]) +
-          " · " + a.monate.length + " Monate · Quelle: " + quelle;
+        spanne.innerHTML = escape(monatLang(a.monate[0])) + " bis " +
+          escape(monatLang(a.monate[a.monate.length - 1])) +
+          " · " + a.monate.length + " Monate · Quelle: " + quelleHtml(serien[0]);
       }
 
       if (tabelleEl) {
@@ -635,9 +658,9 @@
   const SEITEN = [
     ["index.html", "Übersicht"],
     ["geschaeftsklima.html", "Geschäftsklima"],
+    ["beschaeftigungsbarometer.html", "Beschäftigungsbarometer"],
     ["exporterwartungen.html", "Exporterwartungen"],
     ["importklima.html", "Importklima"],
-    ["beschaeftigungsbarometer.html", "Beschäftigungsbarometer"],
     ["methodik.html", "Methodik"]
   ];
 
@@ -796,7 +819,8 @@
     const fuss = document.createElement("div");
     fuss.className = "chart-fuss";
     fuss.innerHTML = "<span>" + escape(monatLang(a.monate[0])) + " bis " +
-      escape(monatLang(a.monate[a.monate.length - 1])) + " · Quelle: " + escape(quelle) + "</span>";
+      escape(monatLang(a.monate[a.monate.length - 1])) + " · Quelle: " +
+      quelleHtml(serien[0]) + "</span>";
     fuss.appendChild(statusEl);
     block.appendChild(fuss);
 
