@@ -93,6 +93,25 @@ Eine Änderung dort wirkt auf Kopfzeile, Fußzeile und Seitentitel aller
 Seiten. Im selben Objekt stehen auch der Prototyp-Hinweis (`disclaimer`)
 und der Datenstand (`stand`).
 
+## Texte ändern
+
+Alle sichtbaren Wörter stehen im HTML der jeweiligen Seite, nicht im
+JavaScript. Wer eine Formulierung ändern will, öffnet also die Datei der
+Seite und sucht den Satz dort — ohne Programmierkenntnisse.
+
+| Was | Wo |
+|---|---|
+| Überschrift und Einleitung einer Seite | `site/<seite>.html`, oben im `<main>`-Teil |
+| Zwischenüberschriften und die Absätze darunter | ebenda, als `<h2>` und `<p class="intro">` |
+| Fußnoten unter den Diagrammen | ebenda, Felder `hinweis:` und `langHinweis:` |
+| Beschriftung der Aufklapp-Schicht „Mehr Details" | ebenda, im `<details>`-Element |
+| Seitenname, Prototyp-Hinweis, Datenstand | `site/config.js` |
+| Kacheltexte der Startseite | `site/config.js`, Feld `themen` |
+| Methodiktexte | `site/methodik.html` |
+
+Nach dem Speichern genügt ein Neuladen im Browser; die Daten müssen dafür
+nicht neu erzeugt werden.
+
 ## Aufbau des Projekts
 
 ```

@@ -48,9 +48,28 @@ veröffentlichte Zahl mehr.
 
 **Divergierende Farbskala, symmetrisch um null.** Salden sind
 Vorzeichengrößen; eine einfarbige Skala würde die Nulllinie verwischen.
-Blau für positive, Rot für negative Werte, neutrales Grau in der Mitte. Die
+Blau für positive, Rot für negative Werte, neutraler Ton in der Mitte. Die
 Skalengrenze ist der größte Betrag im dargestellten Ausschnitt, damit
 Abweichungen nach oben und unten gleich stark eingefärbt sind.
+
+**Farben exakt aus den ifo-Veröffentlichungen.** Die Werte stammen nicht aus
+einer eigenen Palette, sondern wurden den Diagrammen der Pressemitteilung
+`data/raw/ku-2026-10-pm-geschaeftsklima-DE.pdf` entnommen (Vektorgrafiken,
+Farbwerte direkt aus der Datei ausgelesen, 05.11.2026). Gegenprobe: die
+Textfarbe des PDF ist `#414650` — exakt die Lauftextfarbe von ifo.de.
+
+- Liniendiagramme (Seiten 1–2): Geschäftsklima `#3237de`, Geschäftslage
+  `#fa4600`, Geschäftserwartungen `#00be64`; Raster `#b9bec8`, Achsen
+  `#72737e`.
+- Heatmap (Seite 4): „Krise" `#bb3300`, „Abkühlung" `#ff8d62`, „Erholung"
+  `#8385eb`, „Boom" `#3237de`.
+
+Wichtig dabei: In der ifo-Heatmap stehen diese vier Farben für **Kategorien**
+— die vier Konjunkturphasen. Hier werden sie als **Stützpunkte einer
+stufenlosen Saldenskala** verwendet: `#bb3300` am negativen Ende, `#ff8d62`
+schwach negativ, neutral in der Mitte, `#8385eb` schwach positiv, `#3237de`
+am positiven Ende. Die Farben sind also dieselben, ihre Bedeutung ist eine
+andere. Rot für negativ und Blau für positiv entspricht dabei der ifo-Logik.
 
 **Höchstens drei Serien je Diagramm.** Klima, Lage und Erwartungen sind
 genau drei. Beim Vergleich der vier Bereiche des Beschäftigungsbarometers

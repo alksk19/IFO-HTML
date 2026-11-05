@@ -454,6 +454,13 @@
 
     let zeitraum = o.zeitraum || "10j";
 
+    // Die Tabelle zeigt zunaechst wenige Monate und wird auf Klick einmalig
+    // auf die groessere Zahl ergaenzt. Der Zustand liegt hier, damit er beim
+    // Umschalten des Zeitraums erhalten bleibt.
+    const TAB_WENIG = o.tabelleMonate || 6;
+    const TAB_MEHR = o.tabelleMonateMehr || 12;
+    let tabelleMehr = false;
+
     // --- Aufbau
     const block = document.createElement("div");
     block.className = "chart-block sprungziel";
@@ -612,25 +619,46 @@
           " · " + a.monate.length + " Monate · Quelle: " + quelleHtml(serien[0]);
       }
 
-      if (tabelleEl) {
-        // Optional wird die Tabelle auf die letzten n Monate gekuerzt, damit
-        // sie lesbar bleibt. Diagramm und CSV umfassen weiterhin den
-        // gewaehlten Zeitraum; der Hinweistext sagt genau das.
-        let tab = a, erlaeuterung;
-        if (o.tabelleMonate && a.monate.length > o.tabelleMonate) {
-          const k = o.tabelleMonate;
-          tab = {
-            monate: a.monate.slice(-k),
-            spalten: a.spalten.map(function (sp) { return sp.slice(-k); })
-          };
-          erlaeuterung = "Letzte " + k + " Monate; CSV enthält den ganzen Zeitraum";
-        } else {
-          erlaeuterung = "Wie im Diagramm; CSV identisch";
-        }
-        tabelleEl.innerHTML =
-          '<h3 style="margin-top:18px">Daten: ' + escape(o.titel) + "</h3>" +
-          '<p class="hinweis-klein">' + erlaeuterung + "</p>" +
-          tabelleHtml(tab, serien, { legende: o.legende, stellen: stellen });
+      if (tabelleEl) tabelleZeichnen(a);
+    }
+
+    // Nur die Tabelle neu aufbauen, ohne das Diagramm anzufassen - damit der
+    // Klick auf "Weitere Monate" nicht das ganze Diagramm neu zeichnet.
+    function tabelleZeichnen(a) {
+      // Die Tabelle wird auf die letzten n Monate gekuerzt, damit sie lesbar
+      // bleibt. Diagramm und CSV umfassen weiterhin den gewaehlten Zeitraum;
+      // der Hinweistext sagt genau das.
+      const k = tabelleMehr ? TAB_MEHR : TAB_WENIG;
+      let tab = a, erlaeuterung;
+      if (a.monate.length > k) {
+        tab = {
+          monate: a.monate.slice(-k),
+          spalten: a.spalten.map(function (sp) { return sp.slice(-k); })
+        };
+        erlaeuterung = "Letzte " + k + " Monate; CSV enthält den ganzen Zeitraum";
+      } else {
+        erlaeuterung = "Wie im Diagramm; CSV identisch";
+      }
+      tabelleEl.innerHTML =
+        '<h3 style="margin-top:18px">Daten: ' + escape(o.titel) + "</h3>" +
+        '<p class="hinweis-klein">' + erlaeuterung + "</p>" +
+        tabelleHtml(tab, serien, { legende: o.legende, stellen: stellen });
+
+      // Knopf nur, solange ungezeigte Monate uebrig sind. Ein Klick ergaenzt
+      // dieselbe Tabelle auf TAB_MEHR Zeilen - es klappt nichts auf und
+      // nichts zu.
+      if (!tabelleMehr && a.monate.length > TAB_WENIG) {
+        const mehr = document.createElement("button");
+        mehr.type = "button";
+        mehr.className = "btn";
+        mehr.style.marginTop = "10px";
+        mehr.textContent = "Weitere " +
+          (Math.min(TAB_MEHR, a.monate.length) - TAB_WENIG) + " Monate";
+        mehr.addEventListener("click", function () {
+          tabelleMehr = true;
+          tabelleZeichnen(a);
+        });
+        tabelleEl.appendChild(mehr);
       }
     }
 
@@ -844,21 +872,32 @@
     ziel.appendChild(block);
   }
 
-  // Divergierende Skala: Blau fuer positive, Rot fuer negative Salden, in der
-  // Mitte ein neutrales Grau. Die Deckkraft waechst mit dem Betrag.
+  // Divergierende Skala mit den vier Farben der ifo Heatmap: Blau fuer
+  // positive, Rot fuer negative Salden, in der Mitte ein neutraler Ton. Je
+  // Richtung zwei Stuetzpunkte, damit die kraeftigen Toene ("Krise",
+  // "Boom") am Rand der Skala auch wirklich erreicht werden.
   function zellfarbe(v, grenze) {
     const t = Math.max(-1, Math.min(1, v / grenze));
     const betrag = Math.abs(t);
     if (betrag < 0.04) return css("--div-mid");
-    const farbe = t > 0 ? css("--div-pos") : css("--div-neg");
-    return mischen(css("--div-mid"), farbe, 0.15 + 0.85 * betrag);
+
+    const schwach = t > 0 ? css("--div-pos") : css("--div-neg");
+    const stark   = t > 0 ? css("--div-pos-stark") : css("--div-neg-stark");
+
+    // Erste Haelfte: von der Mitte zum hellen Ton. Zweite Haelfte: vom hellen
+    // zum kraeftigen Ton.
+    if (betrag <= 0.5) {
+      return mischen(css("--div-mid"), schwach, 0.3 + 1.4 * betrag);
+    }
+    return mischen(schwach, stark, (betrag - 0.5) / 0.5);
   }
 
   // Helle Zellen nahe der Mitte bekommen dunkle Schrift, kraeftige Zellen
-  // weisse. Sonst steht in den blassen Feldern Weiss auf fast Weiss.
+  // weisse. Sonst steht in den blassen Feldern Weiss auf fast Weiss. Die
+  // Schwelle liegt hinter dem hellen Stuetzpunkt der Skala.
   function zellschrift(v, grenze) {
     const betrag = Math.abs(Math.max(-1, Math.min(1, v / grenze)));
-    return betrag < 0.45 ? css("--text-primary") : "#ffffff";
+    return betrag < 0.55 ? css("--text-primary") : "#ffffff";
   }
 
   function mischen(a, b, anteil) {

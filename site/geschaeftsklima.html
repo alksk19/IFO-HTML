@@ -54,7 +54,12 @@
   <div id="heatmap"></div>
 
   <h2>Mehr Details</h2>
-  <div id="details"></div>
+  <details class="mehr" id="details">
+    <summary>Lange Zeitreihen und weitere Darstellungen</summary>
+    <div class="inhalt">
+      <p class="hinweis-klein">Gesamter verfügbarer Zeitraum.</p>
+    </div>
+  </details>
 
 </main>
 
@@ -114,7 +119,7 @@
     legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
     stellen: 1,
     zeitraum: "10j",
-    tabelleMonate: 13
+    tabelleMonate: 6
   });
 
   /* --- Wirtschaftsbereiche ---------------------------------------------- */
@@ -150,7 +155,7 @@
       stellen: 1,
       nullLinie: true,
       zeitraum: "10j",
-      tabelleMonate: 13,
+      tabelleMonate: 6,
       klein: true,
       hinweis: (schluessel === "Dienstleistungssektor")
         ? "Zeitreihe ab 01/2005; übrige Bereiche ab 01/1991"
@@ -167,7 +172,7 @@
     serien: [unsicherheit],
     stellen: 1,
     zeitraum: "alle",
-    tabelleMonate: 13,
+    tabelleMonate: 6,
     hinweis: "Zeitreihe ab 04/2019; nicht saisonbereinigt"
   });
 
@@ -186,20 +191,11 @@
 
   /* --- Mehr Details: lange Zeitreihen ----------------------------------- */
 
-  const details = document.createElement("details");
-  details.className = "mehr";
-  details.innerHTML = "<summary>Lange Zeitreihen und weitere Darstellungen</summary>" +
-    '<div class="inhalt"></div>';
-  document.getElementById("details").appendChild(details);
+  // Ueberschrift, Einleitungssatz und Huelle stehen im HTML dieser Seite
+  // (oben unter "Mehr Details"), damit die sichtbaren Woerter dort zu finden
+  // und zu aendern sind. Hier werden nur die Diagramme eingehaengt.
+  const details = document.getElementById("details");
   const inhalt = details.querySelector(".inhalt");
-
-  const einleitung = document.createElement("p");
-  einleitung.className = "hinweis-klein";
-  einleitung.textContent =
-    "Die Indexreihen für Deutschland beginnen im Januar 2005, die Salden der " +
-    "Wirtschaftsbereiche im Januar 1991. Die folgenden Diagramme zeigen den " +
-    "gesamten verfügbaren Zeitraum.";
-  inhalt.appendChild(einleitung);
 
   // Die langen Reihen werden erst aufgebaut, wenn die Schicht geöffnet wird.
   let aufgebaut = false;
@@ -214,7 +210,7 @@
       legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
       stellen: 1,
       zeitraum: "alle",
-      tabelleMonate: 13
+      tabelleMonate: 6
     });
 
     APP.chartBlock(inhalt, {
@@ -229,7 +225,7 @@
       stellen: 1,
       nullLinie: true,
       zeitraum: "alle",
-      tabelleMonate: 13
+      tabelleMonate: 6
     });
 
     APP.chartBlock(inhalt, {
@@ -244,7 +240,7 @@
       stellen: 1,
       nullLinie: true,
       zeitraum: "alle",
-      tabelleMonate: 13,
+      tabelleMonate: 6,
       hinweis: "Verarbeitendes Gewerbe, Handel und Bauhauptgewerbe; auch als Index verfügbar"
     });
 
@@ -254,7 +250,7 @@
       serien: [ampel],
       stellen: 1,
       zeitraum: "alle",
-      tabelleMonate: 13,
+      tabelleMonate: 6,
       hinweis: "Laut Quelldatei: Wahrscheinlichkeit für eine expansive Entwicklung in %"
     });
   });

@@ -1,7 +1,7 @@
 // Automatisch erzeugt von R/build_data.R — nicht von Hand bearbeiten.
 // Erneuern mit: Rscript R/build_data.R
 window.SITE_DATA = {
-  "generated": "2026-11-05T10:32:41+0100",
+  "generated": "2026-11-05T12:08:49+0100",
   "datasets": {
     "gsk_deutschland": [
       {

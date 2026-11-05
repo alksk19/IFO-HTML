@@ -72,7 +72,7 @@ window.SEITE = (function () {
         stellen: stellen,
         nullLinie: o.nullLinie === true,
         zeitraum: "10j",
-        tabelleMonate: 13
+        tabelleMonate: 6
       });
     }
 
@@ -99,7 +99,7 @@ window.SEITE = (function () {
             stellen: stellen,
             nullLinie: o.bereiche.nullLinie === true,
             zeitraum: "10j",
-            tabelleMonate: 13,
+            tabelleMonate: 6,
             klein: true
           });
         });
@@ -108,13 +108,11 @@ window.SEITE = (function () {
 
     /* --- Mehr Details --------------------------------------------------- */
 
-    const detailZiel = document.getElementById("details");
-    if (detailZiel) {
-      const details = document.createElement("details");
-      details.className = "mehr";
-      details.innerHTML = "<summary>Lange Zeitreihe und Quellenangaben</summary>" +
-        '<div class="inhalt"></div>';
-      detailZiel.appendChild(details);
+    // Ueberschrift, Aufklapp-Beschriftung und Einleitungssatz stehen im HTML
+    // der jeweiligen Seite, damit die sichtbaren Woerter dort zu finden und zu
+    // aendern sind. Hier werden nur Quellenkasten und Diagramme eingehaengt.
+    const details = document.getElementById("details");
+    if (details) {
       const inhalt = details.querySelector(".inhalt");
 
       // Quellenangaben stehen sofort bereit, das Diagramm wird erst beim
@@ -146,7 +144,7 @@ window.SEITE = (function () {
           stellen: stellen,
           nullLinie: o.nullLinie === true,
           zeitraum: "alle",
-          tabelleMonate: 13,
+          tabelleMonate: 6,
           hinweis: o.langHinweis
         });
 
@@ -169,7 +167,7 @@ window.SEITE = (function () {
               stellen: stellen,
               nullLinie: o.bereiche.nullLinie === true,
               zeitraum: "alle",
-              tabelleMonate: 13
+              tabelleMonate: 6
             });
           }
         }

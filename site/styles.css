@@ -16,16 +16,23 @@
   --text-primary:    #0b0b0b;
   --text-secondary:  #52514e;
   --text-muted:      #898781;
-  --grid:            #e2d9c8;
-  --axis:            #c7bda8;
+  --grid:            #b9bec8;
+  --axis:            #72737e;
   --border:          rgba(11, 11, 11, 0.10);
 
-  --series-1:        #2a78d6;  /* Geschäftsklima      */
-  --series-2:        #eb6834;  /* Geschäftslage       */
-  --series-3:        #1baf7a;  /* Geschäftserwartungen */
+  /* Serienfarben exakt aus den Diagrammen der ifo-Pressemitteilung
+     (data/raw/ku-2026-10-pm-geschaeftsklima-DE.pdf, Seiten 1-2). */
+  --series-1:        #3237de;  /* Geschäftsklima       */
+  --series-2:        #fa4600;  /* Geschäftslage        */
+  --series-3:        #00be64;  /* Geschäftserwartungen */
 
-  --div-pos:         #2a78d6;  /* Heatmap: positive Salden */
-  --div-neg:         #d03b3b;  /* Heatmap: negative Salden */
+  /* Heatmap: die vier Farben der ifo Heatmap (Pressemitteilung, Seite 4).
+     Dort stehen sie fuer die vier Konjunkturphasen, hier als Stuetzpunkte
+     der Saldenskala - siehe DECISIONS.md. */
+  --div-neg-stark:   #bb3300;  /* ifo "Krise"     */
+  --div-neg:         #ff8d62;  /* ifo "Abkuehlung" */
+  --div-pos:         #8385eb;  /* ifo "Erholung"  */
+  --div-pos-stark:   #3237de;  /* ifo "Boom"      */
   --div-mid:         #f3eee4;
 
   --good:            #006300;
@@ -322,23 +329,27 @@ a.tile:hover { border-color: var(--axis); }
 
 /* --- Tabellen ----------------------------------------------------------- */
 
+/* Die Huelle richtet sich nach dem Inhalt statt nach dem Fenster: so stehen
+   Monat und Werte dicht beieinander und die Zeile ist mit einem Blick
+   erfassbar, statt ueber die ganze Seitenbreite gezogen zu werden. */
 .tabelle-huelle {
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
   margin-top: 12px;
+  max-width: fit-content;
 }
 
 table.daten {
   border-collapse: collapse;
-  width: 100%;
+  width: auto;
   font-size: 13.5px;
   font-variant-numeric: tabular-nums;
 }
 
 table.daten th, table.daten td {
-  padding: 8px 12px;
+  padding: 6px 10px;
   text-align: right;
   border-bottom: 1px solid var(--grid);
   white-space: nowrap;
