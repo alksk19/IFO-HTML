@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Rproj.user/
+
+# Teilbare Pakete, nicht im Repository
+freigabe/
