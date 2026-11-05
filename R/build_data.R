@@ -22,8 +22,37 @@ suppressPackageStartupMessages({
 })
 
 # --- Pfade -----------------------------------------------------------------
-# Skript ist aus dem Projektwurzelverzeichnis heraus aufzurufen.
-root     <- normalizePath(".", mustWork = TRUE)
+# Das Projektwurzelverzeichnis wird selbst bestimmt, damit das Skript sowohl
+# per `Rscript R/build_data.R` aus der Wurzel als auch per Source/Run aus dem
+# Ordner R/ heraus laeuft (RStudio setzt das Arbeitsverzeichnis dort nicht um).
+find_root <- function() {
+  has_raw <- function(p) dir.exists(file.path(p, "data", "raw"))
+  # 1) Verzeichnis des Skripts selbst, falls ermittelbar
+  cand <- character()
+  a <- commandArgs(trailingOnly = FALSE)
+  hit <- grep("^--file=", a, value = TRUE)
+  if (length(hit)) cand <- c(cand, dirname(normalizePath(sub("^--file=", "", hit[1]))))
+  sf <- sys.frames()
+  for (fr in rev(sf)) {
+    of <- fr$ofile
+    if (!is.null(of)) { cand <- c(cand, dirname(normalizePath(of))); break }
+  }
+  # 2) Arbeitsverzeichnis
+  cand <- c(cand, normalizePath(getwd()))
+  for (start in cand) {
+    p <- start
+    for (i in 1:5) {
+      if (has_raw(p)) return(p)
+      up <- dirname(p)
+      if (identical(up, p)) break
+      p <- up
+    }
+  }
+  stop("Projektwurzel nicht gefunden: kein Ordner data/raw/ oberhalb von ",
+       normalizePath(getwd()), call. = FALSE)
+}
+
+root     <- find_root()
 dir_raw  <- file.path(root, "data", "raw")
 dir_out  <- file.path(root, "data", "clean")
 dir_site <- file.path(root, "site")

@@ -59,6 +59,10 @@ aufbereiteten Reihen nach `data/clean/` und erneuert `site/data.js`. Danach
 ist die Website auf dem neuen Stand; an den HTML-Dateien ist nichts zu
 ändern.
 
+Das Arbeitsverzeichnis spielt dabei keine Rolle: das Skript sucht die
+Projektwurzel (den Ordner mit `data/raw/`) selbst. Es läuft daher auch, wenn
+es in RStudio aus `R/` heraus mit *Source* bzw. *Run* gestartet wird.
+
 Benötigt werden R und die Pakete `readxl`, `dplyr`, `tidyr`, `jsonlite`:
 
 ```r
