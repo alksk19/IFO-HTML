@@ -59,14 +59,35 @@ dir_site <- file.path(root, "site")
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 dir.create(dir_site, showWarnings = FALSE, recursive = TRUE)
 
-f_gsk  <- file.path(dir_raw, "gsk-d-202610.xlsx")
-f_exp  <- file.path(dir_raw, "export-d-202610.xlsx")
-f_empl <- file.path(dir_raw, "empl-d-202610.xlsx")
-f_imp  <- file.path(dir_raw, "imklima-d-202609.xlsx")
-
-for (f in c(f_gsk, f_exp, f_empl, f_imp)) {
-  if (!file.exists(f)) stop("Rohdatei fehlt: ", f)
+# Die Dateinamen tragen den Datenstand (z. B. gsk-d-202610.xlsx). Statt sie
+# fest einzutragen, wird je Reihe die neueste vorhandene Datei genommen - so
+# laeuft das Skript nach einem Datenupdate ohne Aenderung weiter.
+neueste <- function(praefix) {
+  muster <- paste0("^", praefix, "-d-[0-9]{6}\\.xlsx$")
+  treffer <- sort(list.files(dir_raw, pattern = muster))
+  if (!length(treffer)) {
+    stop("Keine Rohdatei gefunden fuer '", praefix, "' in ", dir_raw,
+         " (erwartet z. B. ", praefix, "-d-202610.xlsx)", call. = FALSE)
+  }
+  file.path(dir_raw, tail(treffer, 1))
 }
+
+f_gsk  <- neueste("gsk")
+f_exp  <- neueste("export")
+f_empl <- neueste("empl")
+f_imp  <- neueste("imklima")
+
+message("Rohdateien: ", paste(basename(c(f_gsk, f_exp, f_empl, f_imp)), collapse = ", "))
+
+# Datenstand aus dem Dateinamen der Geschaeftsklima-Datei ableiten; das
+# Importklima erscheint einen Monat frueher und wird gesondert gefuehrt.
+monat_aus_name <- function(p) {
+  m <- regmatches(basename(p), regexpr("[0-9]{6}", basename(p)))
+  if (!length(m)) return(NA_character_)
+  paste0(substr(m, 1, 4), "-", substr(m, 5, 6))
+}
+stand_gsk <- monat_aus_name(f_gsk)
+stand_imp <- monat_aus_name(f_imp)
 
 # --- Hilfsfunktionen -------------------------------------------------------
 
@@ -293,8 +314,12 @@ to_payload <- function(df) {
   }) |> unname()
 }
 
+# Der Datenstand wandert in die Daten selbst, damit die Website ihn nicht fest
+# eingetragen haben muss und sich nach einem Update von allein mitzieht.
 payload <- list(
   generated = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
+  stand     = stand_gsk,
+  standImportklima = stand_imp,
   datasets  = lapply(datasets, to_payload),
   meta      = lapply(split(meta, seq_len(nrow(meta))), as.list) |> unname()
 )

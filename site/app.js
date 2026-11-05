@@ -25,6 +25,13 @@
                   'Roboto, "Helvetica Neue", Arial, sans-serif';
   if (window.Chart) Chart.defaults.font.family = SCHRIFT;
 
+  // Der Datenstand kommt aus den Daten selbst (R/build_data.R leitet ihn aus
+  // dem Dateinamen der Rohdatei ab). So stimmt er nach einem Update von allein;
+  // der Eintrag in config.js dient nur noch als Rueckfallebene.
+  function stand() {
+    return DATA.stand ? monatLang(DATA.stand) : (CFG.stand || "");
+  }
+
   // Canvas zeichnet mit der Schrift, die im Moment des Zeichnens geladen ist.
   // Bei font-display: swap kann das beim ersten Aufbau noch der Fallback sein;
   // die Diagramme werden deshalb nachgezeichnet, sobald Inter steht. Die
@@ -753,20 +760,16 @@
     document.body.insertBefore(header, document.body.firstChild);
     document.body.insertBefore(hinweis, document.body.firstChild);
 
+    // Kompakt: eine Zeile mit dem Noetigen. Der Prototyp-Hinweis steht schon
+    // oben im Streifen, hier genuegt die Quelle samt Datenstand und der Weg
+    // zur Methodik.
     const footer = document.createElement("footer");
     footer.className = "site";
-    footer.innerHTML = '<div class="wrap">' +
-      "<p><strong>" + escape(CFG.disclaimer) + ".</strong> " + escape(CFG.name) +
-      " ist ein nicht offizieller Prototyp und wird vom ifo Institut weder " +
-      "herausgegeben noch geprüft.</p>" +
-      "<p>Datenquelle: ifo Konjunkturumfragen, Datenstand " + escape(CFG.stand) +
-      ". Die Zeitreihen stammen unverändert aus den vom ifo Institut " +
-      'veröffentlichten Excel-Dateien (<a href="https://www.ifo.de/umfragen/zeitreihen">' +
-      "ifo.de/umfragen/zeitreihen</a>).</p>" +
-      '<p>Erläuterungen zu Salden, Index und Quellen auf der ' +
-      '<a href="methodik.html">Methodikseite</a>. ' +
-      "Alle Daten dieser Seite sind unter jedem Diagramm als CSV abrufbar.</p>" +
-      "</div>";
+    footer.innerHTML = '<div class="wrap"><p>' +
+      escape(CFG.disclaimer) + " · Quelle: ifo Konjunkturumfragen, Stand " +
+      escape(stand()) + " (<a href=\"https://www.ifo.de/umfragen/zeitreihen\">" +
+      "ifo.de</a>) · <a href=\"methodik.html\">Methodik</a>" +
+      "</p></div>";
     document.body.appendChild(footer);
   }
 
@@ -961,6 +964,7 @@
     serienfarben: serienfarben,
     csvHerunterladen: csvHerunterladen,
     quelleHtml: quelleHtml,
+    stand: stand,
     MONATE_KURZ: MONATE_KURZ
   };
 })();

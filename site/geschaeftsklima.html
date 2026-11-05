@@ -17,37 +17,42 @@
 
   <h2>Geschäftsklima</h2>
   <p class="intro">
-    Mittelwert aus der Beurteilung der Lage und den Erwartungen für die
-    kommenden sechs Monate, Index auf 2015 normiert.
+    Das Geschäftsklima ist ein transformierter Mittelwert aus den Salden der
+    Geschäftslage und der Erwartungen; die Indexwerte sind auf den Durchschnitt
+    des Jahres 2015 normiert.
   </p>
   <div class="duo">
     <div id="klima"></div>
-    <a class="tabelle-link" href="daten.html#chart-klima" id="klima-tabelle"></a>
+    <a class="tabelle-link chart-block" href="daten.html#chart-klima" id="klima-tabelle"></a>
   </div>
 
   <h2>Wirtschaftsbereiche</h2>
   <p class="intro">
-    Salden: die Differenz der Prozentanteile positiver und negativer Antworten.
+    Der Saldowert der Geschäftslage ist die Differenz der Prozentanteile der
+    Antworten „gut“ und „schlecht“, der Saldowert der Erwartungen die Differenz
+    der Antworten „günstiger“ und „ungünstiger“.
   </p>
   <div class="raster-2" id="bereiche"></div>
 
   <h2>Geschäftsunsicherheit</h2>
   <p class="intro">
-    Wie schwer es den Befragten fällt, die eigene Geschäftsentwicklung
-    vorherzusagen. Höhere Werte bedeuten höhere Unsicherheit.
+    Sie misst, wie schwer es Manager*innen fällt, die Entwicklung der
+    Geschäftslage ihres Unternehmens in den nächsten sechs Monaten
+    vorherzusagen. Höhere Werte zeigen eine höhere Unsicherheit an.
   </p>
   <div id="unsicherheit"></div>
 
   <h2>Heatmap der Wirtschaftsbereiche</h2>
   <p class="intro">
     Jede Zeile ein Wirtschaftsbereich, jede Spalte ein Monat, die Farbe der
-    Saldo des Geschäftsklimas.
+    Saldo des Geschäftsklimas. Nicht zu verwechseln mit der ifo Heatmap: die
+    fasst die Konjunkturuhr in vier Phasen zusammen.
   </p>
   <div id="heatmap"></div>
 
   <h2>Mehr Details</h2>
   <details class="mehr" id="details">
-    <summary>Großhandel, Einzelhandel und lange Zeitreihen</summary>
+    <summary>Lange Zeitreihen</summary>
     <div class="inhalt">
       <p class="hinweis-klein">Gesamter verfügbarer Zeitraum.</p>
     </div>
@@ -89,8 +94,14 @@
 
   // Die einzige Tabelle der Seite: letzte zwölf Monate, neuester oben. Ein
   // Klick darauf führt zur Datenseite, zum Abschnitt dieser Reihe.
+  // Derselbe Kopfaufbau wie beim Diagramm (Titel, Einheit), damit die
+  // Oberkanten und die Linien beider Kästen auf einer Höhe liegen.
   const tabSerien = [klima, lage, erwartung];
   document.getElementById("klima-tabelle").innerHTML =
+    '<div class="chart-kopf"><div class="titelblock">' +
+      "<h3>Letzte zwölf Monate</h3>" +
+      '<div class="einheit">' + APP.escape(klima.unit) + "</div>" +
+    "</div></div>" +
     APP.tabelleHtml(APP.zuschneiden(tabSerien, 12), tabSerien, {
       legende: ["Klima", "Lage", "Erwartungen"],
       stellen: 1
@@ -98,11 +109,15 @@
 
   /* --- Wirtschaftsbereiche: nur Diagramme, zweispaltig ------------------ */
 
-  // Großhandel und Einzelhandel stehen weiter unten in "Mehr Details".
+  // Alle sechs Bereiche, gleiche Anordnung und gleicher Aufbau je Kasten.
+  // In den Daten steht "Grosshandel" ohne Umlaut; die Anzeige nimmt das
+  // Label aus config.js.
   const BEREICHE = [
     "Verarbeitendes Gewerbe",
     "Dienstleistungssektor",
     "Handel",
+    "Grosshandel",
+    "Einzelhandel",
     "Bauhauptgewerbe"
   ];
 
@@ -113,7 +128,7 @@
 
     APP.chartBlock(ziel, {
       id: "chart-" + name.toLowerCase().replace(/[^a-z]+/g, "-"),
-      titel: name,
+      titel: APP.label(name),
       serien: s,
       legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
       stellen: 1,
@@ -164,28 +179,6 @@
   details.addEventListener("toggle", function () {
     if (!details.open || aufgebaut) return;
     aufgebaut = true;
-
-    // Die beiden Handelsbereiche, die oben bewusst nicht stehen.
-    const raster = document.createElement("div");
-    raster.className = "raster-2";
-    inhalt.appendChild(raster);
-
-    ["Grosshandel", "Einzelhandel"].forEach(function (schluessel) {
-      const s = ["Geschaeftsklima_saldo", "Geschaeftslage_saldo", "Geschaeftserwartungen_saldo"]
-        .map(function (n) { return APP.serie("gsk_bereiche", n, schluessel); });
-
-      APP.chartBlock(raster, {
-        id: "chart-" + schluessel.toLowerCase(),
-        titel: APP.label(schluessel),
-        serien: s,
-        legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
-        stellen: 1,
-        nullLinie: true,
-        zeitraum: "10j",
-        tabelle: false,
-        klein: true
-      });
-    });
 
     APP.chartBlock(inhalt, {
       id: "chart-klima-lang",

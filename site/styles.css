@@ -161,15 +161,14 @@ header.site nav a:hover { color: var(--text-primary); }
 header.site nav a[aria-current="page"] { color: var(--text-primary); font-weight: 600; }
 
 footer.site {
-  margin-top: 56px;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-secondary);
-  font-size: 13.5px;
+  margin-top: 48px;
+  border-top: 1px dotted var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12.5px;
 }
-footer.site .wrap { padding-top: 24px; padding-bottom: 36px; }
-footer.site p { margin: 0 0 8px; }
-footer.site a { color: var(--text-secondary); }
+footer.site .wrap { padding-top: 14px; padding-bottom: 22px; }
+footer.site p { margin: 0; }
 
 /* --- Typografie ---------------------------------------------------------- */
 
@@ -467,9 +466,22 @@ table.daten tbody tr:last-child td { border-bottom: none; }
 }
 .daten-abschnitt h2 { border-top: none; padding-top: 0; margin: 0 0 6px; font-size: 20px; }
 
-/* Die Tabelle neben dem Diagramm fuehrt auf die Datenseite. */
-a.tabelle-link { display: block; border-bottom: none; font-weight: 400; color: inherit; }
-a.tabelle-link:hover .tabelle-huelle { outline: 1px solid var(--akzent); }
+/* Die Tabelle neben dem Diagramm fuehrt auf die Datenseite. Sie sitzt in
+   derselben weissen Flaeche mit demselben Kopf wie das Diagramm, damit die
+   Oberkanten und die waagerechten Linien beider Kaesten fluchten. */
+a.tabelle-link {
+  display: block;
+  border-bottom: none;
+  font-weight: 400;
+  color: inherit;
+}
+a.tabelle-link .tabelle-huelle {
+  background: transparent;
+  max-width: none;
+  /* Gleicher Abstand wie vom Diagrammkopf zur Zeichenflaeche. */
+  margin-top: 16px;
+}
+a.tabelle-link:hover h3 { color: var(--akzent); }
 
 /* --- Heatmap ------------------------------------------------------------ */
 

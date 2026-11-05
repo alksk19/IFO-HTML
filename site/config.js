@@ -12,7 +12,9 @@ window.SITE = {
   // Hinweis, der auf jeder Seite erscheint.
   disclaimer: "Prototyp, keine offizielle Veröffentlichung des ifo Instituts",
 
-  // Monat des aktuellen Datenstands, wie er in den Quelldateien steht.
+  // Rueckfallebene fuer den Datenstand. Normalerweise kommt er aus
+  // site/data.js, wo R/build_data.R ihn aus dem Namen der Rohdatei ablegt -
+  // dann muss hier nach einem Update nichts geaendert werden.
   stand: "Oktober 2026",
 
   // Die Seite beim ifo Institut, auf der die jeweilige Reihe veroeffentlicht
