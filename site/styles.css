@@ -9,10 +9,10 @@
 :root {
   color-scheme: light;
 
-  /* Beiger Seitengrund; die Flaechen der Kacheln bleiben eine Spur heller,
-     damit sie sich weiterhin abheben. */
-  --plane:           #f2ece1;
-  --surface:         #fbf8f2;
+  /* Neutraler, sehr heller Seitengrund; die Flaechen der Kacheln bleiben eine
+     Spur heller, damit sie sich abheben. */
+  --plane:           #f9f9f7;
+  --surface:         #fcfcfb;
   --text-primary:    #0b0b0b;
   --text-secondary:  #52514e;
   --text-muted:      #898781;
@@ -33,7 +33,7 @@
   --div-neg:         #ff8d62;  /* ifo "Abkuehlung" */
   --div-pos:         #8385eb;  /* ifo "Erholung"  */
   --div-pos-stark:   #3237de;  /* ifo "Boom"      */
-  --div-mid:         #f3eee4;
+  --div-mid:         #f0efec;
 
   --good:            #006300;
   --bad:             #d03b3b;
