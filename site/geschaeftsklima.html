@@ -12,50 +12,42 @@
 <main class="wrap">
 
   <h1>ifo Geschäftsklima</h1>
-  <p class="intro">
-    Das ifo Geschäftsklima fasst zusammen, wie Unternehmen in Deutschland ihre
-    laufenden Geschäfte beurteilen und wie sie die nächsten sechs Monate
-    einschätzen. Es beruht auf rund 9.000 monatlichen Meldungen aus dem
-    Verarbeitenden Gewerbe, dem Dienstleistungssektor, dem Handel und dem
-    Bauhauptgewerbe.
-  </p>
+  <p class="intro">Beschreibung</p>
+  <p class="stand-oben" id="stand"></p>
 
-  <div class="tiles" id="kennzahlen"></div>
-
-  <h2>Klima, Lage und Erwartungen</h2>
+  <h2>Geschäftsklima</h2>
   <p class="intro">
-    Das Geschäftsklima ist ein Mittelwert aus der Beurteilung der aktuellen
-    Lage und den Erwartungen für die kommenden sechs Monate. Die Indexwerte
-    sind auf den Durchschnitt des Jahres 2015 normiert.
+    Mittelwert aus der Beurteilung der Lage und den Erwartungen für die
+    kommenden sechs Monate, Index auf 2015 normiert.
   </p>
-  <div id="klima"></div>
+  <div class="duo">
+    <div id="klima"></div>
+    <a class="tabelle-link" href="daten.html#chart-klima" id="klima-tabelle"></a>
+  </div>
 
   <h2>Wirtschaftsbereiche</h2>
   <p class="intro">
-    Für die einzelnen Bereiche werden die Salden ausgewiesen: die Differenz
-    der Prozentanteile positiver und negativer Antworten. Ein Wert über null
-    heißt, dass mehr Unternehmen die Lage gut als schlecht beurteilen.
+    Salden: die Differenz der Prozentanteile positiver und negativer Antworten.
   </p>
-  <div id="bereiche"></div>
+  <div class="raster-2" id="bereiche"></div>
 
   <h2>Geschäftsunsicherheit</h2>
   <p class="intro">
-    Die ifo Geschäftsunsicherheit misst, wie schwer es den Befragten fällt,
-    die eigene Geschäftsentwicklung der nächsten sechs Monate vorherzusagen.
-    Höhere Werte bedeuten höhere Unsicherheit.
+    Wie schwer es den Befragten fällt, die eigene Geschäftsentwicklung
+    vorherzusagen. Höhere Werte bedeuten höhere Unsicherheit.
   </p>
   <div id="unsicherheit"></div>
 
   <h2>Heatmap der Wirtschaftsbereiche</h2>
   <p class="intro">
-    Alle Bereiche nebeneinander: jede Zeile ein Wirtschaftsbereich, jede
-    Spalte ein Monat, die Farbe der Saldo des Geschäftsklimas.
+    Jede Zeile ein Wirtschaftsbereich, jede Spalte ein Monat, die Farbe der
+    Saldo des Geschäftsklimas.
   </p>
   <div id="heatmap"></div>
 
   <h2>Mehr Details</h2>
   <details class="mehr" id="details">
-    <summary>Lange Zeitreihen und weitere Darstellungen</summary>
+    <summary>Großhandel, Einzelhandel und lange Zeitreihen</summary>
     <div class="inhalt">
       <p class="hinweis-klein">Gesamter verfügbarer Zeitraum.</p>
     </div>
@@ -70,47 +62,20 @@
 (function () {
   APP.rahmenAufbauen();
 
-  /* --- Kennzahlen: Geschäftsklima und Konjunkturampel ------------------- */
-
   const klima = APP.serie("gsk_deutschland", "Geschaeftsklima", "Deutschland");
   const lage = APP.serie("gsk_deutschland", "Geschaeftslage", "Deutschland");
   const erwartung = APP.serie("gsk_deutschland", "Geschaeftserwartungen", "Deutschland");
   const ampel = APP.serie("gsk_deutschland", "Konjunkturampel", "Deutschland");
 
-  const kennzahlen = [
-    { serie: klima, titel: "ifo Geschäftsklima", stellen: 1,
-      zusatz: "Index, 2015 = 100" },
-    { serie: ampel, titel: "ifo Konjunkturampel", stellen: 1,
-      zusatz: "Wahrscheinlichkeit für eine expansive Entwicklung" }
-  ];
+  /* --- Datenstand, einmal oben auf der Seite ---------------------------- */
 
-  const kz = document.getElementById("kennzahlen");
-  kennzahlen.forEach(function (k) {
-    const a = APP.aktuell(k.serie);
-    if (!a) return;
-    let klasse = "null", pfeil = "±";
-    if (a.delta > 0) { klasse = "auf"; pfeil = "▲"; }
-    else if (a.delta < 0) { klasse = "ab"; pfeil = "▼"; }
+  const aktuell = APP.aktuell(klima);
+  if (aktuell) {
+    document.getElementById("stand").textContent =
+      "Stand: " + APP.monatLang(aktuell.monat) + " · Quelle: " + klima.source;
+  }
 
-    const el = document.createElement("div");
-    el.className = "tile";
-    el.innerHTML =
-      '<div class="tile-titel">' + APP.escape(k.titel) + "</div>" +
-      '<div class="wert">' + APP.zahl(a.wert, k.stellen) +
-        (k.titel.indexOf("Ampel") > -1 ? " %" : "") + "</div>" +
-      '<div class="einheit">' + APP.escape(k.zusatz) + "</div>" +
-      '<div class="delta ' + klasse + '">' + pfeil + " " +
-        APP.zahlMitVorzeichen(a.delta, k.stellen) + " zum Vormonat</div>" +
-      '<div class="sparkline"></div>' +
-      '<div class="stand">Stand: ' + APP.monatLang(a.monat) + "</div>";
-    kz.appendChild(el);
-
-    const von = Math.max(0, k.serie.values.length - 120);
-    APP.sparkline(el.querySelector(".sparkline"),
-                  k.serie.values.slice(von), k.serie.dates.slice(von));
-  });
-
-  /* --- Klima, Lage, Erwartungen ----------------------------------------- */
+  /* --- Geschäftsklima: Diagramm links, Tabelle rechts ------------------- */
 
   APP.chartBlock(document.getElementById("klima"), {
     id: "chart-klima",
@@ -119,45 +84,44 @@
     legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
     stellen: 1,
     zeitraum: "10j",
-    tabelleMonate: 6
+    tabelle: false
   });
 
-  /* --- Wirtschaftsbereiche ---------------------------------------------- */
+  // Die einzige Tabelle der Seite: letzte zwölf Monate, neuester oben. Ein
+  // Klick darauf führt zur Datenseite, zum Abschnitt dieser Reihe.
+  const tabSerien = [klima, lage, erwartung];
+  document.getElementById("klima-tabelle").innerHTML =
+    APP.tabelleHtml(APP.zuschneiden(tabSerien, 12), tabSerien, {
+      legende: ["Klima", "Lage", "Erwartungen"],
+      stellen: 1
+    });
 
-  // Dieselbe Vorlage je Bereich: ein Diagramm mit Klima, Lage und
-  // Erwartungen als Salden, darunter die zugehörige Tabelle.
+  /* --- Wirtschaftsbereiche: nur Diagramme, zweispaltig ------------------ */
+
+  // Großhandel und Einzelhandel stehen weiter unten in "Mehr Details".
   const BEREICHE = [
     "Verarbeitendes Gewerbe",
     "Dienstleistungssektor",
     "Handel",
-    "Großhandel",
-    "Einzelhandel",
     "Bauhauptgewerbe"
   ];
 
   const ziel = document.getElementById("bereiche");
   BEREICHE.forEach(function (name) {
-    // In den Daten steht "Grosshandel" ohne Umlaut.
-    const schluessel = name === "Großhandel" ? "Grosshandel" : name;
     const s = ["Geschaeftsklima_saldo", "Geschaeftslage_saldo", "Geschaeftserwartungen_saldo"]
-      .map(function (n) { return APP.serie("gsk_bereiche", n, schluessel); });
-
-    const ueberschrift = document.createElement("h3");
-    ueberschrift.style.marginTop = "28px";
-    ueberschrift.textContent = name;
-    ziel.appendChild(ueberschrift);
+      .map(function (n) { return APP.serie("gsk_bereiche", n, name); });
 
     APP.chartBlock(ziel, {
-      id: "chart-" + schluessel.toLowerCase().replace(/[^a-z]+/g, "-"),
-      titel: "ifo Geschäftsklima " + name,
+      id: "chart-" + name.toLowerCase().replace(/[^a-z]+/g, "-"),
+      titel: name,
       serien: s,
       legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
       stellen: 1,
       nullLinie: true,
       zeitraum: "10j",
-      tabelleMonate: 6,
+      tabelle: false,
       klein: true,
-      hinweis: (schluessel === "Dienstleistungssektor")
+      hinweis: (name === "Dienstleistungssektor")
         ? "Zeitreihe ab 01/2005; übrige Bereiche ab 01/1991"
         : null
     });
@@ -172,7 +136,7 @@
     serien: [unsicherheit],
     stellen: 1,
     zeitraum: "alle",
-    tabelleMonate: 6,
+    tabelle: false,
     hinweis: "Zeitreihe ab 04/2019; nicht saisonbereinigt"
   });
 
@@ -189,19 +153,39 @@
     monate: 24
   });
 
-  /* --- Mehr Details: lange Zeitreihen ----------------------------------- */
+  /* --- Mehr Details ------------------------------------------------------ */
 
-  // Ueberschrift, Einleitungssatz und Huelle stehen im HTML dieser Seite
-  // (oben unter "Mehr Details"), damit die sichtbaren Woerter dort zu finden
-  // und zu aendern sind. Hier werden nur die Diagramme eingehaengt.
+  // Überschrift, Aufklapp-Beschriftung und Einleitungssatz stehen im HTML
+  // dieser Seite. Hier werden nur die Diagramme eingehängt.
   const details = document.getElementById("details");
   const inhalt = details.querySelector(".inhalt");
 
-  // Die langen Reihen werden erst aufgebaut, wenn die Schicht geöffnet wird.
   let aufgebaut = false;
   details.addEventListener("toggle", function () {
     if (!details.open || aufgebaut) return;
     aufgebaut = true;
+
+    // Die beiden Handelsbereiche, die oben bewusst nicht stehen.
+    const raster = document.createElement("div");
+    raster.className = "raster-2";
+    inhalt.appendChild(raster);
+
+    ["Grosshandel", "Einzelhandel"].forEach(function (schluessel) {
+      const s = ["Geschaeftsklima_saldo", "Geschaeftslage_saldo", "Geschaeftserwartungen_saldo"]
+        .map(function (n) { return APP.serie("gsk_bereiche", n, schluessel); });
+
+      APP.chartBlock(raster, {
+        id: "chart-" + schluessel.toLowerCase(),
+        titel: APP.label(schluessel),
+        serien: s,
+        legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
+        stellen: 1,
+        nullLinie: true,
+        zeitraum: "10j",
+        tabelle: false,
+        klein: true
+      });
+    });
 
     APP.chartBlock(inhalt, {
       id: "chart-klima-lang",
@@ -210,22 +194,7 @@
       legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
       stellen: 1,
       zeitraum: "alle",
-      tabelleMonate: 6
-    });
-
-    APP.chartBlock(inhalt, {
-      id: "chart-klima-saldo-lang",
-      titel: "ifo Geschäftsklima Deutschland als Salden seit 2005",
-      serien: [
-        APP.serie("gsk_deutschland", "Geschaeftsklima_saldo", "Deutschland"),
-        APP.serie("gsk_deutschland", "Geschaeftslage_saldo", "Deutschland"),
-        APP.serie("gsk_deutschland", "Geschaeftserwartungen_saldo", "Deutschland")
-      ],
-      legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
-      stellen: 1,
-      nullLinie: true,
-      zeitraum: "alle",
-      tabelleMonate: 6
+      tabelle: false
     });
 
     APP.chartBlock(inhalt, {
@@ -240,7 +209,7 @@
       stellen: 1,
       nullLinie: true,
       zeitraum: "alle",
-      tabelleMonate: 6,
+      tabelle: false,
       hinweis: "Verarbeitendes Gewerbe, Handel und Bauhauptgewerbe; auch als Index verfügbar"
     });
 
@@ -250,7 +219,7 @@
       serien: [ampel],
       stellen: 1,
       zeitraum: "alle",
-      tabelleMonate: 6,
+      tabelle: false,
       hinweis: "Laut Quelldatei: Wahrscheinlichkeit für eine expansive Entwicklung in %"
     });
   });

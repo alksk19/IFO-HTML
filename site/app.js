@@ -59,10 +59,15 @@
   }
 
   // Deutsche Schreibweise mit Dezimalkomma.
+  // Anzeigeformat: deutsches Dezimalkomma und ein echtes Minuszeichen (U+2212)
+  // statt des Bindestrichs - es steht auf der Hoehe des Pluszeichens und ist
+  // genauso breit wie eine Ziffer. Die CSV-Ausgabe nutzt diese Funktion nicht
+  // und behaelt die Rohwerte.
   function zahl(v, stellen) {
     if (v === null || v === undefined || Number.isNaN(v)) return "–";
     const s = (stellen === undefined) ? 1 : stellen;
-    return v.toLocaleString("de-DE", { minimumFractionDigits: s, maximumFractionDigits: s });
+    return v.toLocaleString("de-DE", { minimumFractionDigits: s, maximumFractionDigits: s })
+            .replace("-", "−");
   }
 
   function zahlMitVorzeichen(v, stellen) {
@@ -284,10 +289,10 @@
     const url = location.href.split("#")[0] + "#" + id;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url)
-        .then(function () { melden("Link kopiert: " + url); })
-        .catch(function () { melden(url); });
+        .then(function () { melden("Link kopiert"); })
+        .catch(function () { melden("Kopieren nicht möglich"); });
     } else {
-      melden(url);
+      melden("Kopieren nicht möglich");
     }
     history.replaceState(null, "", "#" + id);
   }
@@ -498,10 +503,14 @@
     });
     werkzeuge.appendChild(schalter);
 
+    // "Daten" fuehrt auf die Datenseite, und zwar an den Abschnitt dieser
+    // Reihe. Die Ankernamen folgen derselben Kennung wie das Diagramm, damit
+    // beides zusammenpasst.
     const knoepfe = [
-      ["Bild kopieren", function () { if (chart) bildKopieren(chart, o.titel, quelle, melden); }],
+      ["Daten", function () { location.href = "daten.html#" + o.id; }],
+      ["CSV", function () { csvHerunterladen(serien, ausschnitt(), o.titel, kopfzeilen()); }],
       ["PNG", function () { if (chart) pngHerunterladen(chart, o.titel, quelle); }],
-      ["Daten (CSV)", function () { csvHerunterladen(serien, ausschnitt(), o.titel, kopfzeilen()); }],
+      ["Bild kopieren", function () { if (chart) bildKopieren(chart, o.titel, quelle, melden); }],
       ["Link", function () { linkKopieren(o.id, melden); }]
     ];
     knoepfe.forEach(function (k) {
@@ -535,15 +544,24 @@
 
     const flaeche = document.createElement("div");
     flaeche.className = "chart-flaeche" + (o.klein ? " klein" : "");
-    flaeche.title = "Klicken, um zu den Daten dieses Diagramms zu springen";
+    flaeche.title = "Antippen, um die Schaltflächen einzublenden";
     const canvas = document.createElement("canvas");
     flaeche.appendChild(canvas);
     block.appendChild(flaeche);
 
-    // Klick auf das Diagramm springt in den Datenabschnitt.
-    flaeche.addEventListener("click", function () {
-      const t = document.getElementById(tabelleId);
-      if (t) { t.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    // Die Werkzeuge erscheinen bei Mauszeiger darueber oder Tastaturfokus
+    // (beides in styles.css). Ein Klick oder Tipp auf das Diagramm blendet sie
+    // ebenfalls ein - auf Tastgeraeten gibt es kein Hover. Ein Tipp daneben
+    // nimmt sie wieder weg.
+    flaeche.addEventListener("click", function (e) {
+      e.stopPropagation();
+      document.querySelectorAll(".chart-block.offen").forEach(function (b) {
+        if (b !== block) b.classList.remove("offen");
+      });
+      block.classList.add("offen");
+    });
+    document.addEventListener("click", function (e) {
+      if (!block.contains(e.target)) block.classList.remove("offen");
     });
 
     const fuss = document.createElement("div");
@@ -614,9 +632,12 @@
       }
 
       if (a.monate.length) {
-        spanne.innerHTML = escape(monatLang(a.monate[0])) + " bis " +
-          escape(monatLang(a.monate[a.monate.length - 1])) +
-          " · " + a.monate.length + " Monate · Quelle: " + quelleHtml(serien[0]);
+        // Nur Text, kein Link: die einzige Link-Funktion je Diagramm ist der
+        // Knopf "Link". Der Hyperlink zur ifo-Seite steht auf der Datenseite
+        // und der Methodikseite.
+        spanne.textContent = monatLang(a.monate[0]) + " bis " +
+          monatLang(a.monate[a.monate.length - 1]) +
+          " · " + a.monate.length + " Monate · Quelle: " + quelle;
       }
 
       if (tabelleEl) tabelleZeichnen(a);
@@ -706,6 +727,7 @@
     ["beschaeftigungsbarometer.html", "Beschäftigungsbarometer"],
     ["exporterwartungen.html", "Exporterwartungen"],
     ["importklima.html", "Importklima"],
+    ["daten.html", "Daten"],
     ["methodik.html", "Methodik"]
   ];
 
@@ -865,7 +887,7 @@
     fuss.className = "chart-fuss";
     fuss.innerHTML = "<span>" + escape(monatLang(a.monate[0])) + " bis " +
       escape(monatLang(a.monate[a.monate.length - 1])) + " · Quelle: " +
-      quelleHtml(serien[0]) + "</span>";
+      escape(quelle) + "</span>";
     fuss.appendChild(statusEl);
     block.appendChild(fuss);
 
@@ -938,6 +960,7 @@
     css: css,
     serienfarben: serienfarben,
     csvHerunterladen: csvHerunterladen,
+    quelleHtml: quelleHtml,
     MONATE_KURZ: MONATE_KURZ
   };
 })();

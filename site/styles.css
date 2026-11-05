@@ -9,16 +9,19 @@
 :root {
   color-scheme: light;
 
-  /* Neutraler, sehr heller Seitengrund; die Flaechen der Kacheln bleiben eine
-     Spur heller, damit sie sich abheben. */
-  --plane:           #f9f9f7;
-  --surface:         #fcfcfb;
-  --text-primary:    #0b0b0b;
-  --text-secondary:  #52514e;
-  --text-muted:      #898781;
+  /* Flaechen und Textfarben wie auf ifo.de: kuehler, sehr heller Seitengrund,
+     Inhaltsflaechen weiss, Ueberschriften fast schwarz, Lauftext blaugrau. */
+  --plane:           #f4f5fa;
+  --surface:         #ffffff;
+  --text-primary:    #141414;
+  --text-secondary:  #414650;
+  --text-muted:      #72737e;
   --grid:            #b9bec8;
   --axis:            #72737e;
-  --border:          rgba(11, 11, 11, 0.10);
+  --border:          #dcdfe8;
+
+  /* Akzentfarbe des Instituts, fuer Links und Bedienelemente. */
+  --akzent:          #3237de;
 
   /* Serienfarben exakt aus den Diagrammen der ifo-Pressemitteilung
      (data/raw/ku-2026-10-pm-geschaeftsklima-DE.pdf, Seiten 1-2). */
@@ -33,12 +36,15 @@
   --div-neg:         #ff8d62;  /* ifo "Abkuehlung" */
   --div-pos:         #8385eb;  /* ifo "Erholung"  */
   --div-pos-stark:   #3237de;  /* ifo "Boom"      */
-  --div-mid:         #f0efec;
+  --div-mid:         #eceef4;
 
   --good:            #006300;
   --bad:             #d03b3b;
 
-  --radius: 10px;
+  /* Keine abgerundeten Ecken: der ifo-Auftritt setzt durchgehend auf rechte
+     Winkel. Nur Bedienelemente bekommen die 4 px von ifo.de. */
+  --radius: 0;
+  --radius-btn: 4px;
   --maxw: 1060px;
 }
 
@@ -88,27 +94,38 @@ body {
   margin: 0;
   background: var(--plane);
   color: var(--text-primary);
-  /* Stack und Zeilenhoehe wie auf ifo.de: 16px/26px. */
-  font: 16px/1.625 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  /* Stack und Zeilenhoehe wie auf ifo.de: 16px/22px. */
+  font: 16px/1.375 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
         Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Ueberschriften etwas enger laufen lassen, wie im ifo-Auftritt. */
+/* Ueberschriften eng und kraeftig, wie im ifo-Auftritt. */
 h1, h2, h3 { letter-spacing: -0.01em; }
+
+/* Links wie auf ifo.de: kraeftiges Blau, fett, mit gepunkteter Unterkante
+   statt durchgezogener Unterstreichung. */
+a {
+  color: var(--akzent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--akzent);
+}
+a:hover { border-bottom-style: solid; }
 
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
 
 /* --- Kopf- und Fusszeile ------------------------------------------------- */
 
+/* Sachlicher Hinweisstreifen statt Signalfarbe: er muss gelesen werden
+   koennen, ohne die Seite wie eine Werbeflaeche aussehen zu lassen. */
 .prototyp-hinweis {
-  background: #fab219;
-  color: #0b0b0b;
-  font-size: 13px;
+  background: var(--text-primary);
+  color: #ffffff;
+  font-size: 12.5px;
   font-weight: 500;
-  text-align: center;
-  padding: 7px 20px;
-  letter-spacing: 0.01em;
+  text-align: left;
+  padding: 6px 20px;
 }
 
 header.site {
@@ -158,25 +175,46 @@ footer.site a { color: var(--text-secondary); }
 
 main { padding-top: 34px; }
 
+/* Groessenstaffel und Gewichte nach ifo.de (dort h1 60/75, h2 40/50, h3 20/25,
+   durchgehend 700), fuer die schmalere Spalte hier eine Stufe kleiner. */
 h1 {
-  font-size: 30px;
-  line-height: 1.22;
+  font-size: 44px;
+  line-height: 1.14;
   letter-spacing: -0.02em;
-  margin: 0 0 10px;
-  font-weight: 680;
+  margin: 0 0 14px;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  margin: 46px 0 6px;
-  font-weight: 650;
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 52px 0 8px;
+  font-weight: 700;
 }
 
-h3 { font-size: 16px; margin: 0 0 4px; font-weight: 620; }
+h3 { font-size: 20px; line-height: 1.25; margin: 0 0 4px; font-weight: 700; }
 
-.intro { color: var(--text-secondary); max-width: 68ch; margin: 0 0 6px; }
-.hinweis-klein { color: var(--text-muted); font-size: 13px; max-width: 72ch; }
+/* Zeilenlaenge auf rund 65 Zeichen begrenzt - darueber wird Fliesstext
+   muehsam zu lesen. */
+.intro { color: var(--text-secondary); max-width: 65ch; margin: 0 0 6px; }
+.hinweis-klein { color: var(--text-muted); font-size: 13px; max-width: 65ch; }
+.prosa p, .prosa li, .prosa dd { max-width: 65ch; }
+
+/* Datenstand, einmal oben auf der Seite statt unter jedem Diagramm. */
+.stand-oben {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0 0 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px dotted var(--border);
+}
+
+/* Gepunktete Trennlinie zwischen den Abschnitten, wie im ifo-Auftritt. */
+main h2 {
+  padding-top: 26px;
+  border-top: 1px dotted var(--border);
+}
+main h2:first-of-type { border-top: none; padding-top: 0; }
 
 /* --- Kacheln ------------------------------------------------------------- */
 
@@ -194,14 +232,15 @@ h3 { font-size: 16px; margin: 0 0 4px; font-weight: 620; }
   flex-direction: column;
   max-width: 340px;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 16px 12px;
+  border: none;
+  padding: 20px 20px 16px;
   text-decoration: none;
   color: inherit;
+  font-weight: 400;
 }
 
-a.tile:hover { border-color: var(--axis); }
+a.tile { border-bottom: none; }
+a.tile:hover .tile-titel { color: var(--akzent); }
 
 .tile .tile-titel {
   font-size: 14px;
@@ -210,11 +249,13 @@ a.tile:hover { border-color: var(--axis); }
   margin-bottom: 10px;
 }
 
+/* Der aktuelle Wert in der Akzentfarbe und fett, wie in den ifo-Grafiken. */
 .tile .wert {
-  font-size: 31px;
-  font-weight: 650;
+  font-size: 38px;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.05;
+  color: var(--akzent);
 }
 
 /* Zwei Zeilen Hoehe, damit alle Kacheln dieselbe Taktung haben, auch wenn
@@ -245,12 +286,35 @@ a.tile:hover { border-color: var(--axis); }
 
 /* --- Chart-Baustein ------------------------------------------------------ */
 
+/* Weisse Flaeche ohne Rahmen auf dem hellen Seitengrund - kein Kartenlook. */
 .chart-block {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px 14px;
-  margin: 14px 0 0;
+  border: none;
+  padding: 20px 22px 16px;
+  margin: 16px 0 0;
+}
+
+/* Diagramm und Tabelle nebeneinander, Diagramm breiter. Unter 900 px
+   untereinander. */
+.duo {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+/* Zweispaltiges Raster fuer die Wirtschaftsbereiche. */
+.raster-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.duo > .chart-block, .raster-2 > .chart-block { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .duo, .raster-2 { grid-template-columns: minmax(0, 1fr); }
 }
 
 .chart-kopf {
@@ -264,51 +328,69 @@ a.tile:hover { border-color: var(--axis); }
 .chart-kopf .titelblock { flex: 1 1 260px; min-width: 0; }
 .chart-kopf .einheit { font-size: 12.5px; color: var(--text-muted); }
 
-.werkzeuge { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+/* Die Werkzeuge treten erst hervor, wenn man sich mit dem Diagramm befasst:
+   bei Mauszeiger darueber, bei Tastaturfokus oder nach einem Tipp (dann setzt
+   app.js die Klasse .offen). Sichtbar bleiben sie im Platz, damit nichts
+   springt. */
+.werkzeuge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.12s ease-in-out;
+}
+.chart-block:hover .werkzeuge,
+.chart-block:focus-within .werkzeuge,
+.chart-block.offen .werkzeuge { opacity: 1; }
 
+/* Ohne Mauszeiger (Touch) sind sie immer sichtbar - dort gibt es kein
+   Hover, und ein unsichtbarer Knopf waere nicht auffindbar. */
+@media (hover: none) {
+  .werkzeuge { opacity: 1; }
+}
+
+/* Bedienelemente wie auf ifo.de: flach, ohne Fuellung, Beschriftung in der
+   Akzentfarbe. Keine Pillen, keine dunklen Kapseln. */
 .btn {
   font: inherit;
   font-size: 12.5px;
   line-height: 1;
   padding: 7px 10px;
   border: 1px solid var(--border);
-  background: var(--plane);
-  color: var(--text-secondary);
-  border-radius: 7px;
+  background: transparent;
+  color: var(--akzent);
+  border-radius: var(--radius-btn);
   cursor: pointer;
   white-space: nowrap;
 }
-.btn:hover { color: var(--text-primary); border-color: var(--axis); }
-.btn:active { transform: translateY(0.5px); }
+.btn:hover { border-color: var(--akzent); }
 .btn.aktiv {
-  background: var(--text-primary);
-  color: var(--surface);
-  border-color: var(--text-primary);
-  font-weight: 550;
+  color: var(--akzent);
+  border-color: var(--akzent);
+  font-weight: 600;
 }
 
 .bereich-schalter {
   display: inline-flex;
-  gap: 2px;
-  padding: 2px;
-  background: var(--plane);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  gap: 4px;
 }
 .bereich-schalter .btn {
-  border: none;
+  border: 1px solid transparent;
   background: none;
   padding: 6px 10px;
-  border-radius: 6px;
+  color: var(--text-muted);
 }
-.bereich-schalter .btn.aktiv { background: var(--text-primary); color: var(--surface); }
+.bereich-schalter .btn:hover { color: var(--akzent); border-color: transparent; }
+.bereich-schalter .btn.aktiv {
+  color: var(--akzent);
+  border-bottom-color: var(--akzent);
+  font-weight: 600;
+}
 
 .legende { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 10px 0 2px; }
 .legende span { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-secondary); }
-.legende i {
-  width: 11px; height: 11px; border-radius: 3px; flex: none;
-  box-shadow: 0 0 0 2px var(--surface);
-}
+.legende i { width: 11px; height: 11px; flex: none; }
 
 .chart-flaeche { position: relative; height: 310px; margin-top: 6px; cursor: pointer; }
 .chart-flaeche.klein { height: 215px; }
@@ -320,50 +402,74 @@ a.tile:hover { border-color: var(--axis); }
   font-size: 12px; color: var(--text-muted);
 }
 
-/* Die Quellenangabe verlinkt auf die zugehoerige ifo-Seite. Sie soll sich in
-   die Fusszeile einfuegen und nicht als Browser-Blau herausstechen. */
-.chart-fuss a { color: inherit; text-decoration: underline; }
-.chart-fuss a:hover { color: var(--text-secondary); }
+/* Unter dem Diagramm steht die Quellenangabe nur noch als Text; die einzige
+   Link-Funktion je Diagramm ist der Knopf "Link". Der Hyperlink zur ifo-Seite
+   steht auf der Datenseite und der Methodikseite. */
 
-.kopier-status { font-size: 12px; color: var(--text-secondary); min-height: 1em; }
+/* Kurze, unaufdringliche Rueckmeldung neben dem Knopf. */
+.kopier-status {
+  font-size: 12px;
+  color: var(--akzent);
+  font-weight: 600;
+  min-height: 1em;
+  white-space: nowrap;
+}
 
 /* --- Tabellen ----------------------------------------------------------- */
 
 /* Die Huelle richtet sich nach dem Inhalt statt nach dem Fenster: so stehen
    Monat und Werte dicht beieinander und die Zeile ist mit einem Blick
    erfassbar, statt ueber die ganze Seitenbreite gezogen zu werden. */
+/* Tabellen nach dem EU Data Visualisation Guide: schmal, mit Hoechstbreite,
+   nur leichte Zeilentrenner, keine kraeftigen Rahmen, keine Zebrastreifen. */
 .tabelle-huelle {
   overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: none;
   background: var(--surface);
   margin-top: 12px;
-  max-width: fit-content;
+  max-width: 460px;
 }
 
 table.daten {
   border-collapse: collapse;
-  width: auto;
+  width: 100%;
   font-size: 13.5px;
+  /* Ziffern gleicher Breite, damit die Stellen untereinander stehen. */
   font-variant-numeric: tabular-nums;
 }
 
 table.daten th, table.daten td {
   padding: 6px 10px;
+  /* Zahlen rechtsbuendig; die Koepfe sind genauso ausgerichtet wie ihre
+     Daten. Die Monatsspalte steht links. */
   text-align: right;
   border-bottom: 1px solid var(--grid);
   white-space: nowrap;
 }
 table.daten th:first-child, table.daten td:first-child { text-align: left; }
+/* Zahlen in Dunkelgrau, nicht in der Akzentfarbe (Lesbarkeit, WCAG AA). */
+table.daten td { color: var(--text-primary); }
 table.daten thead th {
   color: var(--text-secondary);
   font-weight: 600;
   font-size: 12.5px;
-  background: var(--plane);
+  background: var(--surface);
+  border-bottom: 1px solid var(--axis);
   position: sticky; top: 0;
 }
 table.daten tbody tr:last-child td { border-bottom: none; }
-table.daten tbody tr:hover td { background: var(--plane); }
+
+/* Abschnitte der Datenseite: weisse Flaeche, gepunktete Trennung. */
+.daten-abschnitt {
+  background: var(--surface);
+  padding: 20px 22px 18px;
+  margin-top: 16px;
+}
+.daten-abschnitt h2 { border-top: none; padding-top: 0; margin: 0 0 6px; font-size: 20px; }
+
+/* Die Tabelle neben dem Diagramm fuehrt auf die Datenseite. */
+a.tabelle-link { display: block; border-bottom: none; font-weight: 400; color: inherit; }
+a.tabelle-link:hover .tabelle-huelle { outline: 1px solid var(--akzent); }
 
 /* --- Heatmap ------------------------------------------------------------ */
 

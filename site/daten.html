@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daten</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-titel="Daten">
+
+<main class="wrap">
+
+  <h1>Daten</h1>
+  <p class="intro">
+    Alle Reihen als Tabelle, je Abschnitt die letzten zwölf Monate. Die
+    vollständige Reihe gibt es über „CSV“.
+  </p>
+  <p class="stand-oben" id="stand"></p>
+
+  <div id="abschnitte"></div>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  APP.rahmenAufbauen();
+
+  // Die Kennungen sind dieselben wie die der Diagramme auf den Themenseiten.
+  // Nur so landet der Knopf "Daten" genau beim passenden Abschnitt.
+  const S = function (dataset, series, sector) { return APP.serie(dataset, series, sector); };
+  const KLIMA3 = ["Geschaeftsklima_saldo", "Geschaeftslage_saldo", "Geschaeftserwartungen_saldo"];
+  const LEG3 = ["Klima", "Lage", "Erwartungen"];
+
+  function bereich(name) {
+    return {
+      id: "chart-" + name.toLowerCase().replace(/[^a-z]+/g, "-"),
+      titel: APP.label(name),
+      serien: KLIMA3.map(function (n) { return S("gsk_bereiche", n, name); }),
+      legende: LEG3
+    };
+  }
+
+  const ABSCHNITTE = [
+    {
+      id: "chart-klima",
+      titel: "ifo Geschäftsklima Deutschland",
+      serien: [S("gsk_deutschland", "Geschaeftsklima", "Deutschland"),
+               S("gsk_deutschland", "Geschaeftslage", "Deutschland"),
+               S("gsk_deutschland", "Geschaeftserwartungen", "Deutschland")],
+      legende: LEG3
+    },
+    bereich("Verarbeitendes Gewerbe"),
+    bereich("Dienstleistungssektor"),
+    bereich("Handel"),
+    bereich("Bauhauptgewerbe"),
+    bereich("Grosshandel"),
+    bereich("Einzelhandel"),
+    bereich("Gewerbliche Wirtschaft"),
+    {
+      id: "chart-unsicherheit",
+      titel: "ifo Geschäftsunsicherheit",
+      serien: [S("gsk_deutschland", "Geschaeftsunsicherheit", "Deutschland")]
+    },
+    {
+      id: "chart-ampel-lang",
+      titel: "ifo Konjunkturampel",
+      serien: [S("gsk_deutschland", "Konjunkturampel", "Deutschland")]
+    },
+    {
+      id: "chart-empl",
+      titel: "ifo Beschäftigungsbarometer Deutschland",
+      serien: [S("empl", "Beschaeftigungsbarometer", "Deutschland")]
+    },
+    {
+      id: "chart-empl-bereiche",
+      titel: "ifo Beschäftigungsbarometer nach Wirtschaftsbereichen",
+      serien: ["Verarbeitendes Gewerbe", "Bauhauptgewerbe", "Handel", "Dienstleistungssektor"]
+        .map(function (n) { return S("empl", "Beschaeftigungsbarometer", n); }),
+      legende: ["Verarb. Gewerbe", "Bau", "Handel", "Dienstl."]
+    },
+    {
+      id: "chart-export",
+      titel: "ifo Exporterwartungen",
+      serien: [S("export", "Exporterwartungen", "Verarbeitendes Gewerbe")]
+    },
+    {
+      id: "chart-importklima",
+      titel: "ifo Importklima",
+      serien: [S("imklima", "Importklima", "Deutschland")],
+      stellen: 2
+    }
+  ];
+
+  const ziel = document.getElementById("abschnitte");
+  let neuester = null;
+
+  ABSCHNITTE.forEach(function (a) {
+    const serien = a.serien.filter(Boolean);
+    if (!serien.length) return;
+
+    if (!neuester) neuester = serien[0];
+
+    const block = document.createElement("section");
+    block.className = "daten-abschnitt sprungziel";
+    block.id = a.id;
+
+    const h = document.createElement("h2");
+    h.textContent = a.titel;
+    block.appendChild(h);
+
+    const meta = document.createElement("p");
+    meta.className = "hinweis-klein";
+    meta.innerHTML = "Einheit laut Quelldatei: " + APP.escape(serien[0].unit) +
+      "<br>Quelle: " + APP.quelleHtml(serien[0]);
+    block.appendChild(meta);
+
+    const stellen = a.stellen === undefined ? 1 : a.stellen;
+    const huelle = document.createElement("div");
+    huelle.innerHTML = APP.tabelleHtml(APP.zuschneiden(serien, 12), serien, {
+      legende: a.legende, stellen: stellen
+    });
+    block.appendChild(huelle);
+
+    const knopf = document.createElement("button");
+    knopf.type = "button";
+    knopf.className = "btn";
+    knopf.style.marginTop = "10px";
+    knopf.textContent = "CSV (vollständige Reihe)";
+    knopf.addEventListener("click", function () {
+      APP.csvHerunterladen(serien, APP.zuschneiden(serien, null), a.titel, [
+        a.titel,
+        "Quelle: " + serien[0].source,
+        SITE.disclaimer,
+        "Erzeugt am " + new Date().toLocaleDateString("de-DE")
+      ]);
+    });
+    block.appendChild(knopf);
+
+    ziel.appendChild(block);
+  });
+
+  if (neuester) {
+    const a = APP.aktuell(neuester);
+    if (a) {
+      document.getElementById("stand").textContent =
+        "Stand: " + APP.monatLang(a.monat);
+    }
+  }
+
+  APP.ankerAnspringen();
+})();
+</script>
+</body>
+</html>
