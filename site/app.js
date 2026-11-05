@@ -603,12 +603,9 @@
             monate: a.monate.slice(-k),
             spalten: a.spalten.map(function (sp) { return sp.slice(-k); })
           };
-          erlaeuterung = "Die Tabelle zeigt die letzten " + k + " Monate. " +
-            "Mit „Daten (CSV)“ lässt sich der vollständige im Diagramm " +
-            "dargestellte Zeitraum herunterladen.";
+          erlaeuterung = "Letzte " + k + " Monate; CSV enthält den ganzen Zeitraum";
         } else {
-          erlaeuterung = "Die Tabelle zeigt genau den im Diagramm dargestellten " +
-            "Zeitraum. Mit „Daten (CSV)“ lässt sich derselbe Ausschnitt herunterladen.";
+          erlaeuterung = "Wie im Diagramm; CSV identisch";
         }
         tabelleEl.innerHTML =
           '<h3 style="margin-top:18px">Daten: ' + escape(o.titel) + "</h3>" +

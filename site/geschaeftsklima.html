@@ -13,12 +13,11 @@
 
   <h1>ifo Geschäftsklima</h1>
   <p class="intro">
-    Das ifo Geschäftsklima fasst zusammen, wie rund 9.000 Unternehmen in
-    Deutschland ihre laufenden Geschäfte beurteilen und wie sie die nächsten
-    sechs Monate einschätzen. Es erscheint monatlich und gilt als der am
-    stärksten beachtete Frühindikator für die deutsche Wirtschaft. Die
-    Befragung deckt das Verarbeitende Gewerbe, den Dienstleistungssektor, den
-    Handel und das Bauhauptgewerbe ab.
+    Das ifo Geschäftsklima fasst zusammen, wie Unternehmen in Deutschland ihre
+    laufenden Geschäfte beurteilen und wie sie die nächsten sechs Monate
+    einschätzen. Es beruht auf rund 9.000 monatlichen Meldungen aus dem
+    Verarbeitenden Gewerbe, dem Dienstleistungssektor, dem Handel und dem
+    Bauhauptgewerbe.
   </p>
 
   <div class="tiles" id="kennzahlen"></div>
@@ -154,7 +153,7 @@
       tabelleMonate: 13,
       klein: true,
       hinweis: (schluessel === "Dienstleistungssektor")
-        ? "Der Dienstleistungssektor wird erst seit Januar 2005 erhoben; die übrigen Bereiche seit Januar 1991."
+        ? "Zeitreihe ab 01/2005; übrige Bereiche ab 01/1991"
         : null
     });
   });
@@ -169,8 +168,7 @@
     stellen: 1,
     zeitraum: "alle",
     tabelleMonate: 13,
-    hinweis: "Die Reihe beginnt im April 2019; für frühere Monate liegen keine Werte vor. " +
-             "Es handelt sich um Ursprungswerte, nicht um saisonbereinigte Werte."
+    hinweis: "Zeitreihe ab 04/2019; nicht saisonbereinigt"
   });
 
   /* --- Heatmap ----------------------------------------------------------- */
@@ -247,9 +245,7 @@
       nullLinie: true,
       zeitraum: "alle",
       tabelleMonate: 13,
-      hinweis: "Gewerbliche Wirtschaft umfasst das Verarbeitende Gewerbe, den Handel " +
-               "und das Bauhauptgewerbe. Die Reihe liegt in der Quelldatei zusätzlich " +
-               "als Index vor."
+      hinweis: "Verarbeitendes Gewerbe, Handel und Bauhauptgewerbe; auch als Index verfügbar"
     });
 
     APP.chartBlock(inhalt, {
@@ -259,9 +255,7 @@
       stellen: 1,
       zeitraum: "alle",
       tabelleMonate: 13,
-      hinweis: "Die Quelldatei bezeichnet die Reihe als „Wahrscheinlichkeit für eine " +
-               "expansive Entwicklung in %“. Eine ausführlichere Definition enthält " +
-               "die herangezogene Pressemitteilung nicht; siehe DATA.md."
+      hinweis: "Laut Quelldatei: Wahrscheinlichkeit für eine expansive Entwicklung in %"
     });
   });
 

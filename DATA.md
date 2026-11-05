@@ -21,6 +21,24 @@ Quellenangabe in den Daten (Spalte `source`):
 „ifo Konjunkturumfragen, Oktober 2026 (ifo Institut)“, beim Importklima
 „ifo Importklima, September 2026 (ifo Institut)“.
 
+### Verlinkte ifo-Seiten
+
+Die Quellenangabe unter jedem Diagramm verlinkt auf die Seite, auf der das ifo
+Institut die jeweilige Reihe veröffentlicht. Die Zuordnung steht in
+`site/config.js` unter `SITE.quellenLinks`; alle URLs wurden am 05.11.2026
+geprüft (Status 200).
+
+| Datensatz | Seite |
+|---|---|
+| `gsk_deutschland`, `gsk_bereiche` | `ifo.de/umfrage/ifo-geschaeftsklima-deutschland` |
+| `empl` | `ifo.de/umfrage/ifo-beschaeftigungsbarometer` |
+| `export` | `ifo.de/umfrage/ifo-exporterwartungen` |
+| `imklima` | `ifo.de/ifo-zeitreihen` |
+
+Für das **Importklima** gibt es auf ifo.de keine eigene Themenseite unter
+`/umfrage/`; die geprüften Kandidaten liefern 404. Die Reihe wird dort nur über
+die Zeitreihen-Seite veröffentlicht, auf die der Link deshalb zeigt.
+
 Für das Importklima nennt die Quelldatei zusätzlich zwei Veröffentlichungen:
 
 - Grimme, C., Lehmann, R. und M. Nöller (2018): Das ifo Importklima — ein
