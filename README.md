@@ -77,13 +77,14 @@ install.packages(c("readxl", "dplyr", "tidyr", "jsonlite"))
 1. Die neuen Excel-Dateien von
    [ifo.de/umfragen/zeitreihen](https://www.ifo.de/umfragen/zeitreihen)
    herunterladen und nach `data/raw/` legen.
-2. Die Dateinamen in `R/build_data.R` anpassen (die Namen tragen den
-   Datenstand, etwa `gsk-d-202610.xlsx`) — die vier Zuweisungen stehen
-   direkt am Anfang unter „Pfade“.
-3. `Rscript R/build_data.R` ausführen. Das Skript prüft dabei selbst, ob je
-   Monat genau ein Wert vorliegt und ob die Monatsfolge lückenlos ist, und
-   bricht bei doppelten oder unlesbaren Datumsangaben ab.
-4. In `site/config.js` den Eintrag `stand` auf den neuen Monat setzen.
+   Die Dateinamen tragen den Datenstand (etwa `gsk-d-202610.xlsx`) und
+   bleiben unverändert; die alten Dateien können liegen bleiben.
+2. `Rscript R/build_data.R` ausführen. Das Skript nimmt je Reihe von selbst
+   die **neueste** vorhandene Datei — im Skript ist nichts anzupassen. Es
+   prüft dabei, ob je Monat genau ein Wert vorliegt und ob die Monatsfolge
+   lückenlos ist, und bricht bei doppelten oder unlesbaren Datumsangaben ab.
+3. Fertig. Der Datenstand steht danach in `site/data.js` und wird von der
+   Website selbst angezeigt; in `site/config.js` ist nichts zu ändern.
 
 Ändert das ifo Institut den Aufbau der Excel-Dateien (zusätzliche Spalten,
 verschobene Kopfzeilen), müssen die Spaltenzuordnungen in `R/build_data.R`
@@ -93,8 +94,9 @@ nachgezogen werden; sie sind dort je Datei kommentiert.
 
 Der Name steht an genau einer Stelle: in `site/config.js`, Feld `name`.
 Eine Änderung dort wirkt auf Kopfzeile, Fußzeile und Seitentitel aller
-Seiten. Im selben Objekt stehen auch der Prototyp-Hinweis (`disclaimer`)
-und der Datenstand (`stand`).
+Seiten. Im selben Objekt steht auch der Prototyp-Hinweis (`disclaimer`).
+Das Feld `stand` dort ist nur noch ein Notnagel: angezeigt wird der
+Datenstand aus `site/data.js`, den das R-Skript setzt.
 
 ## Texte ändern
 
@@ -108,7 +110,7 @@ Seite und sucht den Satz dort — ohne Programmierkenntnisse.
 | Zwischenüberschriften und die Absätze darunter | ebenda, als `<h2>` und `<p class="intro">` |
 | Fußnoten unter den Diagrammen | ebenda, Felder `hinweis:` und `langHinweis:` |
 | Beschriftung der Aufklapp-Schicht „Mehr Details" | ebenda, im `<details>`-Element |
-| Seitenname, Prototyp-Hinweis, Datenstand | `site/config.js` |
+| Seitenname und Prototyp-Hinweis | `site/config.js` |
 | Kacheltexte der Startseite | `site/config.js`, Feld `themen` |
 | Methodiktexte | `site/methodik.html` |
 
@@ -125,16 +127,20 @@ nicht neu erzeugt werden.
 ├── data/
 │   ├── raw/               Rohdaten, unverändert wie heruntergeladen
 │   └── clean/             aufbereitete Reihen als CSV
+├── .github/workflows/
+│   └── daten-aktualisieren.yml  monatlicher Lauf bei GitHub
 ├── R/
-│   └── build_data.R       die gesamte Datenpipeline
+│   ├── build_data.R       die gesamte Datenpipeline
+│   └── update_data.R      holt neue Rohdaten von ifo.de
 └── site/
     ├── index.html         Startseite mit vier Kacheln
     ├── geschaeftsklima.html          ausgebaute Themenseite
     ├── exporterwartungen.html        |
     ├── importklima.html              | aus der Vorlage seite.js
     ├── beschaeftigungsbarometer.html |
+    ├── daten.html         alle Tabellen, je zwölf Monate
     ├── methodik.html      Saldo, Index, Quellen
-    ├── config.js          Name, Hinweis, Datenstand, Themen
+    ├── config.js          Name, Hinweis, Themen, Quellenlinks
     ├── data.js            erzeugt — nicht von Hand bearbeiten
     ├── app.js             Chart-Baustein, Export, Tabellen, Heatmap
     ├── seite.js           Vorlage der drei einfacheren Seiten
