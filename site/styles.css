@@ -9,13 +9,15 @@
 :root {
   color-scheme: light;
 
-  --plane:           #f9f9f7;
-  --surface:         #fcfcfb;
+  /* Beiger Seitengrund; die Flaechen der Kacheln bleiben eine Spur heller,
+     damit sie sich weiterhin abheben. */
+  --plane:           #f2ece1;
+  --surface:         #fbf8f2;
   --text-primary:    #0b0b0b;
   --text-secondary:  #52514e;
   --text-muted:      #898781;
-  --grid:            #e1e0d9;
-  --axis:            #c3c2b7;
+  --grid:            #e2d9c8;
+  --axis:            #c7bda8;
   --border:          rgba(11, 11, 11, 0.10);
 
   --series-1:        #2a78d6;  /* Geschäftsklima      */
@@ -24,7 +26,7 @@
 
   --div-pos:         #2a78d6;  /* Heatmap: positive Salden */
   --div-neg:         #d03b3b;  /* Heatmap: negative Salden */
-  --div-mid:         #f0efec;
+  --div-mid:         #f3eee4;
 
   --good:            #006300;
   --bad:             #d03b3b;
@@ -289,6 +291,11 @@ a.tile:hover { border-color: var(--axis); }
   gap: 4px 16px; margin-top: 9px;
   font-size: 12px; color: var(--text-muted);
 }
+
+/* Die Quellenangabe verlinkt auf die zugehoerige ifo-Seite. Sie soll sich in
+   die Fusszeile einfuegen und nicht als Browser-Blau herausstechen. */
+.chart-fuss a { color: inherit; text-decoration: underline; }
+.chart-fuss a:hover { color: var(--text-secondary); }
 
 .kopier-status { font-size: 12px; color: var(--text-secondary); min-height: 1em; }
 
