@@ -12,7 +12,12 @@
 <main class="wrap">
 
   <h1>ifo Geschäftsklima</h1>
-  <p class="intro">Beschreibung</p>
+
+  <!-- Der Vorspann wird aus den Daten erzeugt (app.js, Funktion lage) und
+       steht deshalb nicht hier im Text. Die Wortwahl dafür steht unten im
+       Aufruf von APP.lage. -->
+  <div id="vorspann"></div>
+
   <p class="stand-oben" id="stand"></p>
 
   <h2>Geschäftsklima</h2>
@@ -71,6 +76,38 @@
   const lage = APP.serie("gsk_deutschland", "Geschaeftslage", "Deutschland");
   const erwartung = APP.serie("gsk_deutschland", "Geschaeftserwartungen", "Deutschland");
   const ampel = APP.serie("gsk_deutschland", "Konjunkturampel", "Deutschland");
+
+  /* --- Vorspann: ergibt sich aus den Daten ------------------------------ */
+
+  // Formulierungen im Aufbau der ifo-Veröffentlichungen. Welcher der drei
+  // Sätze genommen wird, entscheidet die Richtung der jeweiligen Reihe;
+  // die Wörter selbst sind hier zu ändern.
+  APP.lage(document.getElementById("vorspann"), {
+    name: "ifo Geschäftsklimaindex",
+    satzName: "Der ifo Geschäftsklimaindex",
+    serie: klima,
+    einheit: "Punkte",
+    stellen: 1,
+    stimmung: {
+      auf: "Die Stimmung unter den Unternehmen in Deutschland hat sich verbessert.",
+      ab: "Die Stimmung unter den Unternehmen in Deutschland hat sich verschlechtert.",
+      gleich: "Die Stimmung unter den Unternehmen in Deutschland ist nahezu unverändert."
+    },
+    teile: [
+      {
+        serie: lage,
+        auf: "Die Unternehmen bewerteten ihre aktuelle Lage besser.",
+        ab: "Die Unternehmen bewerteten ihre aktuelle Lage schlechter.",
+        gleich: "Die Unternehmen bewerteten ihre aktuelle Lage kaum anders als im Vormonat."
+      },
+      {
+        serie: erwartung,
+        auf: "Ihre Erwartungen für die kommenden Monate waren zuversichtlicher.",
+        ab: "Ihre Erwartungen für die kommenden Monate waren skeptischer.",
+        gleich: "Ihre Erwartungen für die kommenden Monate blieben nahezu unverändert."
+      }
+    ]
+  });
 
   /* --- Datenstand, einmal oben auf der Seite ---------------------------- */
 

@@ -216,3 +216,33 @@ greift er dagegen.
 
 Damit ist die frühere Festlegung „Pages vorbereitet, nicht aktiviert"
 überholt: die Seite ist auf ausdrücklichen Wunsch öffentlich erreichbar.
+
+## Vorspann aus den Daten statt von Hand geschrieben (05.11.2026)
+
+Die Themenseiten begannen mit einem Platzhalter „Beschreibung“. Auf der
+Startseite ist er ersatzlos gestrichen — die vier Kacheln sagen selbst,
+worum es geht, und ein Untertitel darüber wäre Füllmaterial.
+
+Auf der Geschäftsklimaseite steht stattdessen ein Vorspann im Aufbau der
+ifo-Veröffentlichungen: eine Zeile „ifo Geschäftsklimaindex gestiegen
+(Oktober 2026)“, darunter vier Sätze mit dem aktuellen Wert, dem
+Vormonatswert und der Richtung von Lage und Erwartungen.
+
+Dieser Text wird bei jedem Seitenaufruf aus `site/data.js` erzeugt
+(`app.js`, Funktion `lage`) und ist deshalb nach jedem Datenupdate von
+selbst aktuell. Von Hand geschrieben wäre er nach vier Wochen falsch, und
+das fällt niemandem auf.
+
+Bewusst **nicht** erzeugt wird die Deutung, die beim ifo Institut am Ende
+steht („Die Konjunkturbelebung setzt sich fort“). Sie folgt nicht aus den
+Zahlen allein und kann nur von einem Menschen verantwortet werden. Der
+Hinweis unter dem Vorspann sagt ausdrücklich, dass es kein Text des ifo
+Instituts ist.
+
+## Marke und Seitenname getrennt (05.11.2026)
+
+Links oben steht der Herausgeber („ifo Institut“, `config.js`, Feld
+`marke`), der Seitenname ist „Konjunkturindikatoren“ (Feld `name`) und
+erscheint im Browser-Titel und in der Fußzeile. Der frühere Name
+„Konjunktur-Daten Prototyp“ ist entfallen; dass es ein Prototyp ist, sagt
+der schwarze Streifen über jeder Seite deutlicher.

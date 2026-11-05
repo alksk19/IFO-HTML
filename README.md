@@ -1,4 +1,4 @@
-# Konjunktur-Daten Prototyp
+# Konjunkturindikatoren (Prototyp)
 
 Eine statische Website, die die monatlichen Konjunkturindikatoren des ifo
 Instituts zugänglich macht — mit den Zahlen hinter jedem Diagramm direkt zum
@@ -93,6 +93,8 @@ nachgezogen werden; sie sind dort je Datei kommentiert.
 ## Seite umbenennen
 
 Der Name steht an genau einer Stelle: in `site/config.js`, Feld `name`.
+Links oben in der Ecke steht nicht der Name, sondern der Herausgeber —
+Feld `marke` im selben Objekt („ifo Institut“).
 Eine Änderung dort wirkt auf Kopfzeile, Fußzeile und Seitentitel aller
 Seiten. Im selben Objekt steht auch der Prototyp-Hinweis (`disclaimer`).
 Das Feld `stand` dort ist nur noch ein Notnagel: angezeigt wird der
@@ -107,6 +109,7 @@ Seite und sucht den Satz dort — ohne Programmierkenntnisse.
 | Was | Wo |
 |---|---|
 | Überschrift und Einleitung einer Seite | `site/<seite>.html`, oben im `<main>`-Teil |
+| Wortwahl des erzeugten Vorspanns | ebenda, im Aufruf `APP.lage({...})` am Fuß der Seite |
 | Zwischenüberschriften und die Absätze darunter | ebenda, als `<h2>` und `<p class="intro">` |
 | Fußnoten unter den Diagrammen | ebenda, Felder `hinweis:` und `langHinweis:` |
 | Beschriftung der Aufklapp-Schicht „Mehr Details" | ebenda, im `<details>`-Element |

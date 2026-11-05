@@ -754,8 +754,11 @@
       nav += '<a href="' + s[0] + '"' + (s[0] === hier ? ' aria-current="page"' : "") + ">" +
              escape(s[1]) + "</a>";
     });
-    header.innerHTML = '<div class="wrap"><a class="marke" href="index.html">' + escape(CFG.name) +
-      "</a><nav>" + nav + "</nav></div>";
+    // Links oben steht die Marke (config.js, Feld marke) - also der
+    // Herausgeber, nicht der Seitenname. Fehlt der Eintrag, bleibt es beim
+    // Seitennamen.
+    header.innerHTML = '<div class="wrap"><a class="marke" href="index.html">' +
+      escape(CFG.marke || CFG.name) + "</a><nav>" + nav + "</nav></div>";
 
     document.body.insertBefore(header, document.body.firstChild);
     document.body.insertBefore(hinweis, document.body.firstChild);
@@ -771,6 +774,100 @@
       "ifo.de</a>) · <a href=\"methodik.html\">Methodik</a>" +
       "</p></div>";
     document.body.appendChild(footer);
+  }
+
+  /* --- Kurzlage: Vorspann, der sich aus den Daten ergibt ---------------- */
+
+  /*
+    Baut den kurzen Vorspann am Kopf einer Themenseite, im Aufbau der
+    Veroeffentlichungen des ifo Instituts: eine Zeile
+    "<Name> gestiegen (Oktober 2026)", darunter zwei bis vier Saetze mit dem
+    aktuellen Wert, dem Vormonatswert und der Richtung der Teilreihen.
+
+    Der Text wird bei jedem Seitenaufruf aus site/data.js erzeugt. Nach einem
+    Datenupdate steht dort also von selbst der neue Monat mit den neuen
+    Zahlen; von Hand ist nichts nachzutragen.
+
+    Er ist kein Text des ifo Instituts, sondern aus den Zahlen abgeleitet.
+    Der Hinweis unter dem Vorspann sagt das ausdruecklich. Deutungen ueber
+    die Zahlen hinaus ("die Erholung setzt sich fort") entstehen hier
+    bewusst nicht - die kann nur ein Mensch verantworten.
+
+    Die Wortwahl steht in den Aufrufen auf den Seiten selbst, damit sie ohne
+    Programmierkenntnisse zu aendern ist.
+
+    lage(ziel, {
+      name:     "ifo Geschäftsklimaindex",      // fuer die Ueberschrift
+      satzName: "Der ifo Geschäftsklimaindex",  // Subjekt des zweiten Satzes
+      serie:   Serie des Hauptindikators,
+      einheit: "Punkte",                    // Wort hinter der Zahl
+      stellen: 1,
+      stimmung: { auf: "...", ab: "...", gleich: "..." },   // erster Satz
+      teile: [ { serie: ..., auf: "...", ab: "...", gleich: "..." }, ... ]
+    })
+  */
+
+  // Richtung einer Veraenderung. Die Schwelle verhindert, dass eine
+  // Veraenderung, die sich erst in der zweiten Nachkommastelle zeigt, als
+  // Anstieg oder Rueckgang beschrieben wird.
+  function richtung(delta, schwelle) {
+    const s = (schwelle === undefined) ? 0.05 : schwelle;
+    if (delta === null || delta === undefined) return "gleich";
+    if (delta > s) return "auf";
+    if (delta < -s) return "ab";
+    return "gleich";
+  }
+
+  function lage(ziel, o) {
+    if (!ziel || !o || !o.serie) return;
+    const a = aktuell(o.serie);
+    if (!a) return;
+
+    const stellen = (o.stellen === undefined) ? 1 : o.stellen;
+    const einheit = o.einheit || "Punkte";
+    const r = richtung(a.delta, o.schwelle);
+
+    const monat = MONATE[+a.monat.slice(5, 7) - 1];
+    const vormonat = a.vormonat === null ? null :
+      MONATE[(+a.monat.slice(5, 7) + 10) % 12];
+
+    // Erste Zeile: wie sich der Hauptindikator bewegt hat.
+    const ueberschrift = escape(o.name) + " " +
+      { auf: "gestiegen", ab: "gesunken", gleich: "nahezu unverändert" }[r] +
+      " (" + escape(monatLang(a.monat)) + ")";
+
+    const saetze = [];
+
+    // Satz 1: die Lesart in einem Satz, Wortwahl kommt von der Seite.
+    if (o.stimmung && o.stimmung[r]) saetze.push(o.stimmung[r]);
+
+    // Satz 2: die Zahlen selbst.
+    const verb = { auf: "stieg", ab: "sank", gleich: "lag" }[r];
+    let satz = (o.satzName || o.name) + " " + verb + " im " + monat + " " +
+               (r === "gleich" ? "bei " : "auf ") +
+               zahl(a.wert, stellen) + " " + einheit;
+    if (a.vormonat !== null) {
+      satz += ", nach " + zahl(a.vormonat, stellen) + " im " + vormonat;
+    }
+    saetze.push(satz + ".");
+
+    // Weitere Saetze: die Teilreihen, je mit eigener Wortwahl.
+    (o.teile || []).forEach(function (t) {
+      if (!t.serie) return;
+      const b = aktuell(t.serie);
+      if (!b) return;
+      const rt = richtung(b.delta, t.schwelle);
+      if (t[rt]) saetze.push(t[rt]);
+    });
+
+    const block = document.createElement("div");
+    block.className = "lage";
+    block.innerHTML =
+      '<p class="lage-titel">' + ueberschrift + "</p>" +
+      "<p>" + saetze.map(escape).join(" ") + "</p>" +
+      '<p class="hinweis-klein">Aus den Zahlen dieser Seite erzeugt, kein ' +
+      "Text des ifo Instituts.</p>";
+    ziel.appendChild(block);
   }
 
   /* --- Sprungziel nach dem Aufbau anspringen --------------------------- */
@@ -953,6 +1050,7 @@
     tabelleHtml: tabelleHtml,
     rahmenAufbauen: rahmenAufbauen,
     ankerAnspringen: ankerAnspringen,
+    lage: lage,
     monatLang: monatLang,
     monatKurz: monatKurz,
     monatZiffern: monatZiffern,

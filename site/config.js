@@ -6,8 +6,14 @@
 // ---------------------------------------------------------------------------
 
 window.SITE = {
-  // Arbeitstitel. Zum Umbenennen genuegt diese eine Zeile.
-  name: "Konjunktur-Daten Prototyp",
+  // Name der Seite. Steht im Browser-Titel und in der Fusszeile.
+  // Zum Umbenennen genuegt diese eine Zeile.
+  name: "Konjunkturindikatoren",
+
+  // Was links oben in der Ecke steht und zur Startseite zurueckfuehrt.
+  // Bewusst getrennt vom Namen: in der Ecke der Herausgeber, im Titel das
+  // Thema. Ohne Eintrag wird name verwendet.
+  marke: "ifo Institut",
 
   // Hinweis, der auf jeder Seite erscheint.
   disclaimer: "Prototyp, keine offizielle Veröffentlichung des ifo Instituts",

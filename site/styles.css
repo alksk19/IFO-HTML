@@ -199,6 +199,21 @@ h3 { font-size: 20px; line-height: 1.25; margin: 0 0 4px; font-weight: 700; }
 .hinweis-klein { color: var(--text-muted); font-size: 13px; max-width: 65ch; }
 .prosa p, .prosa li, .prosa dd { max-width: 65ch; }
 
+/* Vorspann am Kopf einer Themenseite, aus den Daten erzeugt (app.js,
+   Funktion lage). Aufbau wie bei den ifo-Veroeffentlichungen: eine
+   hervorgehobene Zeile mit der Richtung und dem Monat, darunter die Saetze
+   mit den Zahlen. */
+.lage { margin: 0 0 22px; max-width: 65ch; }
+.lage .lage-titel {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+.lage p { color: var(--text-secondary); margin: 0 0 6px; }
+.lage .hinweis-klein { margin: 0; }
+
 /* Datenstand, einmal oben auf der Seite statt unter jedem Diagramm. */
 .stand-oben {
   color: var(--text-muted);
