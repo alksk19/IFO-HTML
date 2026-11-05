@@ -192,6 +192,10 @@ sondern je Rolle ein für den dunklen Hintergrund geprüfter Wert.
 - **Kein Vergleich der Indikatoren in einem Diagramm.** Index und Salden
   haben unterschiedliche Maßstäbe; zwei Achsen in einem Diagramm wären
   irreführend.
-- **Keine automatische Aktualisierung.** Ein neuer Datenstand erfordert die
-  neuen Excel-Dateien und einen Lauf des R-Skripts; der Weg ist im
-  `README.md` beschrieben.
+- ~~**Keine automatische Aktualisierung.**~~ Seit dem 05.11.2026 gibt es sie
+  doch: `R/update_data.R` holt die Dateien von ifo.de, `R/build_data.R` nimmt
+  je Reihe die neueste, und ein GitHub-Actions-Ablauf führt beides gegen
+  Monatsende aus. Rohdateien werden dabei nie überschrieben, ein neuer Stand
+  kommt als zusätzliche Datei dazu — der alte bleibt nachvollziehbar. Die
+  Pressemitteilung bleibt bewusst außen vor: ihre Methodenkästen sind die
+  Grundlage der Erklärtexte und werden von Hand geprüft.

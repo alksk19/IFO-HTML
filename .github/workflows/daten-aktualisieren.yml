@@ -1,0 +1,70 @@
+name: Daten aktualisieren
+
+# Holt die neuen ifo-Zeitreihen und erzeugt die Website-Daten neu.
+# Das ifo Institut veroeffentlicht das Geschaeftsklima gegen Monatsende,
+# meist zwischen dem 23. und dem 27.; deshalb laeuft der Job an diesen Tagen
+# taeglich. Gibt es nichts Neues, endet er ohne Aenderung.
+#
+# "workflow_dispatch" erlaubt zusaetzlich den Start von Hand im Reiter
+# "Actions" des Repositories.
+
+on:
+  schedule:
+    - cron: "30 7 23-28 * *"
+  workflow_dispatch:
+
+# Der Job schreibt einen Commit zurueck in das Repository.
+permissions:
+  contents: write
+
+concurrency:
+  group: daten-aktualisieren
+  cancel-in-progress: false
+
+jobs:
+  aktualisieren:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: R einrichten
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: R-Pakete zwischenspeichern
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: r-pakete-${{ runner.os }}-readxl-dplyr-tidyr-jsonlite-v1
+
+      - name: R-Pakete installieren
+        run: |
+          options(repos = c(CRAN = "https://packagemanager.posit.co/cran/__linux__/jammy/latest"))
+          noetig <- c("readxl", "dplyr", "tidyr", "jsonlite")
+          fehlend <- noetig[!noetig %in% rownames(installed.packages())]
+          if (length(fehlend)) install.packages(fehlend)
+        shell: Rscript {0}
+
+      - name: Neue Rohdaten von ifo.de holen
+        run: Rscript R/update_data.R
+
+      - name: Website-Daten neu erzeugen
+        run: Rscript R/build_data.R
+
+      - name: Aenderungen committen
+        run: |
+          # --porcelain statt "git diff", damit auch neue, noch nicht
+          # versionierte Rohdateien erkannt werden.
+          if [ -z "$(git status --porcelain data/raw data/clean site/data.js)" ]; then
+            echo "Keine Aenderungen - der vorhandene Datenstand ist aktuell."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/raw data/clean site/data.js
+          git commit -m "Daten aktualisiert (automatischer Lauf)"
+          git push

@@ -161,6 +161,36 @@ nennen.
 `data/clean/series_meta.csv` listet zu jeder der 39 Reihen Anfang, Ende,
 Anzahl der Monatswerte und etwaige Lücken.
 
+## Automatische Aktualisierung
+
+Im Repository liegt ein Arbeitsablauf
+(`.github/workflows/daten-aktualisieren.yml`), der die Daten ohne Zutun
+erneuern kann:
+
+1. `R/update_data.R` liest [ifo.de/ifo-zeitreihen](https://www.ifo.de/ifo-zeitreihen),
+   sucht dort die Links auf die Excel-Dateien und lädt die herunter, die noch
+   nicht in `data/raw/` liegen. Vorhandene Dateien werden nie überschrieben;
+   ein neuer Stand kommt als zusätzliche Datei dazu.
+2. `R/build_data.R` nimmt je Reihe automatisch die **neueste** vorhandene
+   Datei und schreibt `data/clean/` und `site/data.js` neu. Der Datenstand
+   steht danach in `site/data.js` — in `site/config.js` muss nichts geändert
+   werden.
+3. Gibt es Änderungen, committet und pusht der Ablauf sie selbst.
+
+Er läuft vom 23. bis 28. jedes Monats um 07:30 UTC, weil das ifo Institut
+gegen Monatsende veröffentlicht, und lässt sich im Reiter *Actions* von Hand
+starten. Ohne neue Dateien endet er ohne Änderung.
+
+Dasselbe von Hand auf dem eigenen Rechner:
+
+```bash
+cd ~/Desktop/ifo-konjunktur-prototyp && Rscript R/update_data.R && Rscript R/build_data.R
+```
+
+Nicht automatisiert ist die **Pressemitteilung**: Deren Methodenkästen sind
+die Grundlage der Erklärtexte und müssen bei inhaltlichen Änderungen von Hand
+geprüft werden.
+
 ## GitHub Pages
 
 Vorbereitet, **nicht aktiviert**. Im Projekt liegt bereits eine leere Datei
