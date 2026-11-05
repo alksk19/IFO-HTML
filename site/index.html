@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konjunktur-Daten Prototyp</title>
+<meta name="description" content="Prototyp: ifo Konjunkturdaten mit den Zahlen hinter jedem Diagramm zum Herunterladen.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-titel="Übersicht">
+
+<main class="wrap">
+
+  <h1>Konjunkturdaten des ifo Instituts, mit den Zahlen dahinter</h1>
+  <p class="intro">
+    Vier monatliche Indikatoren zur deutschen Wirtschaft. Unter jedem Diagramm
+    stehen genau die Werte, die es zeigt — als Tabelle und als CSV-Datei.
+  </p>
+
+  <div class="tiles" id="kacheln"></div>
+
+  <h2>Was diese Seite ist</h2>
+  <p class="intro">
+    Ein Prototyp, der die veröffentlichten Zeitreihen der ifo Konjunkturumfragen
+    ohne Umweg zugänglich macht: lesen, als Bild weitergeben, als Datensatz
+    weiterverarbeiten. Die Zahlen sind unverändert aus den Excel-Dateien des
+    ifo Instituts übernommen; umgerechnet wurde allein das Datumsformat auf
+    einheitliche Monatsangaben.
+  </p>
+  <p class="hinweis-klein">
+    Was ein Saldo ist, wie der Index gebildet wird und woher die Daten genau
+    stammen, steht auf der <a href="methodik.html">Methodikseite</a>.
+    Einheiten, Besonderheiten und offene Fragen sind in der Datei
+    <code>DATA.md</code> des Projekts dokumentiert.
+  </p>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  APP.rahmenAufbauen();
+
+  const ziel = document.getElementById("kacheln");
+
+  SITE.themen.forEach(function (t) {
+    const s = APP.serie(t.dataset, t.series, t.sector);
+    const a = APP.aktuell(s);
+
+    const kachel = document.createElement("a");
+    kachel.className = "tile";
+    kachel.href = t.seite;
+
+    if (!a) {
+      kachel.innerHTML = '<div class="tile-titel">' + APP.escape(t.titel) + "</div>" +
+        '<p class="hinweis-klein">Keine Daten vorhanden.</p>';
+      ziel.appendChild(kachel);
+      return;
+    }
+
+    // Veränderung zum Vormonat. Bei Salden und beim Importklima ist die
+    // Veränderung in Punkten zu lesen, nicht in Prozent.
+    let klasse = "null", pfeil = "±";
+    if (a.delta > 0) { klasse = "auf"; pfeil = "▲"; }
+    else if (a.delta < 0) { klasse = "ab"; pfeil = "▼"; }
+
+    const stellen = (t.id === "importklima") ? 2 : 1;
+
+    kachel.innerHTML =
+      '<div class="tile-titel">' + APP.escape(t.titel) + "</div>" +
+      '<div class="wert">' + APP.zahl(a.wert, stellen) + "</div>" +
+      '<div class="einheit">' + APP.escape(t.einheitKurz || s.unit) + "</div>" +
+      '<div class="delta ' + klasse + '">' + pfeil + " " +
+        APP.zahlMitVorzeichen(a.delta, stellen) + " zum Vormonat</div>" +
+      '<div class="sparkline"></div>' +
+      '<div class="stand">Stand: ' + APP.monatLang(a.monat) + "</div>" +
+      '<div class="beschreibung">' + APP.escape(t.beschreibung) + "</div>";
+
+    ziel.appendChild(kachel);
+
+    // Sparkline über die letzten zehn Jahre.
+    const fenster = 120;
+    const von = Math.max(0, s.values.length - fenster);
+    APP.sparkline(kachel.querySelector(".sparkline"),
+                  s.values.slice(von), s.dates.slice(von));
+  });
+
+  APP.ankerAnspringen();
+})();
+</script>
+</body>
+</html>
