@@ -19,13 +19,16 @@ Vier Indikatoren, je eine Seite:
 | Importklima | Frühindikator für die deutschen Importe | ab 01/1995 |
 | Beschäftigungsbarometer | Index und vier Wirtschaftsbereiche | ab 01/2002 |
 
-Dazu eine Startseite mit vier Kacheln und eine Methodikseite.
+Dazu eine Startseite mit vier Kacheln, eine **Datenseite** mit allen Tabellen
+und eine Methodikseite.
 
-Jedes Diagramm hat denselben Werkzeugsatz: **Bild kopieren**, **PNG**,
-**Daten (CSV)**, **Link**, dazu einen Zeitraumschalter (2 Jahre, 10 Jahre,
-alles). Ein Klick auf das Diagramm springt in den zugehörigen
-Datenabschnitt. Die CSV enthält genau den Ausschnitt, der gerade im
-Diagramm zu sehen ist.
+Jedes Diagramm hat denselben Werkzeugsatz: **Daten**, **CSV**, **PNG**,
+**Bild kopieren**, **Link**, dazu einen Zeitraumschalter (2 Jahre, 10 Jahre,
+alles). Die Werkzeuge treten erst hervor, wenn man sich mit dem Diagramm
+befasst — bei Mauszeiger darüber, bei Tastaturfokus oder nach einem Tipp; auf
+Tastgeräten sind sie immer sichtbar. „Daten" führt auf die Datenseite, und
+zwar an den Abschnitt genau dieser Reihe. Die CSV enthält den Ausschnitt, der
+gerade im Diagramm zu sehen ist; auf der Datenseite die vollständige Reihe.
 
 ## Website öffnen
 
@@ -157,6 +160,19 @@ nennen.
 
 `data/clean/series_meta.csv` listet zu jeder der 39 Reihen Anfang, Ende,
 Anzahl der Monatswerte und etwaige Lücken.
+
+## GitHub Pages
+
+Vorbereitet, **nicht aktiviert**. Im Projekt liegt bereits eine leere Datei
+`.nojekyll`, damit GitHub die Dateien unverändert ausliefert und nichts durch
+Jekyll verarbeitet wird. Alle Pfade in den Seiten sind relativ und in der
+Schreibweise geprüft — GitHub Pages unterscheidet, anders als macOS, Groß- und
+Kleinschreibung.
+
+Zum Einschalten im Repository unter *Settings → Pages* als Quelle den Branch
+`main` und den Ordner `/site` wählen. Danach ist die Seite unter
+`https://alksk19.github.io/IFO-HTML/` erreichbar. Solange das nicht geschieht,
+ändert sich nichts; der Code ist im öffentlichen Repository trotzdem lesbar.
 
 ## Grenzen dieses Prototyps
 

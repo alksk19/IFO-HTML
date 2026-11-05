@@ -81,11 +81,46 @@ sichtbare Serien auf Unterscheidbarkeit geprüft, auch bei Farbfehlsicht.
 Zuordnung darf nicht allein an der Farbe hängen; die Nulllinie trägt bei
 Salden die eigentliche Aussage.
 
-**Tabelle auf 13 Monate begrenzt, CSV auf den vollen Ausschnitt.** Die
-Tabelle unter jedem Diagramm zeigt die letzten 13 Monate — dieselbe Spanne
-wie die Tabellen der Pressemitteilung und auf einen Blick lesbar. Der
-CSV-Download umfasst dagegen den gesamten im Diagramm dargestellten
-Zeitraum. Der Hinweistext über der Tabelle sagt beides.
+**Tabellen begrenzt, CSV auf den vollen Ausschnitt.** Eine Tabelle zeigt die
+letzten zwölf Monate und ist damit auf einen Blick lesbar. Der CSV-Download
+umfasst den gesamten im Diagramm dargestellten Zeitraum, auf der Datenseite
+die vollständige Reihe. Der Hinweistext über der Tabelle sagt beides.
+
+**Gestaltung am tatsächlichen ifo-Auftritt statt an einer eigenen Idee.**
+Flächen, Textfarben, Größenstaffel und Akzentfarbe sind von ifo.de übernommen
+(ausgelesene Computed Styles, 05.11.2026): Seitengrund `#f4f5fa`,
+Inhaltsflächen weiß, Überschriften `#141414` in 700, Lauftext `#414650`
+16px/22px, Akzent `#3237de`. Dazu die Eigenheiten des Auftritts: rechte Winkel
+statt abgerundeter Karten, Flächen ohne Rahmen, gepunktete Trennlinien, Links
+fett und blau mit gepunkteter Unterkante. Bewusst nicht verwendet werden
+Verläufe, Schatten, Icons vor Überschriften, Pillen-Badges und zentrierte
+Slogan-Köpfe. Begründung: Einfach **und** vertraut aussehende Seiten machen den
+besten ersten Eindruck (Tuch et al. 2012); die Seite soll nach
+Wirtschaftsforschungsinstitut aussehen, nicht nach Vorlage.
+
+**Eine Tabelle je Seite, alle übrigen auf einer Datenseite.** Auf der
+Themenseite steht genau eine Tabelle, neben dem Hauptdiagramm. Jedes weitere
+Diagramm verweist über „Daten" auf `site/daten.html`, wo je Reihe ein
+Abschnitt mit Anker liegt. Begründung: geringe visuelle Komplexität je
+Bildschirm; wer Zahlen braucht, findet sie gesammelt an einem Ort.
+
+**Werkzeuge erscheinen erst bei Befassung.** Die Knöpfe sind standardmäßig
+unsichtbar und erscheinen bei Mauszeiger darüber, bei Tastaturfokus oder nach
+einem Tipp. Auf Geräten ohne Hover bleiben sie sichtbar, sonst wären sie nicht
+auffindbar. Der Platz wird immer freigehalten, damit beim Einblenden nichts
+springt.
+
+**Genau eine Link-Funktion je Diagramm.** Früher war zusätzlich die
+Quellenangabe unter dem Diagramm verlinkt. Die Angabe bleibt als Text
+(Attribution ist Pflicht), der Hyperlink zur ifo-Seite steht nur noch auf der
+Datenseite und der Methodikseite.
+
+**Tabellen nach dem EU Data Visualisation Guide.** Höchstbreite statt voller
+Seitenbreite, Zahlen rechtsbündig und in Dunkelgrau, Spaltenköpfe wie ihre
+Daten ausgerichtet, Monatsspalte links, eine Nachkommastelle mit deutschem
+Komma, echtes Minuszeichen (U+2212) statt Bindestrich, Ziffern gleicher
+Breite, nur leichte Zeilentrenner, keine Zebrastreifen. Blau bleibt dem Akzent
+vorbehalten, damit der Textkontrast mindestens 4,5:1 erreicht (WCAG AA).
 
 **Lange Zeitreihen hinter „Mehr Details“.** Die Seiten sollen für den
 schnellen Blick funktionieren; die Reihen ab 1991 stehen eine Ebene
