@@ -20,10 +20,17 @@
     Beschäftigtenplanungen für die nächsten drei Monate mitzuteilen.
   </p>
 
-  <div class="tiles" id="kennzahlen"></div>
+  <p class="stand-oben" id="stand"></p>
 
-  <h2>Verlauf</h2>
-  <div id="verlauf"></div>
+  <h2>Beschäftigungsbarometer</h2>
+  <p class="intro">
+    Die Indexwerte für Deutschland sind auf den Durchschnitt des Jahres 2015
+    normiert. Werte über 100 stehen für überwiegende Einstellungsabsichten.
+  </p>
+  <div class="duo">
+    <div id="verlauf"></div>
+    <a class="tabelle-link chart-block" href="daten.html#chart-empl" id="verlauf-tabelle"></a>
+  </div>
 
   <h2>Wirtschaftsbereiche</h2>
   <p class="intro">
@@ -33,12 +40,14 @@
     Beschäftigte haben wollen. Der Saldo ist der Anteil der Unternehmen, die
     mehr Beschäftigte planen, minus dem Anteil derer, die weniger planen.
   </p>
-  <div id="bereiche"></div>
+  <div class="raster-2" id="bereiche"></div>
 
   <h2>Mehr Details</h2>
   <details class="mehr" id="details">
-    <summary>Lange Zeitreihe und Quellenangaben</summary>
-    <div class="inhalt"></div>
+    <summary>Lange Zeitreihe</summary>
+    <div class="inhalt">
+      <p class="hinweis-klein">Gesamter verfügbarer Zeitraum.</p>
+    </div>
   </details>
 
 </main>
@@ -46,26 +55,117 @@
 <script src="config.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
-<script src="seite.js"></script>
 <script>
-SEITE.aufbauen({
-  dataset: "empl",
-  series: "Beschaeftigungsbarometer",
-  sector: "Deutschland",
-  kennzahlTitel: "ifo Beschäftigungsbarometer",
-  // Ohne eigene Angabe nimmt die Kachel die Einheit der Reihe, in der
-  // Schreibweise aus config.js - dieselbe wie im Diagramm und in den Tabellen.
-  chartId: "chart-empl",
-  chartTitel: "ifo Beschäftigungsbarometer Deutschland",
-  stellen: 1,
-  langTitel: "ifo Beschäftigungsbarometer seit 2002",
-  langHinweis: "Zeitreihe ab 01/2002; Datumsangaben auf Monate zurückgeführt",
-  bereiche: {
-    ziel: "bereiche",
-    namen: ["Verarbeitendes Gewerbe", "Bauhauptgewerbe", "Handel", "Dienstleistungssektor"],
-    nullLinie: true
+(function () {
+  APP.rahmenAufbauen();
+
+  const deutschland = APP.serie("empl", "Beschaeftigungsbarometer", "Deutschland");
+
+  /* --- Datenstand, einmal oben auf der Seite ---------------------------- */
+
+  const aktuell = APP.aktuell(deutschland);
+  if (aktuell) {
+    document.getElementById("stand").textContent =
+      "Stand: " + APP.monatLang(aktuell.monat) + " · Quelle: " + deutschland.source;
   }
-});
+
+  /* --- Deutschland: Diagramm links, Tabelle rechts ---------------------- */
+
+  APP.chartBlock(document.getElementById("verlauf"), {
+    id: "chart-empl",
+    titel: "ifo Beschäftigungsbarometer Deutschland",
+    serien: [deutschland],
+    stellen: 1,
+    zeitraum: "10j",
+    tabelle: false
+  });
+
+  // Die einzige Tabelle der Seite: letzte zwölf Monate, neuester oben. Ein
+  // Klick darauf führt zur Datenseite, zum Abschnitt dieser Reihe.
+  // Derselbe Kopfaufbau wie beim Diagramm (Titel, Einheit), damit die
+  // Oberkanten und die Linien beider Kästen auf einer Höhe liegen.
+  document.getElementById("verlauf-tabelle").innerHTML =
+    '<div class="chart-kopf"><div class="titelblock">' +
+      "<h3>Letzte zwölf Monate</h3>" +
+      '<div class="einheit">' + APP.escape(APP.einheit(deutschland.unit)) + "</div>" +
+    "</div></div>" +
+    APP.tabelleHtml(APP.zuschneiden([deutschland], 12), [deutschland], {
+      legende: ["Indexwert"],
+      stellen: 1
+    });
+
+  /* --- Wirtschaftsbereiche: nur Diagramme, zweispaltig ------------------ */
+
+  const BEREICHE = [
+    "Verarbeitendes Gewerbe",
+    "Dienstleistungssektor",
+    "Handel",
+    "Bauhauptgewerbe"
+  ];
+
+  const ziel = document.getElementById("bereiche");
+  BEREICHE.forEach(function (name) {
+    const s = APP.serie("empl", "Beschaeftigungsbarometer", name);
+    if (!s) return;
+
+    APP.chartBlock(ziel, {
+      id: "chart-empl-" + name.toLowerCase()
+            .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue")
+            .replace(/[^a-z]+/g, "-"),
+      titel: APP.label(name),
+      serien: [s],
+      stellen: 1,
+      nullLinie: true,
+      zeitraum: "10j",
+      tabelle: false,
+      klein: true
+    });
+  });
+
+  /* --- Mehr Details ------------------------------------------------------ */
+
+  const details = document.getElementById("details");
+  const inhalt = details.querySelector(".inhalt");
+
+  let aufgebaut = false;
+  details.addEventListener("toggle", function () {
+    if (!details.open || aufgebaut) return;
+    aufgebaut = true;
+
+    APP.chartBlock(inhalt, {
+      id: "chart-empl-lang",
+      titel: "ifo Beschäftigungsbarometer seit 2002",
+      serien: [deutschland],
+      stellen: 1,
+      zeitraum: "alle",
+      tabelle: false,
+      hinweis: "Zeitreihe ab 01/2002; Datumsangaben auf Monate zurückgeführt"
+    });
+
+    // Die vier Bereiche im Vergleich. Höchstens drei Serien je Diagramm,
+    // damit die Farben unterscheidbar bleiben - deshalb zwei Diagramme.
+    const serien = BEREICHE.map(function (n) {
+      return APP.serie("empl", "Beschaeftigungsbarometer", n);
+    }).filter(Boolean);
+
+    for (let i = 0; i < serien.length; i += 3) {
+      const teil = serien.slice(i, i + 3);
+      APP.chartBlock(inhalt, {
+        id: "chart-empl-vergleich-" + (i / 3 + 1),
+        titel: "Wirtschaftsbereiche im Vergleich (" +
+               teil.map(function (s) { return APP.label(s.sector); }).join(", ") + ")",
+        serien: teil,
+        legende: teil.map(function (s) { return APP.label(s.sector); }),
+        stellen: 1,
+        nullLinie: true,
+        zeitraum: "alle",
+        tabelle: false
+      });
+    }
+  });
+
+  APP.ankerAnspringen();
+})();
 </script>
 </body>
 </html>

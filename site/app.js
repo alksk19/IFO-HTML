@@ -445,6 +445,67 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
+  /* --- Erlaeuterung hinter einem (i) ------------------------------------ */
+
+  /*
+    Haengt neben einen Diagrammtitel einen kleinen Knopf, der eine
+    Erlaeuterung samt Quellenzeile aufklappt. Geschlossen wird sie durch
+    erneutes Klicken, durch einen Klick daneben oder mit der Esc-Taste.
+
+    infoKnopf(ziel, block, { text, quelle }, id)
+  */
+  function infoKnopf(ziel, block, info, id) {
+    if (!ziel) return;
+
+    const knopfId = id + "-info";
+
+    const knopf = document.createElement("button");
+    knopf.type = "button";
+    knopf.className = "info-knopf";
+    knopf.textContent = "i";
+    knopf.setAttribute("aria-label", "Erläuterung einblenden");
+    knopf.setAttribute("aria-expanded", "false");
+    knopf.setAttribute("aria-controls", knopfId);
+    ziel.appendChild(knopf);
+
+    const popover = document.createElement("div");
+    popover.className = "info-popover";
+    popover.id = knopfId;
+    popover.hidden = true;
+    popover.innerHTML = "<p>" + escape(info.text) + "</p>" +
+      (info.quelle ? '<p class="info-quelle">' + escape(info.quelle) + "</p>" : "");
+    ziel.appendChild(popover);
+
+    function zu() {
+      popover.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      knopf.setAttribute("aria-label", "Erläuterung einblenden");
+    }
+
+    knopf.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const offen = !popover.hidden;
+      // Erst alle anderen schliessen, damit nie zwei offen stehen.
+      document.querySelectorAll(".info-popover").forEach(function (p) {
+        if (p !== popover) p.hidden = true;
+      });
+      document.querySelectorAll(".info-knopf").forEach(function (b) {
+        if (b !== knopf) b.setAttribute("aria-expanded", "false");
+      });
+      if (offen) { zu(); return; }
+      popover.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      knopf.setAttribute("aria-label", "Erläuterung ausblenden");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!popover.hidden && !popover.contains(e.target) && e.target !== knopf) zu();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !popover.hidden) { zu(); knopf.focus(); }
+    });
+  }
+
   /* --- Der Chart-Baustein ----------------------------------------------- */
 
   /*
@@ -462,6 +523,8 @@
                  Zeitraum
       hinweis:   optionaler Hinweis unter dem Diagramm
       klein:     true fuer die flachere Variante in Bereichsabschnitten
+      info:      { text, quelle } - Erlaeuterung hinter einem (i) neben dem
+                 Titel
     })
   */
   function chartBlock(ziel, o) {
@@ -493,9 +556,16 @@
     kopf.className = "chart-kopf";
     kopf.innerHTML =
       '<div class="titelblock">' +
-        "<h3>" + escape(o.titel) + "</h3>" +
+        '<h3><span class="titeltext">' + escape(o.titel) + "</span></h3>" +
         '<div class="einheit">' + escape(einheiten.join(" · ")) + "</div>" +
       "</div>";
+
+    // Erlaeuterung hinter einem (i) neben dem Titel. Der Text steht im
+    // Aufruf auf der Seite, damit er ohne Programmierkenntnisse zu aendern
+    // ist: info: { text: "...", quelle: "..." }
+    if (o.info && o.info.text) {
+      infoKnopf(kopf.querySelector("h3"), block, o.info, o.id);
+    }
 
     const werkzeuge = document.createElement("div");
     werkzeuge.className = "werkzeuge";

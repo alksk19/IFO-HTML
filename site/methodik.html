@@ -12,13 +12,7 @@
 <div class="prosa">
 
   <h1>Methodik und Quellen</h1>
-  <p class="intro">
-    Diese Seite erklärt, wie die hier gezeigten Zahlen zustande kommen,
-    woher sie stammen und was bei ihrer Verwendung zu beachten ist. Die
-    inhaltlichen Erläuterungen folgen den Methodenkästen der
-    Pressemitteilung des ifo Instituts vom 26. Oktober 2026; sie sind unten
-    als Zitat ausgewiesen.
-  </p>
+  <p class="stand-oben">Stand: Oktober 2026</p>
 
   <h2>Was ist ein Saldo?</h2>
   <p>
@@ -70,48 +64,6 @@
     <code>unit</code>.
   </p>
 
-  <h2>Die Methodenkästen der Pressemitteilung</h2>
-  <p>
-    Die folgenden Abschnitte geben die Erläuterungen des ifo Instituts
-    wieder, auf denen die Texte dieser Seite beruhen.
-  </p>
-
-  <div class="quelle-kasten">
-    <p><strong>ifo Geschäftsklima.</strong> „Das ifo Geschäftsklima basiert
-    auf ca. 9.000 monatlichen Meldungen von Unternehmen des Verarbeitenden
-    Gewerbes, des Dienstleistungssektors, des Handels und des
-    Bauhauptgewerbes. Die Unternehmen werden gebeten, ihre gegenwärtige
-    Geschäftslage zu beurteilen und ihre Erwartungen für die nächsten sechs
-    Monate mitzuteilen. Sie können ihre Lage mit ‚gut‘, ‚befriedigend‘ oder
-    ‚schlecht‘ und ihre Geschäftserwartungen für die nächsten sechs Monaten
-    als ‚günstiger‘, ‚gleichbleibend‘ oder ‚ungünstiger‘ kennzeichnen. Der
-    Saldowert der gegenwärtigen Geschäftslage ist die Differenz der
-    Prozentanteile der Antworten ‚gut‘ und ‚schlecht‘, der Saldowert der
-    Erwartungen ist die Differenz der Prozentanteile der Antworten
-    ‚günstiger‘ und ‚ungünstiger‘. Das Geschäftsklima ist ein
-    transformierter Mittelwert aus den Salden der Geschäftslage und der
-    Erwartungen. Zur Berechnung der Indexwerte werden die transformierten
-    Salden jeweils auf den Durchschnitt des Jahres 2015 normiert.“</p>
-    <p style="margin-bottom:0"><em>Quelle: ifo Institut, Pressemitteilung
-    „ifo Geschäftsklima Deutschland — Ergebnisse der ifo Konjunkturumfragen
-    im Oktober 2026“, München, 26. Oktober 2026, Methodenkasten S. 2.</em></p>
-  </div>
-
-  <div class="quelle-kasten">
-    <p><strong>ifo Geschäftsunsicherheit.</strong> „Die ifo
-    Geschäftsunsicherheit misst, wie schwer es Manager*innen fällt, die
-    Entwicklung der Geschäftslage ihres Unternehmens in den nächsten sechs
-    Monaten vorherzusagen. Das Maß berechnet sich auf Basis der gewichteten
-    Anteile der Unternehmen, die auf die Antwortoptionen ‚leicht‘, ‚eher
-    leicht‘, ‚eher schwer‘ und ‚schwer‘ einer entsprechenden Frage in der ifo
-    Konjunkturumfrage entfallen. Dazu werden die Antwortkategorien in eine
-    numerische Skala mit gleichen Abständen übersetzt. Die ifo
-    Geschäftsunsicherheit kann rein rechnerisch zwischen 0 und 100 liegen.
-    Höhere Werte zeigen dabei eine höhere Unsicherheit an: Die zukünftige
-    Geschäftslage ist schwieriger vorherzusagen.“</p>
-    <p style="margin-bottom:0"><em>Quelle: ebenda, Methodenkasten S. 4.</em></p>
-  </div>
-
   <h2>Die vier Indikatoren im Überblick</h2>
   <dl id="reihen"></dl>
 
@@ -120,24 +72,7 @@
     Grundlage sind die vom ifo Institut veröffentlichten Excel-Dateien mit
     den langen Zeitreihen, abrufbar unter
     <a href="https://www.ifo.de/umfragen/zeitreihen">ifo.de/umfragen/zeitreihen</a>,
-    sowie die oben zitierte Pressemitteilung. Die Rohdateien liegen
-    unverändert im Projektordner unter <code>data/raw/</code>.
-  </p>
-  <p>
-    An den Zahlen selbst wurde nichts gerechnet. Verändert wurde allein die
-    Form: Die Quelldateien verwenden zwei verschiedene Datumsformate — teils
-    Text in der Schreibweise <code>MM/JJJJ</code>, teils echte
-    Excel-Datumswerte, beim Beschäftigungsbarometer zudem
-    Veröffentlichungstage statt Monatsenden. Alle Datumsangaben wurden auf
-    die einheitliche Form <code>JJJJ-MM</code> gebracht. Je Reihe liegt
-    danach genau ein Wert pro Monat vor, ohne Lücken in der Monatsfolge.
-  </p>
-  <p>
-    Erzeugt werden die Daten dieser Seite von einem einzigen R-Skript
-    (<code>R/build_data.R</code>). Es liest die Rohdateien, schreibt die
-    aufbereiteten Reihen als CSV nach <code>data/clean/</code> und erneuert
-    die Datendatei der Website. An den Zahlen wird dabei nichts gerechnet;
-    Einheiten und Bezeichnungen folgen den Angaben des ifo Instituts.
+    sowie die Pressemitteilung vom 26. Oktober 2026.
   </p>
 
   <h2>Einheiten</h2>
@@ -173,29 +108,6 @@
     <dt>ifo Konjunkturampel</dt>
     <dd>Wahrscheinlichkeit für eine expansive Entwicklung in Prozent.</dd>
   </dl>
-
-  <h2>Verwendung</h2>
-  <p>
-    Unter jedem Diagramm steht die Tabelle mit den dargestellten Werten, und
-    über jedem Diagramm liegen vier Schaltflächen: <em>Bild kopieren</em>
-    legt das Diagramm als Bild in die Zwischenablage, <em>PNG</em> lädt es
-    als Datei, <em>Daten (CSV)</em> lädt genau die gezeigten Werte, und
-    <em>Link</em> kopiert die Adresse dieses Diagramms. Exportierte Bilder
-    tragen Quellenangabe und Prototyp-Hinweis mit sich.
-  </p>
-  <p>
-    Die CSV-Dateien verwenden Semikolon als Trennzeichen und Komma als
-    Dezimaltrennzeichen und lassen sich in einem deutschsprachigen Excel
-    ohne Importdialog öffnen. Die Spalten entsprechen den Dateien in
-    <code>data/clean/</code>: <code>date</code>, <code>series</code>,
-    <code>sector</code>, <code>value</code>, <code>unit</code>,
-    <code>source</code>.
-  </p>
-  <p class="hinweis-klein">
-    Bei Zitaten in Veröffentlichungen ist das ifo Institut als Quelle zu
-    nennen, nicht diese Seite. Sie ist ein Prototyp und keine offizielle
-    Veröffentlichung des Instituts.
-  </p>
 
 </div>
 </main>
