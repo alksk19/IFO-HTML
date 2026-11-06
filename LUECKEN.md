@@ -101,8 +101,10 @@ Beschäftigungsbarometer, Importklima. Nicht enthalten:
 - **Pressemitteilung nicht automatisiert.** Ihre Methodenkästen sind die
   Grundlage der Erklärtexte und müssen bei inhaltlichen Änderungen von
   Hand geprüft werden.
-- **Das ZIP in `freigabe/` ist vom Vormittag** und kennt die heutigen
-  Änderungen nicht. Es wird nur auf Zuruf neu gepackt.
+- **Das ZIP in `freigabe/` wird nur auf Zuruf neu gepackt.** Es ist keine
+  automatische Ausgabe und läuft dem Stand der Website hinterher, sobald
+  sich an `site/` etwas ändert. Stand des aktuellen Pakets: 06.11.2026,
+  entspricht dem Commit `87cbf76`.
 
 ## 7. Noch festzulegen
 
