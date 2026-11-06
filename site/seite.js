@@ -49,7 +49,8 @@ window.SEITE = (function () {
       el.innerHTML =
         '<div class="tile-titel">' + APP.escape(o.kennzahlTitel) + "</div>" +
         '<div class="wert">' + APP.zahl(a.wert, stellen) + "</div>" +
-        '<div class="einheit">' + APP.escape(o.kennzahlZusatz || haupt.unit) + "</div>" +
+        '<div class="einheit">' +
+          APP.escape(o.kennzahlZusatz || APP.einheit(haupt.unit)) + "</div>" +
         '<div class="delta ' + klasse + '">' + pfeil + " " +
           APP.zahlMitVorzeichen(a.delta, stellen) + " zum Vormonat</div>" +
         '<div class="sparkline"></div>' +
@@ -124,8 +125,8 @@ window.SEITE = (function () {
                '<p style="margin:0 0 6px">Zeitraum: ' +
                APP.escape(APP.monatLang(haupt.start)) + " bis " +
                APP.escape(APP.monatLang(haupt.end)) + " · " +
-               haupt.values.length + " Monatswerte · Einheit laut Quelldatei: " +
-               APP.escape(haupt.unit) + "</p>";
+               haupt.values.length + " Monatswerte · Einheit: " +
+               APP.escape(APP.einheit(haupt.unit)) + "</p>";
       (o.quellenZusatz || []).forEach(function (q) {
         qh += '<p style="margin:0 0 6px">' + APP.escape(q) + "</p>";
       });

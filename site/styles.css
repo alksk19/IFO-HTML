@@ -368,26 +368,14 @@ a.tile:hover .tile-titel { color: var(--akzent); }
 .chart-kopf .titelblock { flex: 1 1 260px; min-width: 0; }
 .chart-kopf .einheit { font-size: 12.5px; color: var(--text-muted); }
 
-/* Die Werkzeuge treten erst hervor, wenn man sich mit dem Diagramm befasst:
-   bei Mauszeiger darueber, bei Tastaturfokus oder nach einem Tipp (dann setzt
-   app.js die Klasse .offen). Sichtbar bleiben sie im Platz, damit nichts
-   springt. */
+/* Die Werkzeuge sind dauerhaft sichtbar (Entscheidung vom 06.11.2026). Vorher
+   traten sie erst bei Mauszeiger, Tastaturfokus oder einem Tipp hervor; wer
+   sie nicht suchte, fand sie dadurch nicht. */
 .werkzeuge {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
-  opacity: 0;
-  transition: opacity 0.12s ease-in-out;
-}
-.chart-block:hover .werkzeuge,
-.chart-block:focus-within .werkzeuge,
-.chart-block.offen .werkzeuge { opacity: 1; }
-
-/* Ohne Mauszeiger (Touch) sind sie immer sichtbar - dort gibt es kein
-   Hover, und ein unsichtbarer Knopf waere nicht auffindbar. */
-@media (hover: none) {
-  .werkzeuge { opacity: 1; }
 }
 
 /* Bedienelemente wie auf ifo.de: flach, ohne Fuellung, Beschriftung in der
@@ -467,7 +455,11 @@ a.tile:hover .tile-titel { color: var(--akzent); }
   border: none;
   background: var(--surface);
   margin-top: 12px;
-  max-width: 460px;
+  /* Hoechstbreite, damit Tabellen schmal und auf einen Blick erfassbar
+     bleiben. 520px ist das Mass, das die breiteste vorkommende Kopfzeile
+     (Monat, Geschäftsklima, Geschäftsbeurteilung, Geschäftserwartungen)
+     gerade aufnimmt; mit den frueheren Kurzformen genuegten 460px. */
+  max-width: 520px;
 }
 
 table.daten {

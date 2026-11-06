@@ -32,7 +32,9 @@
   // Nur so landet der Knopf "Daten" genau beim passenden Abschnitt.
   const S = function (dataset, series, sector) { return APP.serie(dataset, series, sector); };
   const KLIMA3 = ["Geschaeftsklima_saldo", "Geschaeftslage_saldo", "Geschaeftserwartungen_saldo"];
-  const LEG3 = ["Klima", "Lage", "Erwartungen"];
+  // Begriffe wie in den Veroeffentlichungen des ifo Instituts, ausgeschrieben
+  // statt der Kurzformen.
+  const LEG3 = ["Geschäftsklima", "Geschäftsbeurteilung", "Geschäftserwartungen"];
 
   function bereich(name) {
     return {
@@ -111,10 +113,16 @@
     h.textContent = a.titel;
     block.appendChild(h);
 
+    // Einheitenzeile direkt unter dem Titel, in derselben Form wie bei den
+    // Diagrammen und der Zwoelf-Monats-Tabelle auf der Geschaeftsklima-Seite.
+    const einheit = document.createElement("div");
+    einheit.className = "einheit";
+    einheit.textContent = APP.einheit(serien[0].unit);
+    block.appendChild(einheit);
+
     const meta = document.createElement("p");
     meta.className = "hinweis-klein";
-    meta.innerHTML = "Einheit laut Quelldatei: " + APP.escape(serien[0].unit) +
-      "<br>Quelle: " + APP.quelleHtml(serien[0]);
+    meta.innerHTML = "Quelle: " + APP.quelleHtml(serien[0]);
     block.appendChild(meta);
 
     const stellen = a.stellen === undefined ? 1 : a.stellen;

@@ -27,16 +27,11 @@
 
   <h2>Wirtschaftsbereiche</h2>
   <p class="intro">
-    Die vier Bereiche werden getrennt ausgewiesen. Werte über null stehen
-    für überwiegende Einstellungsabsichten, Werte darunter für überwiegende
-    Abbauabsichten.
-  </p>
-  <p class="hinweis-klein">
-    Die Quelldatei weist in der Kopfzeile nur für die Gesamtreihe eine
-    Einheit aus („Indexwerte, 2015 = 100, saisonbereinigt“). Für die vier
-    Bereichsspalten ist keine Einheit angegeben; ihre Werte legen Salden
-    nahe, werden hier aber nicht als solche deklariert. Siehe
-    <code>DATA.md</code>.
+    Getrennt ausgewiesen werden vier Bereiche: Verarbeitendes Gewerbe,
+    Dienstleistungssektor, Handel und Bauhauptgewerbe. Die Unternehmen geben
+    an, ob sie in den nächsten drei Monaten mehr, gleich viele oder weniger
+    Beschäftigte haben wollen. Der Saldo ist der Anteil der Unternehmen, die
+    mehr Beschäftigte planen, minus dem Anteil derer, die weniger planen.
   </p>
   <div id="bereiche"></div>
 
@@ -58,7 +53,8 @@ SEITE.aufbauen({
   series: "Beschaeftigungsbarometer",
   sector: "Deutschland",
   kennzahlTitel: "ifo Beschäftigungsbarometer",
-  kennzahlZusatz: "Index, 2015 = 100",
+  // Ohne eigene Angabe nimmt die Kachel die Einheit der Reihe, in der
+  // Schreibweise aus config.js - dieselbe wie im Diagramm und in den Tabellen.
   chartId: "chart-empl",
   chartTitel: "ifo Beschäftigungsbarometer Deutschland",
   stellen: 1,

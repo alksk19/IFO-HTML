@@ -224,6 +224,37 @@ nicht.
 
 Abschalten lässt sich das unter *Settings → Pages* über *Unpublish site*.
 
+## Einheiten
+
+Maßgeblich sind die Angaben des ifo Instituts auf der Seite der Zeitreihen
+([ifo.de/umfragen/zeitreihen](https://www.ifo.de/umfragen/zeitreihen),
+Abschnitt „Inhalt“); für das Beschäftigungsbarometer zusätzlich die Tabelle
+„nach Wirtschaftsbereich“ der Pressemitteilung.
+
+| Reihe | Einheit |
+|---|---|
+| ifo Geschäftsklima, Deutschland | Indexwerte (2015=100, saisonbereinigt) und Salden (saisonbereinigt), je für Geschäftsklima, Geschäftsbeurteilung, Geschäftserwartungen |
+| Wirtschaftsbereiche (Verarbeitendes Gewerbe, Dienstleistungssektor, Handel, Bauhauptgewerbe; dazu Groß-, Einzelhandel, Gewerbliche Wirtschaft) | Salden (saisonbereinigt) |
+| ifo Beschäftigungsbarometer, Deutschland | Indexwerte (2015=100, saisonbereinigt) |
+| ifo Beschäftigungsbarometer, Wirtschaftsbereiche | Salden (saisonbereinigt) |
+| ifo Exporterwartungen | Salden (saisonbereinigt) |
+| ifo Geschäftsunsicherheit | Ursprungswerte als Saldo, nicht saisonbereinigt |
+| ifo Konjunkturampel | Wahrscheinlichkeit für eine expansive Entwicklung in % |
+| ifo Importklima | Indexwerte, saisonbereinigt |
+
+Diese Schreibweise erscheint unter jedem Diagramm- und Tabellentitel. Die
+Zuordnung von der Angabe der Quelldatei auf die angezeigte Schreibweise steht
+in `site/config.js` unter `einheiten`; die Spalte `unit` der CSV-Dateien
+trägt die Angabe der Quelldatei.
+
+## Begriffe
+
+Durchgängig verwendet werden **Geschäftsklima**, **Geschäftsbeurteilung** und
+**Geschäftserwartungen** — in Diagrammlegenden, Tabellenköpfen und in der
+Spalte `series` der CSV-Dateien. Kurzformen wie „Klima“, „Lage“ oder
+„Erwartungen“ kommen nicht vor. Die Zuordnung steht in `site/config.js` unter
+`labels`; eine Änderung dort wirkt auf alle Seiten und alle CSV-Downloads.
+
 ## Grenzen dieses Prototyps
 
 - Es sind **keine eigenen Berechnungen** enthalten. Angezeigt werden allein
@@ -231,8 +262,6 @@ Abschalten lässt sich das unter *Settings → Pages* über *Unpublish site*.
 - Die ifo **Konjunkturuhr** ist bewusst nicht enthalten.
 - Die Heatmap zeigt **Salden**, nicht die vier Konjunkturphasen der
   offiziellen ifo-Heatmap (siehe `DECISIONS.md`).
-- Drei Angaben sind aus den Quellen nicht eindeutig; sie sind unverändert
-  übernommen und auf der Methodikseite sowie in `DATA.md` gekennzeichnet.
 
 Bei Zitaten in Veröffentlichungen ist das ifo Institut als Quelle zu
 nennen, nicht diese Seite.

@@ -42,10 +42,10 @@ window.SITE = {
   // verwendet durchgaengig diese Beschriftungen.
   labels: {
     Geschaeftsklima: "Geschäftsklima",
-    Geschaeftslage: "Geschäftslage",
+    Geschaeftslage: "Geschäftsbeurteilung",
     Geschaeftserwartungen: "Geschäftserwartungen",
     Geschaeftsklima_saldo: "Geschäftsklima",
-    Geschaeftslage_saldo: "Geschäftslage",
+    Geschaeftslage_saldo: "Geschäftsbeurteilung",
     Geschaeftserwartungen_saldo: "Geschäftserwartungen",
     Geschaeftsunsicherheit: "ifo Geschäftsunsicherheit",
     Konjunkturampel: "ifo Konjunkturampel",
@@ -60,6 +60,19 @@ window.SITE = {
     Einzelhandel: "Einzelhandel",
     Bauhauptgewerbe: "Bauhauptgewerbe",
     Deutschland: "Deutschland"
+  },
+
+  // Schreibweise der Einheiten fuer die Anzeige. Links steht die Angabe so,
+  // wie sie in der Quelldatei des ifo Instituts steht und auch in den
+  // CSV-Dateien unter data/clean/ erhalten bleibt; rechts die Schreibweise,
+  // in der sie auf der Seite erscheint. Die Angabe wird dabei nicht
+  // inhaltlich geaendert, nur gesetzt.
+  //
+  // Eine hier nicht aufgefuehrte Einheit wird unveraendert angezeigt.
+  einheiten: {
+    "Indexwerte, 2015 = 100, saisonbereinigt": "Indexwerte (2015=100, saisonbereinigt)",
+    "Salden, saisonbereinigt": "Salden (saisonbereinigt)",
+    "Indexwerte, saisonbereinigt": "Indexwerte (saisonbereinigt)"
   },
 
   // Die vier Themen der Startseite. Jede Kachel zeigt den letzten Wert, die
@@ -97,9 +110,6 @@ window.SITE = {
       titel: "ifo Importklima",
       seite: "importklima.html",
       beschreibung: "Frühindikator für die deutschen Importe.",
-      // Die Einheit aus der Quelldatei ist fuer die Kachel zu lang; die
-      // vollstaendige Bezeichnung samt Vorbehalt steht auf der Themenseite.
-      einheitKurz: "Indexwerte, saisonbereinigt",
       dataset: "imklima",
       series: "Importklima",
       sector: "Deutschland"

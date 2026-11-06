@@ -148,32 +148,55 @@ Das Importklima endet im September 2026 und damit einen Monat früher als
 die übrigen Reihen. Beim Vergleich von Ständen über mehrere Indikatoren ist
 das zu beachten.
 
+## Einheiten
+
+Maßgeblich sind die Angaben des ifo Instituts auf der Seite der Zeitreihen
+([ifo.de/umfragen/zeitreihen](https://www.ifo.de/umfragen/zeitreihen),
+Abschnitt „Inhalt“); beim Beschäftigungsbarometer zusätzlich die Tabelle
+„nach Wirtschaftsbereich“ der Pressemitteilung. Die vollständige Übersicht
+steht in `README.md`.
+
+Auf der Website erscheinen die Einheiten in der Schreibweise der
+ifo-Veröffentlichungen — `Indexwerte (2015=100, saisonbereinigt)`
+beziehungsweise `Salden (saisonbereinigt)`. Die Zuordnung steht in
+`site/config.js` unter `einheiten`; die Spalte `unit` der CSV-Dateien trägt
+weiterhin die Angabe der Quelldatei.
+
 ## Offene Fragen
 
-Nichts davon wurde durch eigene Annahmen ersetzt; die Bezeichnungen der
-Quelldateien sind unverändert übernommen und auf der Website gekennzeichnet.
+Die folgenden Punkte sind sachlich noch nicht geklärt. Sie stehen hier als
+interne Notiz; auf der Website werden sie nicht ausgewiesen.
 
 ### 1. Einheit des Importklimas
 Die Quelldatei bezeichnet die Spalte `R1` in Zeile 8 als „ifo Importklima
-(Indexwerte, saisonbereinigt)“. Die Werte liegen jedoch zwischen **−3,093
-und 1,353** und schwanken um null. Ein auf 2015 = 100 normierter Index wie
-beim Geschäftsklima ist das nicht.
+(Indexwerte, saisonbereinigt)“, und diese Bezeichnung wird übernommen. Die
+Werte liegen jedoch zwischen **−3,093 und 1,353** und schwanken um null; ein
+auf 2015 = 100 normierter Index wie beim Geschäftsklima ist das nicht.
 
 *Zu klären:* Welche Einheit hat die Reihe tatsächlich — standardisierte
 Werte, Wachstumsbeiträge, etwas anderes? Wie ist ein Wert von etwa −0,24 zu
-interpretieren? In den Daten steht als Einheit:
-`Indexwerte, saisonbereinigt (Bezeichnung aus der Quelldatei, siehe DATA.md)`.
+interpretieren?
 
-### 2. Einheit der Bereichsspalten des Beschäftigungsbarometers
+### 2. Einheit der Bereichsspalten des Beschäftigungsbarometers — geklärt
 Die Kopfzeile 7 weist als Einheit nur „Indexwerte, 2015 = 100,
 saisonbereinigt“ aus. Diese Angabe passt zur Gesamtreihe (Werte um 95), aber
-nicht zu den vier Bereichsspalten (Werte wie −45,4 oder −23,7), die klar
-Salden nahelegen. Eine eigene Einheitenangabe für die Bereichsspalten
-enthält die Datei nicht.
+nicht zu den vier Bereichsspalten (Werte wie −45,4 oder −23,7). Eine eigene
+Einheitenangabe für die Bereichsspalten enthält die Datei nicht.
 
-*Zu klären:* Sind die vier Bereichsspalten Salden? In den Daten steht als
-Einheit bewusst:
-`Einheit in der Quelldatei nicht ausgewiesen (siehe DATA.md)`.
+*Geklärt am 06.11.2026:* Es sind Salden. Beleg sind die Pressemitteilungen
+des ifo Instituts zum Beschäftigungsbarometer, deren Tabelle „nach
+Wirtschaftsbereich“ ausdrücklich mit „Salden, saisonbereinigt“ überschrieben
+ist. In den Daten steht seither:
+
+| Reihe | Einheit |
+|---|---|
+| Deutschland | `Indexwerte, 2015 = 100, saisonbereinigt` |
+| die vier Wirtschaftsbereiche | `Salden, saisonbereinigt` |
+
+Auf der Website erscheinen sie in der Schreibweise der ifo-Veröffentlichungen
+(`Indexwerte (2015=100, saisonbereinigt)` beziehungsweise
+`Salden (saisonbereinigt)`); die Zuordnung steht in `site/config.js` unter
+`einheiten`.
 
 ### 3. Definition der Konjunkturampel
 Die Pressemitteilung vom Oktober 2026 enthält Methodenkästen zum

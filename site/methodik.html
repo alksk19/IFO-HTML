@@ -136,37 +136,43 @@
     Erzeugt werden die Daten dieser Seite von einem einzigen R-Skript
     (<code>R/build_data.R</code>). Es liest die Rohdateien, schreibt die
     aufbereiteten Reihen als CSV nach <code>data/clean/</code> und erneuert
-    die Datendatei der Website. Einheiten und Bezeichnungen werden dabei
-    exakt so übernommen, wie sie in den Quelldateien stehen.
+    die Datendatei der Website. An den Zahlen wird dabei nichts gerechnet;
+    Einheiten und Bezeichnungen folgen den Angaben des ifo Instituts.
   </p>
 
-  <h2>Offene Fragen</h2>
+  <h2>Einheiten</h2>
   <p>
-    Zwei Angaben ließen sich aus den Quellen nicht eindeutig klären und
-    werden deshalb unverändert, aber gekennzeichnet wiedergegeben:
+    Welche Einheit eine Reihe hat, steht unter jedem Diagramm- und
+    Tabellentitel. Maßgeblich sind die Angaben des ifo Instituts auf der
+    Seite der Zeitreihen, Abschnitt „Inhalt“, sowie für das
+    Beschäftigungsbarometer die Tabelle „nach Wirtschaftsbereich“ der
+    Pressemitteilung.
   </p>
-  <ul>
-    <li>
-      Beim <strong>ifo Importklima</strong> bezeichnet die Quelldatei die
-      Reihe als „Indexwerte, saisonbereinigt“. Die Werte schwanken jedoch um
-      null und liegen zwischen etwa −3,1 und 1,4; es handelt sich also nicht
-      um einen auf 2015 = 100 normierten Index wie beim Geschäftsklima.
-    </li>
-    <li>
-      Beim <strong>ifo Beschäftigungsbarometer</strong> weist die Quelldatei
-      eine Einheit nur für die Gesamtreihe aus („Indexwerte, 2015 = 100“).
-      Für die vier Bereichsspalten ist keine Einheit angegeben; ihre Werte
-      legen Salden nahe, werden hier aber nicht als solche deklariert.
-    </li>
-  </ul>
-  <p>
-    Ebenfalls offen ist die genaue Definition der <strong>ifo
-    Konjunkturampel</strong>: Die herangezogene Pressemitteilung enthält
-    dazu keinen Methodenkasten. Übernommen wurde die Bezeichnung aus der
-    Quelldatei — „Wahrscheinlichkeit für eine expansive Entwicklung in %“.
-    Alle offenen Punkte sind in der Datei <code>DATA.md</code> des Projekts
-    festgehalten.
-  </p>
+  <dl>
+    <dt>ifo Geschäftsklima, Deutschland</dt>
+    <dd>Indexwerte (2015=100, saisonbereinigt) und Salden (saisonbereinigt),
+    jeweils für Geschäftsklima, Geschäftsbeurteilung und
+    Geschäftserwartungen.</dd>
+
+    <dt>Wirtschaftsbereiche</dt>
+    <dd>Salden (saisonbereinigt) — Verarbeitendes Gewerbe,
+    Dienstleistungssektor, Handel und Bauhauptgewerbe, dazu Groß- und
+    Einzelhandel sowie die Gewerbliche Wirtschaft.</dd>
+
+    <dt>ifo Beschäftigungsbarometer</dt>
+    <dd>Deutschland in Indexwerten (2015=100, saisonbereinigt), die vier
+    Wirtschaftsbereiche in Salden (saisonbereinigt).</dd>
+
+    <dt>ifo Exporterwartungen</dt>
+    <dd>Salden (saisonbereinigt).</dd>
+
+    <dt>ifo Geschäftsunsicherheit</dt>
+    <dd>Ursprungswerte als Saldo, nicht saisonbereinigt; rechnerisch zwischen
+    0 und 100.</dd>
+
+    <dt>ifo Konjunkturampel</dt>
+    <dd>Wahrscheinlichkeit für eine expansive Entwicklung in Prozent.</dd>
+  </dl>
 
   <h2>Verwendung</h2>
   <p>
@@ -230,7 +236,7 @@
       "<br><span class=\"hinweis-klein\">Verfügbar ab " +
       APP.escape(APP.monatLang(s.start)) + ", zuletzt " +
       APP.escape(APP.monatLang(s.end)) + " · " + s.values.length +
-      " Monatswerte · Einheit laut Quelldatei: " + APP.escape(s.unit) +
+      " Monatswerte · Einheit: " + APP.escape(APP.einheit(s.unit)) +
       "</span>";
     dl.appendChild(dd);
   });

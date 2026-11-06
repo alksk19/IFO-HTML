@@ -172,8 +172,11 @@ gsk_de <- bind_rows(
   tidy_block(m1, g1[[5]], "Geschaeftsklima_saldo",       "Deutschland", "Salden, saisonbereinigt", SRC_IFO),
   tidy_block(m1, g1[[6]], "Geschaeftslage_saldo",        "Deutschland", "Salden, saisonbereinigt", SRC_IFO),
   tidy_block(m1, g1[[7]], "Geschaeftserwartungen_saldo", "Deutschland", "Salden, saisonbereinigt", SRC_IFO),
-  tidy_block(m1, g1[[8]], "Geschaeftsunsicherheit", "Deutschland", "Ursprungswerte (Saldo), ab 04/2019", SRC_IFO),
-  tidy_block(m1, g1[[9]], "Konjunkturampel",        "Deutschland", "Wahrscheinlichkeit fuer eine expansive Entwicklung in %", SRC_IFO)
+  # Einheiten sind sichtbarer Text und tragen deshalb Umlaute. Der
+  # Beginn der Reihe (04/2019) gehoert nicht in die Einheit, sondern in den
+  # Hinweis unter dem Diagramm.
+  tidy_block(m1, g1[[8]], "Geschaeftsunsicherheit", "Deutschland", "Ursprungswerte (Saldo), nicht saisonbereinigt", SRC_IFO),
+  tidy_block(m1, g1[[9]], "Konjunkturampel",        "Deutschland", "Wahrscheinlichkeit für eine expansive Entwicklung in %", SRC_IFO)
 )
 
 # --- 2. Wirtschaftsbereiche (gsk, Sheet 2) ---------------------------------
@@ -224,13 +227,18 @@ export <- tidy_block(mex, ex[[2]], "Exporterwartungen",
 # werden auf den Monat reduziert; check_months stellt sicher, dass dabei
 # nichts zusammenfaellt. Die Datei bezeichnet in der Kopfzeile nur
 # "Indexwerte, 2015 = 100" und labelt die vier Bereichsspalten nicht
-# einzeln; deren Einheit ist offen (siehe DATA.md) und wird hier bewusst
-# nicht als Saldo deklariert.
+# einzeln; dass es sich dort um Salden handelt, ist durch die
+# Pressemitteilungen des ifo Instituts belegt (siehe DATA.md).
 em <- suppressMessages(read_excel(f_empl, sheet = 1, col_names = FALSE, skip = 9))
 mem <- to_month(em[[1]])
 check_months(mem, "Beschaeftigungsbarometer")
 
-U_EMPL_SEKTOR <- "Einheit in der Quelldatei nicht ausgewiesen (siehe DATA.md)"
+# Die Kopfzeile der Excel-Datei weist eine Einheit nur fuer die Gesamtreihe
+# aus. Fuer die vier Bereichsspalten ist sie durch die Pressemitteilungen des
+# ifo Instituts belegt (Tabelle "nach Wirtschaftsbereich, Salden,
+# saisonbereinigt") und wird hier entsprechend gesetzt; geklaert am
+# 06.11.2026, siehe DATA.md.
+U_EMPL_SEKTOR <- U_SAL
 
 empl <- bind_rows(
   tidy_block(mem, em[[2]], "Beschaeftigungsbarometer", "Deutschland", U_IDX, SRC_IFO),
@@ -251,7 +259,7 @@ mim <- to_month(im[[1]])
 check_months(mim, "Importklima")
 
 imklima <- tidy_block(mim, im[[2]], "Importklima", "Deutschland",
-                      "Indexwerte, saisonbereinigt (Bezeichnung aus der Quelldatei, siehe DATA.md)",
+                      "Indexwerte, saisonbereinigt",
                       SRC_IMP)
 
 # --- Metadaten je Serie ----------------------------------------------------

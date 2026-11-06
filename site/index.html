@@ -16,10 +16,9 @@
   <div class="tiles" id="kacheln"></div>
 
   <p class="hinweis-klein">
-    Was ein Saldo ist, wie der Index gebildet wird und woher die Daten genau
-    stammen, steht auf der <a href="methodik.html">Methodikseite</a>.
-    Einheiten, Besonderheiten und offene Fragen sind in der Datei
-    <code>DATA.md</code> des Projekts dokumentiert.
+    Was ein Saldo ist, wie der Index gebildet wird, welche Einheit jede Reihe
+    hat und woher die Daten stammen, steht auf der
+    <a href="methodik.html">Methodikseite</a>.
   </p>
 
 </main>
@@ -59,7 +58,8 @@
     kachel.innerHTML =
       '<div class="tile-titel">' + APP.escape(t.titel) + "</div>" +
       '<div class="wert">' + APP.zahl(a.wert, stellen) + "</div>" +
-      '<div class="einheit">' + APP.escape(t.einheitKurz || s.unit) + "</div>" +
+      '<div class="einheit">' +
+        APP.escape(APP.einheit(s.unit)) + "</div>" +
       '<div class="delta ' + klasse + '">' + pfeil + " " +
         APP.zahlMitVorzeichen(a.delta, stellen) + " zum Vormonat</div>" +
       '<div class="sparkline"></div>' +

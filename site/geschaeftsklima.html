@@ -121,9 +121,13 @@
 
   APP.chartBlock(document.getElementById("klima"), {
     id: "chart-klima",
-    titel: "ifo Geschäftsklima, Lage und Erwartungen",
+    // Die drei Reihen nennt die Legende; der Titel zaehlt sie nicht auf,
+    // sonst laeuft er in der schmalen linken Spalte ueber drei Zeilen und
+    // drueckt das Diagramm nach unten. Gleiche Benennung wie auf der
+    // Datenseite.
+    titel: "ifo Geschäftsklima Deutschland",
     serien: [klima, lage, erwartung],
-    legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
+    legende: ["Geschäftsklima", "Geschäftsbeurteilung", "Geschäftserwartungen"],
     stellen: 1,
     zeitraum: "10j",
     tabelle: false
@@ -137,10 +141,10 @@
   document.getElementById("klima-tabelle").innerHTML =
     '<div class="chart-kopf"><div class="titelblock">' +
       "<h3>Letzte zwölf Monate</h3>" +
-      '<div class="einheit">' + APP.escape(klima.unit) + "</div>" +
+      '<div class="einheit">' + APP.escape(APP.einheit(klima.unit)) + "</div>" +
     "</div></div>" +
     APP.tabelleHtml(APP.zuschneiden(tabSerien, 12), tabSerien, {
-      legende: ["Klima", "Lage", "Erwartungen"],
+      legende: ["Geschäftsklima", "Geschäftsbeurteilung", "Geschäftserwartungen"],
       stellen: 1
     });
 
@@ -167,7 +171,7 @@
       id: "chart-" + name.toLowerCase().replace(/[^a-z]+/g, "-"),
       titel: APP.label(name),
       serien: s,
-      legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
+      legende: ["Geschäftsklima", "Geschäftsbeurteilung", "Geschäftserwartungen"],
       stellen: 1,
       nullLinie: true,
       zeitraum: "10j",
@@ -221,7 +225,7 @@
       id: "chart-klima-lang",
       titel: "ifo Geschäftsklima Deutschland seit 2005",
       serien: [klima, lage, erwartung],
-      legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
+      legende: ["Geschäftsklima", "Geschäftsbeurteilung", "Geschäftserwartungen"],
       stellen: 1,
       zeitraum: "alle",
       tabelle: false
@@ -235,7 +239,7 @@
         APP.serie("gsk_bereiche", "Geschaeftslage_saldo", "Gewerbliche Wirtschaft"),
         APP.serie("gsk_bereiche", "Geschaeftserwartungen_saldo", "Gewerbliche Wirtschaft")
       ],
-      legende: ["Geschäftsklima", "Geschäftslage", "Geschäftserwartungen"],
+      legende: ["Geschäftsklima", "Geschäftsbeurteilung", "Geschäftserwartungen"],
       stellen: 1,
       nullLinie: true,
       zeitraum: "alle",
@@ -250,7 +254,7 @@
       stellen: 1,
       zeitraum: "alle",
       tabelle: false,
-      hinweis: "Laut Quelldatei: Wahrscheinlichkeit für eine expansive Entwicklung in %"
+      hinweis: "Wahrscheinlichkeit für eine expansive Entwicklung in %"
     });
   });
 

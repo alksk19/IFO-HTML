@@ -13,17 +13,11 @@
 
   <h1>ifo Importklima</h1>
   <p class="intro">
-    Das ifo Importklima ist nach der Veröffentlichung, auf die die Quelldatei
-    verweist, „ein erster Frühindikator für die Prognose der deutschen
-    Importe“ (Grimme, Lehmann und Nöller 2018). Die Werte schwanken um null.
-  </p>
-  <p class="hinweis-klein">
-    Die Quelldatei bezeichnet die Reihe als „Indexwerte, saisonbereinigt“.
-    Die Werte liegen jedoch zwischen etwa −3,1 und 1,4 und schwanken um null,
-    sind also kein auf 2015 = 100 normierter Index wie beim Geschäftsklima.
-    Die Bezeichnung wird hier unverändert aus der Datei übernommen; die
-    genaue Einheit ist eine offene Frage und in <code>DATA.md</code>
-    festgehalten.
+    Das ifo Importklima ist „ein erster Frühindikator für die Prognose der
+    deutschen Importe“ (Grimme, Lehmann und Nöller 2018). Es verdichtet
+    Informationen aus den wichtigsten Herkunftsländern deutscher Einfuhren.
+    Die Werte schwanken um null; höhere Werte deuten auf eine kräftigere
+    Importentwicklung hin.
   </p>
 
   <div class="tiles" id="kennzahlen"></div>
@@ -49,7 +43,7 @@ SEITE.aufbauen({
   series: "Importklima",
   sector: "Deutschland",
   kennzahlTitel: "ifo Importklima",
-  kennzahlZusatz: "Bezeichnung laut Quelldatei: Indexwerte, saisonbereinigt",
+  // Ohne eigene Angabe nimmt die Kachel die Einheit der Reihe.
   chartId: "chart-importklima",
   chartTitel: "ifo Importklima",
   nullLinie: true,

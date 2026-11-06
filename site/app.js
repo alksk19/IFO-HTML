@@ -82,6 +82,15 @@
     return (v > 0 ? "+" : "") + zahl(v, stellen);
   }
 
+  // Einheit in der Schreibweise, in der sie angezeigt werden soll. Die
+  // Zuordnung steht in config.js unter "einheiten". Der in den Daten
+  // gespeicherte Text bleibt unveraendert und steht so auch in den
+  // heruntergeladenen CSV-Dateien.
+  function einheitText(unit) {
+    if (!unit) return "";
+    return (CFG && CFG.einheiten && CFG.einheiten[unit]) || unit;
+  }
+
   function label(name) {
     return (CFG && CFG.labels && CFG.labels[name]) || name;
   }
@@ -462,7 +471,9 @@
     const stellen = o.stellen === undefined ? 1 : o.stellen;
     const tabelleId = o.id + "-daten";
     const quelle = serien[0].source;
-    const einheiten = Array.from(new Set(serien.map(function (s) { return s.unit; })));
+    const einheiten = Array.from(new Set(serien.map(function (s) {
+      return einheitText(s.unit);
+    })));
 
     let zeitraum = o.zeitraum || "10j";
 
@@ -551,25 +562,9 @@
 
     const flaeche = document.createElement("div");
     flaeche.className = "chart-flaeche" + (o.klein ? " klein" : "");
-    flaeche.title = "Antippen, um die Schaltflächen einzublenden";
     const canvas = document.createElement("canvas");
     flaeche.appendChild(canvas);
     block.appendChild(flaeche);
-
-    // Die Werkzeuge erscheinen bei Mauszeiger darueber oder Tastaturfokus
-    // (beides in styles.css). Ein Klick oder Tipp auf das Diagramm blendet sie
-    // ebenfalls ein - auf Tastgeraeten gibt es kein Hover. Ein Tipp daneben
-    // nimmt sie wieder weg.
-    flaeche.addEventListener("click", function (e) {
-      e.stopPropagation();
-      document.querySelectorAll(".chart-block.offen").forEach(function (b) {
-        if (b !== block) b.classList.remove("offen");
-      });
-      block.classList.add("offen");
-    });
-    document.addEventListener("click", function (e) {
-      if (!block.contains(e.target)) block.classList.remove("offen");
-    });
 
     const fuss = document.createElement("div");
     fuss.className = "chart-fuss";
@@ -789,9 +784,11 @@
     Zahlen; von Hand ist nichts nachzutragen.
 
     Er ist kein Text des ifo Instituts, sondern aus den Zahlen abgeleitet.
-    Der Hinweis unter dem Vorspann sagt das ausdruecklich. Deutungen ueber
-    die Zahlen hinaus ("die Erholung setzt sich fort") entstehen hier
-    bewusst nicht - die kann nur ein Mensch verantworten.
+    Kenntlich gemacht wird das ueber den Prototyp-Hinweis, der auf jeder
+    Seite steht; eine eigene Zeile unter dem Vorspann gibt es dafuer seit
+    dem 06.11.2026 nicht mehr. Deutungen ueber die Zahlen hinaus ("die
+    Erholung setzt sich fort") entstehen hier bewusst nicht - die kann nur
+    ein Mensch verantworten.
 
     Die Wortwahl steht in den Aufrufen auf den Seiten selbst, damit sie ohne
     Programmierkenntnisse zu aendern ist.
@@ -864,9 +861,7 @@
     block.className = "lage";
     block.innerHTML =
       '<p class="lage-titel">' + ueberschrift + "</p>" +
-      "<p>" + saetze.map(escape).join(" ") + "</p>" +
-      '<p class="hinweis-klein">Aus den Zahlen dieser Seite erzeugt, kein ' +
-      "Text des ifo Instituts.</p>";
+      "<p>" + saetze.map(escape).join(" ") + "</p>";
     ziel.appendChild(block);
   }
 
@@ -915,7 +910,7 @@
     const kopf = document.createElement("div");
     kopf.className = "chart-kopf";
     kopf.innerHTML = '<div class="titelblock"><h3>' + escape(o.titel) + "</h3>" +
-      '<div class="einheit">' + escape(serien[0].unit) + "</div></div>";
+      '<div class="einheit">' + escape(einheitText(serien[0].unit)) + "</div></div>";
     kopf.appendChild(werkzeuge);
     block.appendChild(kopf);
 
@@ -1057,6 +1052,7 @@
     zahl: zahl,
     zahlMitVorzeichen: zahlMitVorzeichen,
     label: label,
+    einheit: einheitText,
     escape: escape,
     css: css,
     serienfarben: serienfarben,
