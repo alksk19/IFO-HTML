@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wirtschaft in Deutschland — Entwurf (Dummy-Daten)</title>
+<meta name="description" content="Entwurf: Bürger-Wirtschafts-Dashboard für Deutschland, auf Basis von ifo-, Destatis- und BA-Daten. Diese Fassung zeigt ausschließlich Dummy-Daten.">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dashboard_v2.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body data-titel="Wirtschaft in Deutschland (Entwurf)">
+
+<div class="dummy-banner">
+  Entwurf mit Dummy-Daten — alle Zahlen auf dieser Seite sind frei erfunden
+  und dienen nur der Veranschaulichung von Aufbau und Darstellung.
+</div>
+<div class="prototyp-hinweis">
+  Prototyp, keine offizielle Veröffentlichung des ifo Instituts, der
+  Bundesagentur für Arbeit oder des Statistischen Bundesamts
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="marke" href="index.html">ifo Institut</a>
+    <nav>
+      <a href="index.html">Übersicht</a>
+      <a href="geschaeftsklima.html">Geschäftsklima</a>
+      <a href="beschaeftigungsbarometer.html">Beschäftigungsbarometer</a>
+      <a href="exporterwartungen.html">Exporterwartungen</a>
+      <a href="importklima.html">Importklima</a>
+      <a href="daten.html">Daten</a>
+      <a href="methodik.html">Methodik</a>
+      <a href="dashboard_v2.html" aria-current="page">Wirtschaft in Deutschland (Entwurf)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h1>Wirtschaft in Deutschland</h1>
+  <p class="rubrik-intro">
+    Die wichtigsten Kennzahlen zur deutschen Wirtschaft auf einen Blick —
+    auf Basis von ifo-, Destatis- und BA-Daten. Diese Fassung zeigt
+    ausschließlich Dummy-Daten; siehe Hinweis oben.
+  </p>
+
+  <nav class="rubrik-nav" aria-label="Rubriken">
+    <a href="#fragen">4 Fragen</a>
+    <a href="#bip">BIP</a>
+    <a href="#arbeitsmarkt">Arbeitsmarkt</a>
+    <a href="#inflation">Inflation &amp; Preise</a>
+    <a href="#rohstoffe">Rohstoffe &amp; Energie</a>
+    <a href="#wohnen">Wohnen</a>
+  </nav>
+
+  <!-- ===================== Kennzahlen-Kacheln ===================== -->
+  <div class="tiles" id="kennzahlen-sichtbar"></div>
+
+  <details class="mehr mehr-kennzahlen-knopf" id="mehr-kennzahlen">
+    <summary>Mehr Kennzahlen</summary>
+    <div class="tiles" id="kennzahlen-weitere" style="margin-top:16px"></div>
+  </details>
+
+  <!-- ===================== Die Wirtschaft in 4 Fragen ===================== -->
+  <section class="rubrik-abschnitt" id="fragen">
+    <h2>Die Wirtschaft in 4 Fragen</h2>
+    <p class="rubrik-intro">Vier Fragen, vier Diagramme — der schnelle Einstieg.</p>
+    <div class="fragen-raster">
+      <div id="frage-inflation"></div>
+      <div id="frage-arbeitsmarkt"></div>
+      <div id="frage-unternehmen"></div>
+      <div id="frage-zinsen"></div>
+    </div>
+
+    <div class="prognose-kasten" id="prognose-kasten">
+      <h3>Wohin geht's? — ifo Konjunkturprognose</h3>
+      <div id="prognose-chart"></div>
+    </div>
+  </section>
+
+  <!-- ===================== BIP ===================== -->
+  <section class="rubrik-abschnitt" id="bip">
+    <h2>BIP</h2>
+    <p class="rubrik-intro">Wie schnell wächst die deutsche Wirtschaft, und woher kommt das Wachstum?</p>
+    <div class="karten-raster">
+      <div id="bip-wachstum-card"></div>
+      <div id="bip-preise-card"></div>
+      <div id="wachstumsbeitraege-card"></div>
+      <div id="konjunkturuhr-card"></div>
+    </div>
+    <h3 style="margin-top:32px">Außenhandel</h3>
+    <div class="karten-raster">
+      <div>
+        <div id="exporterwartungen-card"></div>
+        <div id="warenexporte-card" style="margin-top:8px"></div>
+      </div>
+      <div>
+        <div id="importklima-card"></div>
+        <div id="warenimporte-card" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Arbeitsmarkt ===================== -->
+  <section class="rubrik-abschnitt" id="arbeitsmarkt">
+    <h2>Arbeitsmarkt</h2>
+    <p class="rubrik-intro">Wie viele Menschen haben Arbeit, und wie hat sich das zuletzt verändert?</p>
+    <div class="karten-raster">
+      <div id="arbeitslosenquote-card"></div>
+      <div id="arbeitslosenquote-gruppen-card"></div>
+      <div id="beschaeftigung-branchen-card"></div>
+      <div id="erwerbsquoten-card"></div>
+      <div id="loehne-card"></div>
+      <div id="beschaeftigungsbarometer-card"></div>
+    </div>
+
+    <details class="mehr" id="arbeitsmarkt-mehr" style="margin-top:28px">
+      <summary>Weitere ifo-Indikatoren zum Arbeitsmarkt</summary>
+      <div class="karten-raster" id="arbeitsmarkt-weitere" style="margin-top:16px"></div>
+    </details>
+  </section>
+
+  <!-- ===================== Inflation & Preise ===================== -->
+  <section class="rubrik-abschnitt" id="inflation">
+    <h2>Inflation &amp; Preise</h2>
+    <p class="rubrik-intro">Steigen die Preise noch schneller als das 2-%-Ziel der EZB?</p>
+    <div class="karten-raster">
+      <div id="vpi-card"></div>
+      <div id="preiskaleidoskop-card"></div>
+      <div id="loehne-vs-vpi-card"></div>
+      <div id="kaufkraft-card"></div>
+    </div>
+
+    <details class="mehr" id="inflation-mehr" style="margin-top:28px">
+      <summary>Weiteres zu Preisen</summary>
+      <div class="karten-raster" id="inflation-weitere" style="margin-top:16px"></div>
+    </details>
+  </section>
+
+  <!-- ===================== Rohstoffe & Energie ===================== -->
+  <section class="rubrik-abschnitt" id="rohstoffe">
+    <h2>Rohstoffe &amp; Energie</h2>
+    <p class="rubrik-intro">Was kostet die Einfuhr von Energie und Metallen?</p>
+    <div class="karten-raster">
+      <div id="einfuhrpreise-card"></div>
+      <div id="energiepreise-card"></div>
+    </div>
+    <details class="mehr" id="rohstoffe-mehr" style="margin-top:28px">
+      <summary>Weiteres zu Rohstoffen</summary>
+      <div class="karten-raster" id="rohstoffe-weitere" style="margin-top:16px"></div>
+    </details>
+  </section>
+
+  <!-- ===================== Wohnen ===================== -->
+  <section class="rubrik-abschnitt" id="wohnen">
+    <h2>Wohnen</h2>
+    <p class="rubrik-intro">Wie stark unterscheiden sich Mieten und Baukosten zwischen den Bundesländern?</p>
+    <div class="karten-raster">
+      <div id="mietindex-card"></div>
+      <div id="mietbelastung-card"></div>
+      <div id="haeuserpreise-card"></div>
+      <div id="baupreise-card"></div>
+    </div>
+    <details class="mehr" id="wohnen-mehr" style="margin-top:28px">
+      <summary>Weiteres zum Wohnungsbau</summary>
+      <div class="karten-raster" id="wohnen-weitere" style="margin-top:16px"></div>
+    </details>
+  </section>
+
+  <p class="hinweis-klein" style="margin-top:48px">
+    Alle Angaben zu Status, Lizenz und Quelle stammen aus der Registry
+    <code>data/datasets.csv</code>. Schema der Dummy-CSV-Dateien:
+    <code>data/SCHEMA.md</code>.
+  </p>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>
+      Entwurf mit Dummy-Daten · Prototyp, keine offizielle Veröffentlichung ·
+      Quellen (sobald echte Daten eingespielt sind): ifo Institut, Statistisches
+      Bundesamt (Destatis), Bundesagentur für Arbeit
+    </p>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script>window.SITE_DATA = { stand: "", datasets: {} };</script>
+<script src="dashboard_v2_data.js"></script>
+<script src="dashboard_v2_registry.js"></script>
+<script src="app.js"></script>
+<script src="dashboard_v2.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* --- kleiner Umschalter-Baustein, wie im Dashboard mehrfach gebraucht - */
+
+  function toggleBlock(zielId, optionen, bauen) {
+    const ziel = document.getElementById(zielId);
+    if (!ziel) return;
+    const schalter = document.createElement("div");
+    schalter.className = "toggle-schalter";
+    const inhalt = document.createElement("div");
+    ziel.appendChild(schalter);
+    ziel.appendChild(inhalt);
+
+    let aktiv = optionen[0].id;
+    function render() {
+      inhalt.innerHTML = "";
+      Array.prototype.forEach.call(schalter.children, function (b) {
+        b.classList.toggle("aktiv", b.dataset.id === aktiv);
+      });
+      bauen(inhalt, aktiv);
+    }
+    optionen.forEach(function (o, i) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn" + (i === 0 ? " aktiv" : "");
+      b.textContent = o.label;
+      b.dataset.id = o.id;
+      b.addEventListener("click", function () { aktiv = o.id; render(); });
+      schalter.appendChild(b);
+    });
+    render();
+  }
+
+  /* --- Kennzahlen-Kacheln ------------------------------------------------ */
+
+  DASH.kachel(document.getElementById("kennzahlen-sichtbar"), {
+    id: "kz-geschaeftsklima", registryId: "ifo_geschaeftsklima",
+    titel: "ifo Geschäftsklima", dataset: "ifo_geschaeftsklima",
+    series: "Geschaeftsklima", sector: "Deutschland", einheitKurz: "Punkte", stellen: 1
+  });
+  DASH.kachel(document.getElementById("kennzahlen-sichtbar"), {
+    id: "kz-inflation", registryId: "inflation_vpi",
+    titel: "Inflation", dataset: "inflation_vpi",
+    series: "VPI_veraenderung_vorjahr", sector: null, einheitKurz: "% ggü. Vorjahr", stellen: 1
+  });
+  DASH.kachel(document.getElementById("kennzahlen-sichtbar"), {
+    id: "kz-arbeitslosenquote", registryId: "arbeitslosenquote",
+    titel: "Arbeitslosenquote (BA)", dataset: "arbeitslosenquote",
+    series: "Arbeitslosenquote", sector: "BA", einheitKurz: "%", stellen: 1
+  });
+  DASH.kachel(document.getElementById("kennzahlen-sichtbar"), {
+    id: "kz-bip", registryId: "bip_real",
+    titel: "Reales BIP", dataset: "bip_real",
+    series: "BIP_real", sector: null, einheitKurz: "% ggü. Vorjahr", stellen: 1
+  });
+
+  DASH.kachel(document.getElementById("kennzahlen-weitere"), {
+    id: "kz-reallohn", registryId: "reallohn",
+    titel: "Reallohnindex", dataset: "reallohn",
+    series: "Reallohnindex", sector: null, einheitKurz: "2015=100", stellen: 1
+  });
+  DASH.kachel(document.getElementById("kennzahlen-weitere"), {
+    id: "kz-leitzins", registryId: "ezb_leitzins",
+    titel: "EZB-Leitzins", dataset: "ezb_leitzins",
+    series: "Hauptrefinanzierungssatz", sector: null, einheitKurz: "% p.a.", stellen: 2
+  });
+  DASH.kachel(document.getElementById("kennzahlen-weitere"), {
+    id: "kz-bundesanleihe", registryId: "bundesanleihe_10j",
+    titel: "10J-Bundesanleihe", dataset: "bundesanleihe_10j",
+    series: "Rendite_10j_Bundesanleihe", sector: null, einheitKurz: "% p.a.", stellen: 2
+  });
+  DASH.kachel(document.getElementById("kennzahlen-weitere"), {
+    id: "kz-dax", registryId: "dax",
+    titel: "DAX", dataset: "dax",
+    series: "DAX_Schlusskurs", sector: null, einheitKurz: "Punkte", stellen: 0
+  });
+
+  /* --- 4 Fragen ----------------------------------------------------------- */
+
+  DASH.chartBlock(document.getElementById("frage-inflation"), {
+    id: "frage-inflation-chart", registryId: "inflation_vpi",
+    titel: "Sind wir bei 2 %?",
+    bedeutung: "Die EZB strebt mittelfristig 2 % Inflation an — die gestrichelte Linie zeigt dieses Ziel.",
+    serien: [{ dataset: "inflation_vpi", series: "VPI_veraenderung_vorjahr" }],
+    legende: ["Inflation (VPI)"], stellen: 1, zielwert: { wert: 2, text: "2-%-Ziel" }
+  });
+
+  DASH.chartBlock(document.getElementById("frage-arbeitsmarkt"), {
+    id: "frage-arbeitsmarkt-chart", registryId: "arbeitslosenquote",
+    titel: "Arbeitsmarkt: wie steht's?",
+    bedeutung: "Die Arbeitslosenquote (BA) zeigt, wie viele Menschen ohne Arbeit sind.",
+    serien: [{ dataset: "arbeitslosenquote", series: "Arbeitslosenquote", sector: "BA" }],
+    legende: ["Arbeitslosenquote (BA)"], stellen: 1
+  });
+
+  DASH.chartBlock(document.getElementById("frage-unternehmen"), {
+    id: "frage-unternehmen-chart", registryId: "ifo_geschaeftsklima",
+    titel: "Unternehmen: wie ist die Stimmung?",
+    bedeutung: "Das ifo Geschäftsklima fasst Lage und Erwartungen der Unternehmen zusammen.",
+    serien: [{ dataset: "ifo_geschaeftsklima", series: "Geschaeftsklima", sector: "Deutschland" }],
+    legende: ["ifo Geschäftsklima"], stellen: 1
+  });
+
+  DASH.chartBlock(document.getElementById("frage-zinsen"), {
+    id: "frage-zinsen-chart", registryId: "ezb_leitzins",
+    titel: "Zinsen: wohin gehen sie?",
+    bedeutung: "Leitzins der EZB und Rendite 10-jähriger Bundesanleihen im Vergleich.",
+    serien: [
+      { dataset: "ezb_leitzins", series: "Hauptrefinanzierungssatz" },
+      { dataset: "bundesanleihe_10j", series: "Rendite_10j_Bundesanleihe" }
+    ],
+    legende: ["EZB-Leitzins", "10J-Bundesanleihe"], stellen: 2
+  });
+
+  DASH.chartBlock(document.getElementById("prognose-chart"), {
+    id: "prognose-chart-inner", registryId: "ifo_konjunkturprognose",
+    titel: "ifo Konjunkturprognose",
+    bedeutung: "So schätzt das ifo Institut das Wirtschaftswachstum für die kommenden Quartale ein.",
+    serien: [{ dataset: "ifo_konjunkturprognose", series: "BIP_Prognose" }],
+    legende: ["BIP-Prognose"], stellen: 1, zeitraum: "alle"
+  });
+
+  /* --- BIP ----------------------------------------------------------------- */
+
+  toggleBlock("bip-wachstum-card",
+    [{ id: "vq", label: "ggü. Vorquartal" }, { id: "vj", label: "ggü. Vorjahr" }],
+    function (ziel, aktiv) {
+      ziel.innerHTML = "";
+      DASH.chartBlock(ziel, {
+        id: "bip-wachstum-" + aktiv, registryId: "bip_wachstum",
+        titel: "Reales BIP-Wachstum",
+        bedeutung: "Wie stark ist die Wirtschaftsleistung zuletzt gewachsen oder geschrumpft?",
+        serien: [{ dataset: "bip_wachstum", series: "BIP", sector: aktiv === "vq" ? "ggü. Vorquartal" : "ggü. Vorjahr" }],
+        legende: [aktiv === "vq" ? "ggü. Vorquartal" : "ggü. Vorjahr"],
+        stellen: 1, nullLinie: true
+      });
+    });
+
+  toggleBlock("bip-preise-card",
+    [{ id: "preisbereinigt", label: "preisbereinigt" }, { id: "jeweilige_preise", label: "jeweilige Preise" }],
+    function (ziel, aktiv) {
+      ziel.innerHTML = "";
+      DASH.chartBlock(ziel, {
+        id: "bip-preise-" + aktiv, registryId: "bip_bws_preise",
+        titel: "BIP und Bruttowertschöpfung",
+        bedeutung: "BIP und Bruttowertschöpfung wachsen meist ähnlich, aber nicht immer gleich stark.",
+        serien: [
+          { dataset: "bip_bws_preise", series: "BIP", sector: aktiv },
+          { dataset: "bip_bws_preise", series: "Bruttowertschoepfung", sector: aktiv }
+        ],
+        legende: ["BIP", "Bruttowertschöpfung"], stellen: 1
+      });
+    });
+
+  DASH.chartBlock(document.getElementById("wachstumsbeitraege-card"), {
+    id: "wachstumsbeitraege-chart", registryId: "wachstumsbeitraege",
+    titel: "Wachstumsbeiträge zum BIP",
+    bedeutung: "Welcher Teil der Wirtschaft trägt wie viel zum Wachstum bei?",
+    serien: [
+      { dataset: "wachstumsbeitraege", series: "Privater_Konsum" },
+      { dataset: "wachstumsbeitraege", series: "Staatskonsum" },
+      { dataset: "wachstumsbeitraege", series: "Bruttoanlageinvestitionen" },
+      { dataset: "wachstumsbeitraege", series: "Aussenbeitrag" }
+    ],
+    legende: ["Privater Konsum", "Staatskonsum", "Bruttoanlageinvestitionen", "Außenbeitrag"],
+    stellen: 1, nullLinie: true
+  });
+
+  DASH.quadrantBlock(document.getElementById("konjunkturuhr-card"), {
+    id: "konjunkturuhr-chart", registryId: "ifo_konjunkturuhr",
+    titel: "ifo Konjunkturuhr",
+    bedeutung: "Lage gegen Erwartungen: so lässt sich die Konjunkturphase der letzten drei Jahre ablesen.",
+    dataset: "ifo_konjunkturuhr", lage: "Geschaeftslage", erwartungen: "Geschaeftserwartungen",
+    info: { text: "Beide Achsen zeigen Salden als Abweichung vom langjährigen Mittel. Rechts oben steht für Boom, links unten für Krise, rechts unten für Abkühlung, links oben für Erholung." }
+  });
+
+  DASH.chartBlock(document.getElementById("exporterwartungen-card"), {
+    id: "exporterwartungen-chart", registryId: "ifo_exporterwartungen",
+    titel: "ifo Exporterwartungen",
+    bedeutung: "Wie zuversichtlich sind Industrieunternehmen für ihre Exportgeschäfte?",
+    serien: [{ dataset: "ifo_exporterwartungen", series: "Exporterwartungen", sector: "Verarbeitendes Gewerbe" }],
+    legende: ["ifo Exporterwartungen"], stellen: 1, nullLinie: true
+  });
+  DASH.chartBlock(document.getElementById("warenexporte-card"), {
+    id: "warenexporte-chart", registryId: "destatis_warenexporte",
+    titel: "Warenexporte",
+    bedeutung: "Die tatsächliche Entwicklung der deutschen Exporte im Vergleich zu den Erwartungen oben.",
+    serien: [{ dataset: "destatis_warenexporte", series: "Warenexporte" }],
+    legende: ["Warenexporte"], stellen: 1
+  });
+
+  DASH.chartBlock(document.getElementById("importklima-card"), {
+    id: "importklima-chart", registryId: "ifo_importklima",
+    titel: "ifo Importklima",
+    bedeutung: "Frühindikator für die Entwicklung der deutschen Importe.",
+    serien: [{ dataset: "ifo_importklima", series: "Importklima", sector: "Deutschland" }],
+    legende: ["ifo Importklima"], stellen: 2, nullLinie: true
+  });
+  DASH.chartBlock(document.getElementById("warenimporte-card"), {
+    id: "warenimporte-chart", registryId: "destatis_warenimporte",
+    titel: "Warenimporte",
+    bedeutung: "Die tatsächliche Entwicklung der deutschen Importe im Vergleich zum Importklima oben.",
+    serien: [{ dataset: "destatis_warenimporte", series: "Warenimporte" }],
+    legende: ["Warenimporte"], stellen: 1
+  });
+
+  /* --- Arbeitsmarkt --------------------------------------------------------- */
+
+  toggleBlock("arbeitslosenquote-card",
+    [{ id: "BA", label: "BA" }, { id: "ILO", label: "ILO" }],
+    function (ziel, aktiv) {
+      ziel.innerHTML = "";
+      DASH.chartBlock(ziel, {
+        id: "arbeitslosenquote-" + aktiv, registryId: "arbeitslosenquote",
+        titel: "Arbeitslosenquote",
+        bedeutung: "Die BA zählt alle bei der Arbeitsagentur gemeldeten Arbeitslosen, die ILO-Quote folgt einer international vergleichbaren Befragung.",
+        serien: [{ dataset: "arbeitslosenquote", series: "Arbeitslosenquote", sector: aktiv }],
+        legende: ["Arbeitslosenquote (" + aktiv + ")"], stellen: 1,
+        info: { text: "BA-Quote: Anteil der bei der Bundesagentur für Arbeit gemeldeten Arbeitslosen an den zivilen Erwerbspersonen. ILO-Quote: Anteil der laut Arbeitskräfteerhebung aktiv arbeitsuchenden Personen — international besser vergleichbar, aber mit anderer Abgrenzung." }
+      });
+    });
+
+  DASH.chartBlock(document.getElementById("arbeitslosenquote-gruppen-card"), {
+    id: "arbeitslosenquote-gruppen-chart", registryId: "arbeitslosenquote_gruppen",
+    titel: "Arbeitslosigkeit nach Gruppen",
+    bedeutung: "Jüngere, Ältere, Frauen, Männer und Langzeitarbeitslose entwickeln sich unterschiedlich.",
+    serien: [
+      { dataset: "arbeitslosenquote_gruppen", series: "Arbeitslosenquote", sector: "15_bis_24_Jahre" },
+      { dataset: "arbeitslosenquote_gruppen", series: "Arbeitslosenquote", sector: "55_bis_64_Jahre" },
+      { dataset: "arbeitslosenquote_gruppen", series: "Langzeitarbeitslosenquote" }
+    ],
+    legende: ["15–24 Jahre", "55–64 Jahre", "Langzeitarbeitslose"], stellen: 1
+  });
+
+  DASH.chartBlock(document.getElementById("beschaeftigung-branchen-card"), {
+    id: "beschaeftigung-branchen-chart", registryId: "beschaeftigung_branchen",
+    titel: "Beschäftigung nach Branchen",
+    bedeutung: "In welchen Branchen wächst oder schrumpft die Zahl der Beschäftigten?",
+    serien: [
+      { dataset: "beschaeftigung_branchen", series: "Beschaeftigte", sector: "Verarbeitendes_Gewerbe" },
+      { dataset: "beschaeftigung_branchen", series: "Beschaeftigte", sector: "Dienstleistungssektor" },
+      { dataset: "beschaeftigung_branchen", series: "Beschaeftigte", sector: "Baugewerbe" }
+    ],
+    legende: ["Verarbeitendes Gewerbe", "Dienstleistungen", "Baugewerbe"], stellen: 1, nullLinie: true
+  });
+
+  DASH.chartBlock(document.getElementById("erwerbsquoten-card"), {
+    id: "erwerbsquoten-chart", registryId: "erwerbstaetigenquote",
+    titel: "Erwerbstätigenquote und Erwerbsquote",
+    bedeutung: "Wie groß ist der Anteil der Bevölkerung, der arbeitet oder dem Arbeitsmarkt zur Verfügung steht?",
+    serien: [
+      { dataset: "erwerbstaetigenquote", series: "Erwerbstaetigenquote" },
+      { dataset: "erwerbsquote", series: "Erwerbsquote" }
+    ],
+    legende: ["Erwerbstätigenquote", "Erwerbsquote"], stellen: 1, zeitraum: "alle"
+  });
+
+  toggleBlock("loehne-card",
+    [{ id: "alter", label: "nach Alter" }, { id: "branche", label: "nach Branche" }],
+    function (ziel, aktiv) {
+      ziel.innerHTML = "";
+      if (aktiv === "alter") {
+        DASH.chartBlock(ziel, {
+          id: "loehne-alter-chart", registryId: "loehne_alter",
+          titel: "Löhne nach Alter",
+          bedeutung: "Bruttomonatsverdienst nach Altersgruppe.",
+          serien: [
+            { dataset: "loehne_alter", series: "Bruttomonatsverdienst", sector: "unter_25" },
+            { dataset: "loehne_alter", series: "Bruttomonatsverdienst", sector: "25_bis_54" },
+            { dataset: "loehne_alter", series: "Bruttomonatsverdienst", sector: "55_und_aelter" }
+          ],
+          legende: ["unter 25", "25–54", "55 und älter"], stellen: 0, zeitraum: "alle"
+        });
+      } else {
+        DASH.chartBlock(ziel, {
+          id: "loehne-branche-chart", registryId: "loehne_branche",
+          titel: "Löhne nach Branche",
+          bedeutung: "Bruttomonatsverdienst nach Wirtschaftsbereich.",
+          serien: [
+            { dataset: "loehne_branche", series: "Bruttomonatsverdienst", sector: "Verarbeitendes_Gewerbe" },
+            { dataset: "loehne_branche", series: "Bruttomonatsverdienst", sector: "Dienstleistungssektor" },
+            { dataset: "loehne_branche", series: "Bruttomonatsverdienst", sector: "Baugewerbe" }
+          ],
+          legende: ["Verarbeitendes Gewerbe", "Dienstleistungen", "Baugewerbe"], stellen: 0, zeitraum: "alle"
+        });
+      }
+    });
+
+  DASH.chartBlock(document.getElementById("beschaeftigungsbarometer-card"), {
+    id: "beschaeftigungsbarometer-chart", registryId: "ifo_beschaeftigungsbarometer",
+    titel: "ifo Beschäftigungsbarometer",
+    bedeutung: "Planen Unternehmen, in den kommenden Monaten mehr oder weniger Personal einzustellen?",
+    serien: [{ dataset: "ifo_beschaeftigungsbarometer", series: "Beschaeftigungsbarometer", sector: "Deutschland" }],
+    legende: ["ifo Beschäftigungsbarometer"], stellen: 1
+  });
+
+  [["ifo_fachkraeftemangel", "Fachkraeftemangel", "ifo Fachkräftemangel"],
+   ["ifo_kurzarbeit", "Kurzarbeit", "ifo Kurzarbeit"],
+   ["ifo_homeoffice", "Homeoffice", "ifo Homeoffice"]
+  ].forEach(function (x) {
+    const div = document.createElement("div");
+    document.getElementById("arbeitsmarkt-weitere").appendChild(div);
+    DASH.chartBlock(div, {
+      id: x[0] + "-chart", registryId: x[0], titel: x[2],
+      bedeutung: "Anteil der Unternehmen, die davon betroffen sind.",
+      serien: [{ dataset: x[0], series: x[1] }], legende: [x[2]], stellen: 1
+    });
+  });
+
+  /* --- Inflation & Preise --------------------------------------------------- */
+
+  DASH.chartBlock(document.getElementById("vpi-card"), {
+    id: "vpi-chart", registryId: "inflation_vpi",
+    titel: "Verbraucherpreise (VPI)",
+    bedeutung: "Die gestrichelte Linie zeigt das 2-%-Ziel der EZB.",
+    serien: [{ dataset: "inflation_vpi", series: "VPI_veraenderung_vorjahr" }],
+    legende: ["VPI, Veränderung ggü. Vorjahr"], stellen: 1, zielwert: { wert: 2 }
+  });
+
+  toggleBlock("preiskaleidoskop-card",
+    [{ id: "prozent", label: "% ggü. Vorjahr" }, { id: "index", label: "Index" }],
+    function (ziel, aktiv) {
+      ziel.innerHTML = "";
+      if (aktiv === "prozent") {
+        DASH.chartBlock(ziel, {
+          id: "preiskaleidoskop-prozent", registryId: "vpi_guetergruppen",
+          titel: "Preiskaleidoskop",
+          bedeutung: "Manche Gütergruppen verteuern sich schneller als andere — frei wählbarer Zeitraum über den Zeitraumschalter.",
+          serien: [
+            { dataset: "vpi_guetergruppen", series: "VPI_veraenderung_vorjahr", sector: "Nahrungsmittel" },
+            { dataset: "vpi_guetergruppen", series: "VPI_veraenderung_vorjahr", sector: "Energie" },
+            { dataset: "vpi_guetergruppen", series: "VPI_veraenderung_vorjahr", sector: "Dienstleistungen" }
+          ],
+          legende: ["Nahrungsmittel", "Energie", "Dienstleistungen"], stellen: 1, nullLinie: true
+        });
+      } else {
+        DASH.chartBlock(ziel, {
+          id: "preiskaleidoskop-index", registryId: "vpi_index",
+          titel: "Preiskaleidoskop (Index)",
+          bedeutung: "Dieselben Preise, hier als Index statt als Jahresveränderung.",
+          serien: [{ dataset: "vpi_index", series: "VPI_index" }],
+          legende: ["VPI, Index"], stellen: 1
+        });
+      }
+    });
+
+  DASH.chartBlock(document.getElementById("loehne-vs-vpi-card"), {
+    id: "loehne-vs-vpi-chart", registryId: "loehne_vs_vpi",
+    titel: "Löhne vs. Verbraucherpreise",
+    bedeutung: "Steigen die Löhne schneller als die Preise, wächst die Kaufkraft.",
+    serien: [
+      { dataset: "loehne_vs_vpi", series: "Nominallohnindex" },
+      { dataset: "loehne_vs_vpi", series: "VPI_index" }
+    ],
+    legende: ["Nominallohnindex", "VPI"], stellen: 1, zeitraum: "alle"
+  });
+
+  /* --- Kaufkraft-Rechner (kein Chart.js-Diagramm, eigenes Widget) -------- */
+
+  (function () {
+    const vpi = DASH.serie("vpi_index", "VPI_index");
+    const ziel = document.getElementById("kaufkraft-card");
+    const box = document.createElement("div");
+    box.className = "chart-block";
+    box.innerHTML =
+      '<div class="chart-kopf"><div class="titelblock"><h3><span class="titeltext">' +
+      "Kaufkraft-Rechner</span></h3></div></div>" +
+      '<p class="dash-bedeutung">Was war ein Betrag aus einem früheren Jahr heute wert?</p>' +
+      '<div class="kaufkraft-rechner">' +
+      '<label for="kk-betrag">Betrag (Euro)</label>' +
+      '<input type="number" id="kk-betrag" value="100" min="0">' +
+      '<label for="kk-von">Jahr</label>' +
+      '<select id="kk-von"></select>' +
+      '<div class="ergebnis" id="kk-ergebnis"></div>' +
+      '<p class="hinweis-klein">Berechnet mit dem Dummy-Verbraucherpreisindex oben; Stand heute: ' +
+      (vpi ? APP.monatLang(vpi.end) : "–") + '.</p>' +
+      "</div>";
+    ziel.appendChild(box);
+
+    if (!vpi) return;
+    const sel = box.querySelector("#kk-von");
+    const jahre = Array.from(new Set(vpi.dates.map(function (d) { return d.slice(0, 4); })));
+    jahre.forEach(function (j) {
+      const o = document.createElement("option");
+      o.value = j; o.textContent = j;
+      sel.appendChild(o);
+    });
+    sel.value = jahre[0];
+
+    function indexFuerJahr(jahr) {
+      const i = vpi.dates.findIndex(function (d) { return d.slice(0, 4) === jahr; });
+      return i > -1 ? vpi.values[i] : null;
+    }
+
+    function rechnen() {
+      const betrag = parseFloat(box.querySelector("#kk-betrag").value) || 0;
+      const vonIndex = indexFuerJahr(sel.value);
+      const heuteIndex = vpi.values[vpi.values.length - 1];
+      const erg = box.querySelector("#kk-ergebnis");
+      if (!vonIndex) { erg.textContent = "–"; return; }
+      const heuteWert = betrag * (heuteIndex / vonIndex);
+      erg.textContent = APP.zahl(heuteWert, 2) + " €";
+    }
+    box.querySelector("#kk-betrag").addEventListener("input", rechnen);
+    sel.addEventListener("change", rechnen);
+    rechnen();
+  })();
+
+  [["ifo_preiserwartungen", "Preiserwartungen", "ifo Preiserwartungen"]].forEach(function (x) {
+    const div = document.createElement("div");
+    document.getElementById("inflation-weitere").appendChild(div);
+    DASH.chartBlock(div, {
+      id: x[0] + "-chart", registryId: x[0], titel: x[2],
+      bedeutung: "Erwarten Unternehmen in den kommenden Monaten steigende oder fallende Preise?",
+      serien: [{ dataset: x[0], series: x[1] }], legende: [x[2]], stellen: 1, nullLinie: true
+    });
+  });
+  (function () {
+    const reg = DASH.registry("tankrabatt_tracker");
+    const div = document.createElement("div");
+    div.className = "chart-block";
+    div.innerHTML = '<div class="chart-kopf"><div class="titelblock"><h3><span class="titeltext">' +
+      "Tankrabatt-Tracker</span></h3></div></div>" +
+      '<p class="dash-bedeutung">Entwicklung einer möglichen Tankrabatt-Regelung im Vergleich zum Kraftstoffpreis.</p>' +
+      '<p class="hinweis-klein dash-status dash-status-platzhalter">' +
+      APP.escape(DASH.STATUS_TEXT.platzhalter) + "</p>";
+    document.getElementById("inflation-weitere").appendChild(div);
+  })();
+
+  /* --- Rohstoffe & Energie --------------------------------------------------- */
+
+  DASH.chartBlock(document.getElementById("einfuhrpreise-card"), {
+    id: "einfuhrpreise-chart", registryId: "einfuhrpreise",
+    titel: "Einfuhrpreise",
+    bedeutung: "Wie teuer ist die Einfuhr von Energie und Metallen im Vergleich zum Vorjahr?",
+    serien: [
+      { dataset: "einfuhrpreise", series: "Einfuhrpreise", sector: "Energie" },
+      { dataset: "einfuhrpreise", series: "Einfuhrpreise", sector: "Metalle" }
+    ],
+    legende: ["Energie", "Metalle"], stellen: 1, nullLinie: true
+  });
+
+  DASH.chartBlock(document.getElementById("energiepreise-card"), {
+    id: "energiepreise-chart", registryId: "energiepreise",
+    titel: "Energiepreise für Verbraucher",
+    bedeutung: "Wie stark verändern sich die Energiekosten für private Haushalte?",
+    serien: [{ dataset: "energiepreise", series: "Energiepreise_Verbraucher" }],
+    legende: ["Energiepreise"], stellen: 1, nullLinie: true
+  });
+
+  (function () {
+    const div = document.createElement("div");
+    document.getElementById("rohstoffe-weitere").appendChild(div);
+    DASH.chartBlock(div, {
+      id: "ifo_materialmangel-chart", registryId: "ifo_materialmangel",
+      titel: "ifo Materialmangel",
+      bedeutung: "Anteil der Unternehmen, die über Materialengpässe berichten.",
+      serien: [{ dataset: "ifo_materialmangel", series: "Materialmangel" }],
+      legende: ["ifo Materialmangel"], stellen: 1
+    });
+  })();
+
+  /* --- Wohnen ---------------------------------------------------------------- */
+
+  DASH.barBlock(document.getElementById("mietindex-card"), {
+    id: "mietindex-chart", registryId: "mietindex_bundesland",
+    titel: "Mietindex nach Bundesland", dataset: "mietindex_bundesland",
+    bedeutung: "Wie stark unterscheiden sich die Mieten zwischen den Bundesländern?",
+    kartenHinweis: "Als Karte vorgesehen (siehe Registry-Eintrag geodaten_bundeslaender); bis zur geklärten Kartengrundlage als Ranking dargestellt."
+  });
+
+  DASH.barBlock(document.getElementById("mietbelastung-card"), {
+    id: "mietbelastung-chart", registryId: "mietbelastungsquote_bundesland",
+    titel: "Mietbelastungsquote nach Bundesland", dataset: "mietbelastungsquote_bundesland",
+    bedeutung: "Welcher Anteil des Haushaltseinkommens geht für die Miete auf?"
+  });
+
+  DASH.chartBlock(document.getElementById("haeuserpreise-card"), {
+    id: "haeuserpreise-chart", registryId: "haeuserpreise",
+    titel: "Häuserpreise",
+    bedeutung: "Häuser in Städten und auf dem Land entwickeln sich unterschiedlich.",
+    serien: [
+      { dataset: "haeuserpreise", series: "Haeuserpreisindex", sector: "Staedte" },
+      { dataset: "haeuserpreise", series: "Haeuserpreisindex", sector: "Laendlich" }
+    ],
+    legende: ["Städte", "Ländlich"], stellen: 1, zeitraum: "alle"
+  });
+
+  DASH.chartBlock(document.getElementById("baupreise-card"), {
+    id: "baupreise-chart", registryId: "baupreise",
+    titel: "Baupreise",
+    bedeutung: "Wie stark sind die Kosten für den Neubau zuletzt gestiegen?",
+    serien: [{ dataset: "baupreise", series: "Baupreisindex" }],
+    legende: ["Baupreise"], stellen: 1, zeitraum: "alle"
+  });
+
+  (function () {
+    const div = document.createElement("div");
+    document.getElementById("wohnen-weitere").appendChild(div);
+    DASH.chartBlock(div, {
+      id: "ifo_geschaeftsklima_wohnungsbau-chart", registryId: "ifo_geschaeftsklima_wohnungsbau",
+      titel: "ifo Geschäftsklima Wohnungsbau",
+      bedeutung: "Wie beurteilen Bauunternehmen ihre Geschäftslage im Wohnungsbau?",
+      serien: [{ dataset: "ifo_geschaeftsklima_wohnungsbau", series: "Geschaeftsklima_Wohnungsbau" }],
+      legende: ["ifo Geschäftsklima Wohnungsbau"], stellen: 1, nullLinie: true
+    });
+    const geoReg = DASH.registry("geodaten_bundeslaender");
+    const hw = document.createElement("p");
+    hw.className = "hinweis-klein dash-status dash-status-platzhalter";
+    hw.textContent = "Geodatei der Bundesländer: " + DASH.STATUS_TEXT.platzhalter +
+      " (" + geoReg.notiz + ")";
+    document.getElementById("wohnen-weitere").appendChild(hw);
+  })();
+
+})();
+</script>
+</body>
+</html>
