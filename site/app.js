@@ -452,10 +452,14 @@
     Erlaeuterung samt Quellenzeile aufklappt. Geschlossen wird sie durch
     erneutes Klicken, durch einen Klick daneben oder mit der Esc-Taste.
 
-    infoKnopf(ziel, block, { text, quelle }, id)
+    Verwendbar an Diagrammtiteln und an Ueberschriften der Seite. Das
+    Zielelement muss im Stylesheet positioniert sein, damit die Blase
+    darunter haengt - bei Ueberschriften genuegt die Klasse "mit-info".
+
+    infoKnopf(ziel, { text, quelle }, id)
   */
-  function infoKnopf(ziel, block, info, id) {
-    if (!ziel) return;
+  function infoKnopf(ziel, info, id) {
+    if (!ziel || !info || !info.text) return;
 
     const knopfId = id + "-info";
 
@@ -564,7 +568,7 @@
     // Aufruf auf der Seite, damit er ohne Programmierkenntnisse zu aendern
     // ist: info: { text: "...", quelle: "..." }
     if (o.info && o.info.text) {
-      infoKnopf(kopf.querySelector("h3"), block, o.info, o.id);
+      infoKnopf(kopf.querySelector("h3"), o.info, o.id);
     }
 
     const werkzeuge = document.createElement("div");
@@ -979,8 +983,10 @@
 
     const kopf = document.createElement("div");
     kopf.className = "chart-kopf";
-    kopf.innerHTML = '<div class="titelblock"><h3>' + escape(o.titel) + "</h3>" +
+    kopf.innerHTML = '<div class="titelblock"><h3><span class="titeltext">' +
+      escape(o.titel) + "</span></h3>" +
       '<div class="einheit">' + escape(einheitText(serien[0].unit)) + "</div></div>";
+    if (o.info) infoKnopf(kopf.querySelector("h3"), o.info, o.id);
     kopf.appendChild(werkzeuge);
     block.appendChild(kopf);
 
@@ -1110,6 +1116,7 @@
     aktuell: aktuell,
     chartBlock: chartBlock,
     heatmap: heatmap,
+    infoKnopf: infoKnopf,
     sparkline: sparkline,
     zuschneiden: zuschneiden,
     tabelleHtml: tabelleHtml,
