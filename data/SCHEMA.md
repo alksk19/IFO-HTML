@@ -4,10 +4,18 @@ Gilt für die Grafiken des Dashboard-Entwurfs (`site/dashboard_v2.html`).
 Betrifft nicht die vier bestehenden ifo-Seiten (`geschaeftsklima.html` usw.) —
 deren Schema steht weiterhin in `README.md` und `DATA.md`.
 
-Jede Grafik des Dashboards bezieht ihre Daten aus genau einer CSV-Datei in
-`data/dummy/`. Beim Umstieg auf echte Daten wird ausschließlich die
-jeweilige CSV-Datei ausgetauscht; an `site/dashboard_v2.html` ändert sich
-nichts, sofern Spaltennamen und Schreibweise erhalten bleiben.
+Jede Grafik des Dashboards bezieht ihre Daten aus genau einer CSV-Datei,
+entweder in `data/dummy/` (erfundene Platzhalterwerte) oder, sobald echte
+Zahlen vorliegen, in `data/real/` (tatsächliche Werte aus der jeweils in
+`data/datasets.csv` genannten Quelle). Welcher Ordner gilt, steht in der
+Spalte `csv_datei` der Registry (`real/<id>.csv` bzw. `<id>.csv` ohne
+Präfix für `data/dummy/`). `scripts/build_dummy_dashboard.py` übernimmt
+jede Datei aus `data/real/`, deren Name (ohne Endung) einer Registry-`id`
+entspricht, automatisch anstelle der erfundenen Reihe — die zugehörige
+`data/dummy/<id>.csv` wird dann nicht mehr erzeugt. Beim Umstieg auf echte
+Daten wird also die passende CSV-Datei einfach nach `data/real/` gelegt;
+an `site/dashboard_v2.html` ändert sich nichts, sofern Spaltennamen und
+Schreibweise erhalten bleiben.
 
 Es gibt zwei Schema-Typen:
 

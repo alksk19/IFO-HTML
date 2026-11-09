@@ -181,22 +181,31 @@ reg("reallohn", "Reallohnindex", "kennzahlen", "Destatis",
     "Index (2015=100)", "quartal", MONATE[-1], "reallohn.csv", "frei", True,
     "Genesis-Tabellencode: unbekannt")
 
+# ezb_leitzins und bundesanleihe_10j: unten durch ECHTE_DATEN_OVERRIDE ersetzt
+# (data/real/ezb_leitzins.csv, data/real/bundesanleihe_10j.csv). Platzhalter
+# hier nur, damit die Registry-Zeile und ein Fallback existieren, falls die
+# echten Dateien einmal fehlen sollten.
 add_a("ezb_leitzins", [
     serie_a("Hauptrefinanzierungssatz", None, "in % p.a.", quelle_ezb(),
             reihe(7, 1.0, 0.0, 0.0, 0.05))
 ])
 reg("ezb_leitzins", "EZB-Leitzins", "kennzahlen", "Europäische Zentralbank",
-    "https://www.ecb.europa.eu", "Freie Nutzung mit Quellenangabe",
-    "in % p.a.", "unregelmäßig", MONATE[-1], "ezb_leitzins.csv", "frei", True)
+    "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.MRR_FR.LEV",
+    "Freie Nutzung mit Quellenangabe (ECB Data Portal)",
+    "in % p.a.", "unregelmäßig, hier als Monatsendwert", MONATE[-1],
+    "real/ezb_leitzins.csv", "frei", True,
+    "Echte Daten (ECB Data Portal API, Reihe FM.D.U2.EUR.4F.KR.MRR_FR.LEV), siehe data/real/ezb_leitzins.csv")
 
 add_a("bundesanleihe_10j", [
     serie_a("Rendite_10j_Bundesanleihe", None, "in % p.a.", quelle_bbk(),
             reihe(8, 1.0, 0.0, 0.2, 0.08))
 ])
 reg("bundesanleihe_10j", "Rendite 10-jähriger Bundesanleihen", "kennzahlen",
-    "Deutsche Bundesbank", "https://www.bundesbank.de/de/statistiken/zeitreihen-datenbanken",
-    "Freie Nutzung mit Quellenangabe", "in % p.a.", "täglich/Monatsmittel",
-    MONATE[-1], "bundesanleihe_10j.csv", "frei", True)
+    "Deutsche Bundesbank",
+    "https://api.statistiken.bundesbank.de/rest/data/BBSIS/M.I.ZAR.ZI.EUR.S1311.B.A604.R10XX.R.A.A._Z._Z.A",
+    "Freie Nutzung mit Quellenangabe (Bundesbank-Zeitreihen-API)",
+    "in % p.a.", "monatlich", MONATE[-1], "real/bundesanleihe_10j.csv", "frei", True,
+    "Echte Daten (Bundesbank-Zeitreihen-API, Reihe BBSIS.M.I.ZAR.ZI.EUR.S1311.B.A604.R10XX.R.A.A._Z._Z.A), siehe data/real/bundesanleihe_10j.csv")
 
 add_a("dax", [
     serie_a("DAX_Schlusskurs", None, "Punkte", "unbekannt",
@@ -410,14 +419,14 @@ reg("ifo_beschaeftigungsbarometer", "ifo Beschäftigungsbarometer", "arbeitsmark
     "Indexwerte (2015=100, saisonbereinigt)", "monatlich", MONATE[-1],
     "ifo_beschaeftigungsbarometer.csv", "frei", True)
 
-for id, titel in [
+for seed, (id, titel) in enumerate([
     ("ifo_fachkraeftemangel", "ifo Fachkräftemangel"),
     ("ifo_kurzarbeit", "ifo Kurzarbeit"),
     ("ifo_homeoffice", "ifo Homeoffice"),
-]:
+], start=70):
     add_a(id, [serie_a(titel.replace("ifo ", "").replace(" ", "_"), None,
                         "in % der Unternehmen", quelle_ifo(),
-                        reihe(hash(id) % 1000, 20, 0.0, 3, 2))])
+                        reihe(seed, 20, 0.0, 3, 2))])
     reg(id, titel, "arbeitsmarkt", "ifo Institut",
         "https://www.ifo.de/umfragen/zeitreihen",
         "Sonderauswertung, kostenpflichtig",
@@ -558,6 +567,43 @@ reg("ifo_geschaeftsklima_wohnungsbau", "ifo Geschäftsklima Wohnungsbau", "wohne
     MONATE[-1], "ifo_geschaeftsklima_wohnungsbau.csv", "kostenpflichtig", False)
 
 # -----------------------------------------------------------------------------
+# Echte-Daten-Override: data/real/<id>.csv ersetzt die Zufallsreihe desselben
+# Datensatzes, falls vorhanden. Die Registry-Zeile (Quelle, Lizenz, Status)
+# wird weiterhin oben gepflegt; hier wird nur DATASETS[id] ausgetauscht, damit
+# site/dashboard_v2_data.js echte statt erfundener Werte enthaelt.
+# -----------------------------------------------------------------------------
+
+DIR_REAL = os.path.join(ROOT, "data", "real")
+n_real = 0
+if os.path.isdir(DIR_REAL):
+    for fname in sorted(os.listdir(DIR_REAL)):
+        if not fname.endswith(".csv"):
+            continue
+        id = fname[:-4]
+        if id not in DATASETS:
+            print("WARNUNG: data/real/%s hat keinen passenden Registry-Eintrag, uebersprungen" % fname)
+            continue
+        serien_by_key = {}
+        with open(os.path.join(DIR_REAL, fname), newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                key = (row["series"], row["sector"] or None)
+                s = serien_by_key.setdefault(key, {
+                    "series": row["series"], "sector": row["sector"] or None,
+                    "unit": row["unit"], "source": row["source"],
+                    "dates": [], "values": []
+                })
+                s["dates"].append(row["date"])
+                s["values"].append(float(row["value"]))
+        serien = []
+        for s in serien_by_key.values():
+            s["start"], s["end"] = s["dates"][0], s["dates"][-1]
+            serien.append(s)
+        DATASETS[id] = {"typ": "A", "serien": serien}
+        n_real += 1
+
+print("Echte-Daten-Overrides aus data/real/ angewendet:", n_real)
+
+# -----------------------------------------------------------------------------
 # Schreiben: data/datasets.csv
 # -----------------------------------------------------------------------------
 
@@ -581,6 +627,8 @@ n_csv = 0
 for row in REGISTRY:
     if not row["csv_datei"] or row["id"] not in DATASETS:
         continue
+    if row["csv_datei"].startswith("real/"):
+        continue  # liegt schon als Quelle in data/real/, nicht erneut schreiben
     ds = DATASETS[row["id"]]
     path = os.path.join(DIR_DUMMY, row["csv_datei"])
     with open(path, "w", newline="", encoding="utf-8") as f:
