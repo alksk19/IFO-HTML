@@ -1,0 +1,96 @@
+/* ---------------------------------------------------------------------------
+   dashboard_v2.css — Ergaenzungen fuer den Dashboard-Entwurf
+
+   Nur fuer dashboard_v2.html geladen, zusaetzlich zu styles.css (das bleibt
+   unveraendert). Verwendet dieselben CSS-Variablen (--akzent, --surface,
+   --border usw.), damit die Seite optisch zum bestehenden Prototyp passt.
+--------------------------------------------------------------------------- */
+
+.dummy-banner {
+  background: #b00000;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 650;
+  text-align: left;
+  padding: 8px 20px;
+}
+
+.dash-bedeutung {
+  margin: 2px 0 10px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.dash-status {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px dashed var(--border);
+  display: inline-block;
+}
+.dash-status-ifo_genehmigung { color: var(--text-secondary); }
+.dash-status-kostenpflichtig { color: var(--text-muted); }
+.dash-status-platzhalter { color: var(--text-muted); font-style: italic; }
+
+.dash-tile .dash-status { font-size: 12px; margin-top: 10px; }
+
+.rubrik-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 10px 0 28px;
+  padding-bottom: 10px;
+  border-bottom: 1px dotted var(--border);
+}
+.rubrik-nav a { font-size: 14px; }
+
+.rubrik-abschnitt { margin-top: 48px; }
+.rubrik-abschnitt h2 { margin-bottom: 4px; }
+.rubrik-intro { color: var(--text-secondary); margin-top: 0; }
+
+.karten-raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.toggle-schalter {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 0 12px;
+}
+
+.fragen-raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.prognose-kasten {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  margin-top: 24px;
+}
+.prognose-kasten h3 { margin-top: 0; }
+
+.kaufkraft-rechner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  max-width: 480px;
+}
+.kaufkraft-rechner label { display: block; font-size: 14px; margin: 10px 0 4px; }
+.kaufkraft-rechner input, .kaufkraft-rechner select {
+  font: inherit; padding: 6px 8px; border: 1px solid var(--border);
+  background: var(--plane); color: var(--text-primary); width: 100%;
+}
+.kaufkraft-rechner .ergebnis {
+  margin-top: 14px; font-size: 20px; font-weight: 650; color: var(--akzent);
+}
+
+.mehr-kennzahlen-knopf { margin: 4px 0 24px; }
+
+@media (max-width: 640px) {
+  .karten-raster, .fragen-raster { grid-template-columns: 1fr; }
+}
